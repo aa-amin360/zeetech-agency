@@ -1,0 +1,23 @@
+/* Custom Responsive & Viewport Tweaks */
+@media (max-width: 640px) {
+  /* Prevent horizontal overflow on mobile screens */
+  body,
+  html {
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  /* Compact padding for cards on small mobile displays */
+  .mobile-compact-padding {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tablet-card-spacing {
+    gap: 2.5rem;
+  }
+}

@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS statistics (
+    id SERIAL PRIMARY KEY,
+    value INT NOT NULL,
+    prefix VARCHAR(10) DEFAULT '',
+    suffix VARCHAR(10) DEFAULT '+',
+    label VARCHAR(100) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS clients (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    company VARCHAR(150) NOT NULL,
+    role VARCHAR(150) NOT NULL,
+    image TEXT,
+    testimonial TEXT,
+    rating DECIMAL(2, 1) DEFAULT 5.0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
