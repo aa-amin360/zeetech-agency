@@ -1,0 +1,284 @@
+/* =========================================================
+   ZeeTech — site-wide tokens, base styles and shared pieces.
+   Section styles live next to each section in /sections.
+   Geometry is expressed in design pixels via --u, so at a
+   1920px-wide section every value matches Figma 1:1.
+   ========================================================= */
+
+:root {
+  /* brand tokens (from Figma) */
+  --zt-orange: #fd5600;
+  --zt-ink: #0b1733;
+  --zt-ink-strong: #0e0e0d;
+  --zt-canvas: #f2efe7;
+  --zt-line: #d8d5ce;
+  --zt-avatar-ring: #001e5d;
+  --zt-base: #fdfafe;            /* glass backing colour used by the shader */
+
+  /* font files are self-hosted by next/font (see src/app/(frontend)/fonts.ts) */
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  color-scheme: light;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+
+html, body {
+  margin: 0;
+  background: var(--zt-base);
+  color: var(--zt-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body { overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+
+/* ---------------------------------------------------------
+   Buttons (Figma "Button" — Primary / Secondary)
+   --------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 28px;
+  border-radius: 2px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.btn__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.btn:hover .btn__icon { transform: translate(2px, -2px); }
+.btn:focus-visible { outline: 2px solid var(--zt-ink); outline-offset: 3px; }
+
+.btn--primary { background: var(--zt-orange); color: #fff; }
+.btn--primary:hover { background: #e64e00; }
+.btn--nav { color: var(--zt-canvas); flex-shrink: 0; }
+
+.btn--secondary {
+  background: var(--zt-canvas);
+  color: var(--zt-ink-strong);
+  border: 1px solid var(--zt-line);
+}
+.btn--secondary:hover { background: var(--zt-ink-strong); color: var(--zt-canvas); border-color: var(--zt-ink-strong); }
+
+/* =========================================================
+   Sections below the fold (Figma 154:278 → 383:361)
+   Same approach as the statement block: every section is an
+   inline-size container, --u is 1 design px at the section width,
+   and sizes clamp so they never drop below a readable floor.
+   ========================================================= */
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.sec {
+  position: relative;
+  container-type: inline-size;
+  overflow: hidden;
+  overflow: clip;                 /* clip, not hidden: keeps position: sticky working */
+}
+.sec > * {
+  /* 1 design px; stops growing past the 1920px design frame */
+  --u: calc(min(100cqw, 1920px) / 1920);
+  --pad: clamp(20px, calc(128 * var(--u)), 128px);
+  /* on screens wider than the design, content stays in a centred 1920px frame */
+  --frame: max(0px, (100cqw - 1920px) / 2);
+}
+.sec__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, calc(80 * var(--u)), 80px);
+  width: 100%;
+  max-width: 1920px;
+  margin-inline: auto;
+  padding: clamp(56px, calc(80 * var(--u)), 80px) var(--pad);
+  --fs-display: clamp(34px, calc(80 * var(--u)), 80px);
+  --fs-sub: clamp(14px, calc(24 * var(--u)), 24px);
+}
+
+@keyframes zt-spin { to { transform: rotate(360deg); } }
+
+/* ---------------------------------------------------------
+   Shared section heading pieces
+   --------------------------------------------------------- */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(13px, calc(20 * var(--u)), 20px);
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #000;
+  font-feature-settings: "dlig" 1;
+}
+.eyebrow--light { color: #fff; }
+.eyebrow__badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: 8px;
+  border: 1px dashed var(--zt-orange);
+  border-radius: 88px;
+}
+.eyebrow__badge img { display: block; width: 18px; height: 18px; }
+
+.display {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--fs-display);
+  line-height: 1.2;
+  letter-spacing: -0.0375em;       /* -3px @ 80px */
+  color: var(--zt-ink-strong);
+  font-feature-settings: "dlig" 1;
+}
+.display--light { color: #fff; }
+.display__line { display: block; }
+.display__em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--zt-orange);
+}
+
+.sub {
+  margin: 0;
+  font-weight: 400;
+  font-size: var(--fs-sub);
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #696969;
+  font-feature-settings: "dlig" 1;
+}
+.sub--soft { color: rgba(88, 88, 88, 0.72); }
+.sub--dim { color: #707070; }
+.sub--narrow { max-width: 15.75em; }            /* 378px @ 24px */
+
+.sec-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+.sec-head--center { align-items: center; text-align: center; }
+.sec-head--center .sub { max-width: 48.92em; }  /* 1174px @ 24px */
+.sec-head--split {
+  flex-direction: row;
+  align-items: flex-end;
+  gap: clamp(24px, calc(64 * var(--u)), 64px);
+}
+.sec-head__main {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.sec-head__aside {
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* extra button styles used below the fold */
+.btn--ink { background: var(--zt-ink-strong); color: #fff; }
+.btn--ink:hover { background: #b9f227; color: var(--zt-ink-strong); }   /* "signal lime" hover */
+.btn--signal { background: #ff7200; color: var(--zt-canvas); }
+.btn--signal:hover { background: #e66700; }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .btn__icon { transition: none; }
+}
+
+@media (max-width: 900px) {
+  .sec__inner { --fs-display: clamp(30px, 8.2cqw, 56px); }
+  .sec-head--split { flex-direction: column; align-items: flex-start; }
+  .sec-head--split > * { flex: none !important; width: 100%; }
+  .sub { font-size: clamp(14px, 3.6cqw, 18px); }
+}
+
+/* Hero intro: hidden before first paint only when JS will animate it in.
+   The fallback animation reveals it anyway if scripts never run. */
+@keyframes zt-intro-failsafe { to { visibility: visible; } }
+html.motion-ready [data-intro] {
+  visibility: hidden;
+  animation: zt-intro-failsafe 0s 3s forwards;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--zt-ink-strong);
+  color: #fff;
+  border-radius: 2px;
+}
+.skip-link:focus { top: 12px; }
+
+/* ---------------------------------------------------------
+   Endless strips (src/components/Marquee.tsx)
+   --------------------------------------------------------- */
+@keyframes marquee-left  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+@keyframes marquee-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+.loop { overflow: hidden; }
+.loop__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-left var(--dur, 40s) linear infinite;
+}
+.loop[data-dir="right"] .loop__track { animation-name: marquee-right; }
+.loop__set {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.loop__set > li { flex-shrink: 0; }
+.display__hl { color: var(--zt-orange); }
+
+@media (prefers-reduced-motion: reduce) {
+  .loop__track { animation: none; }
+}
+
+/* In-place video player (src/components/VideoFrame.tsx) */
+.video-frame__player {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000;
+  object-fit: contain;
+}

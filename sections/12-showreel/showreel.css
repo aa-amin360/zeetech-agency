@@ -1,0 +1,45 @@
+/* ---------------------------------------------------------
+   Showreel with tickers (Figma 392:1359)
+   --------------------------------------------------------- */
+.showreel { background: #f7f3ec; }
+.showreel__inner { max-width: none; padding-left: 0; padding-right: 0; }
+.showreel .sec-head { padding: 0 calc(var(--pad) + var(--frame)); }
+.ticker--media:hover .loop__track { animation-play-state: paused; }
+.ticker .loop__set {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0 16px 0 0;
+  list-style: none;
+  font-family: var(--font-montserrat), var(--font-sans);
+  font-weight: 500;
+  font-size: clamp(16px, calc(24 * var(--u)), 24px);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--zt-ink-strong);
+}
+.ticker--navy .loop__set { color: #09152e; }
+.ticker:not(.ticker--media) .loop__set li { display: flex; align-items: center; gap: 16px; }
+.ticker:not(.ticker--media) .loop__set li::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  background: url("/brand/icon-bullet.svg") center / contain no-repeat;
+}
+.ticker--media { padding-block: 10px; }
+.ticker--media .loop__set { gap: 24px; padding-right: 24px; }
+.ticker--media li {
+  flex-shrink: 0;
+  width: max(calc(538.667 * var(--u)), 260px);
+  aspect-ratio: 538.667 / 497;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(113, 113, 113, 0.25);
+}
+.ticker--media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ticker--media img.is-top { object-position: 50% 0; }
+
+

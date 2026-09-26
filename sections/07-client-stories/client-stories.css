@@ -1,0 +1,139 @@
+/* ---------------------------------------------------------
+   Client stories slider (Figma 197:562)
+   Inactive slides sit at 52.5% scale (807 / 1537) and peek in
+   from the right edge.
+   --------------------------------------------------------- */
+.testi { background: #f6f6f6; }
+.arrows { display: flex; gap: 32px; }
+.arrow {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 2px dashed var(--zt-orange);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--zt-orange);
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.arrow svg { width: 24px; height: 24px; }
+.arrow:disabled { border-color: #696969; color: #696969; cursor: default; }
+.arrow:not(:disabled):hover { background: var(--zt-orange); border-style: solid; color: #fff; }
+.arrow:focus-visible { outline: 2px solid var(--zt-ink-strong); outline-offset: 3px; }
+
+.testi__viewport { margin-right: calc(-1 * var(--pad)); overflow: hidden; overflow: clip; }   /* next slide peeks in up to the design frame edge */
+.testi__track {
+  display: flex;
+  align-items: center;
+  gap: calc(80 * var(--u));
+  transition: transform 0.8s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.testi__slide {
+  flex: 0 0 calc(1537 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: calc(64 * var(--u));
+  padding: calc(24 * var(--u));
+  border-radius: 16px;
+  transform: scale(0.525);
+  transform-origin: 0 50%;
+  cursor: pointer;
+  transition: transform 0.8s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.testi__slide.is-active { transform: none; cursor: default; }
+.testi__media {
+  position: relative;
+  flex: 0 0 30.9%;                  /* 460 / 1489 */
+  aspect-ratio: 460 / 534;
+  margin: 0;
+  border: 2px solid #d8d5ce;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.testi__media > img:first-child { display: block; width: 100%; height: 100%; object-fit: cover; }
+.testi__play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10.43%;                    /* 48 / 460 */
+  height: auto;
+  transform: translate(-50%, -50%);
+}
+.testi__body { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.testi__quote {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(18px, calc(40 * var(--u)), 40px);
+  line-height: 1.5;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  color: var(--zt-ink-strong);
+}
+.testi__quote p { margin: 0; }
+.testi__source {
+  display: inline-block;
+  vertical-align: middle;
+  width: 2.575em;                   /* 103px @ 40px */
+  padding: 4px 8px;
+  border: 1px solid rgba(14, 14, 13, 0.13);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.56);
+}
+.testi__crop {
+  position: relative;
+  display: block;
+  aspect-ratio: 81 / 30;
+  overflow: hidden;
+  box-shadow: 0 4px 5px #000;
+}
+.testi__crop img {
+  position: absolute;
+  left: -44.44%;
+  top: -84.17%;
+  width: 185.19%;
+  height: 261.67%;
+  max-width: none;
+}
+.testi__person { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.testi__person > div {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  color: var(--zt-ink-strong);
+}
+.testi__name { margin: 0; font-weight: 500; font-size: clamp(30px, calc(64 * var(--u)), 64px); line-height: 1.5; }
+.testi__role { margin: 0; font-size: clamp(14px, calc(20 * var(--u)), 20px); line-height: 1.5; }
+.testi__crest { flex-shrink: 0; width: clamp(56px, calc(80 * var(--u)), 80px); height: auto; object-fit: cover; }
+
+
+@media (max-width: 900px) {
+  .testi__viewport { margin-right: 0; overflow: hidden; }
+  .testi__track { gap: 24px; }
+  .testi__slide { flex: 0 0 100%; flex-direction: column; align-items: stretch; gap: 24px; padding: 0; transform: none; opacity: 0.35; }
+  .testi__slide.is-active { opacity: 1; }
+  .testi__media { flex: none; width: min(100%, 420px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testi__track, .testi__slide { transition: none; }
+}
+
+/* play button over a video testimonial */
+.testi__play-btn {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.testi__play-btn .testi__play { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.testi__play-btn:hover .testi__play { transform: translate(-50%, -50%) scale(1.12); }
+.testi__play-btn:focus-visible { outline: 3px solid var(--zt-orange); outline-offset: -3px; }

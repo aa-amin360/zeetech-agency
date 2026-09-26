@@ -1,0 +1,8 @@
+# Not needed on Vercel (the seed script runs from your computer, see DEPLOY-VERCEL.md)
+legacy
+scripts
+deploy
+.dev-db
+media
+.env
+.env*.local

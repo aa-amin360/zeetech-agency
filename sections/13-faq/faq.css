@@ -1,0 +1,144 @@
+/* ---------------------------------------------------------
+   FAQ (Figma 394:2249)
+   --------------------------------------------------------- */
+.faq { background: #f6f6f6; }
+.faq__knot {
+  position: absolute;
+  left: calc(var(--frame) + 1551 * var(--u));
+  top: calc(-121 * var(--u));
+  width: calc(501 * var(--u));
+  height: auto;
+  aspect-ratio: 501 / 511;
+  object-fit: cover;
+  filter: blur(0.9px);
+  pointer-events: none;
+}
+.faq__main { flex: 0 1 59.68%; }              /* 993 / 1664 */
+.faq .sec-head__aside { flex: 1 1 0; }
+.faq__body {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(32px, calc(64 * var(--u)), 64px);
+}
+.help {
+  position: relative;
+  isolation: isolate;
+  flex: 0 0 calc(642 * var(--u));
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding: clamp(24px, calc(48 * var(--u)), 48px);
+  border-radius: 24px;
+  overflow: hidden;
+}
+.help__bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
+.help::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(0, 0, 0, 0.32); }
+.help__avatars { display: flex; }
+.help__avatars img {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--zt-canvas);
+  border-radius: 50%;
+  object-fit: cover;
+}
+.help__avatars img + img { margin-left: -12px; }
+.help__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: clamp(26px, calc(40 * var(--u)), 40px);
+  line-height: 1.2;
+  letter-spacing: -0.075em;         /* -3px @ 40px */
+  color: #fff;
+}
+.help__title em { font-family: var(--font-serif); font-style: italic; font-weight: 600; color: var(--zt-orange); }
+.help__text {
+  margin: 0;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(16px, calc(24 * var(--u)), 24px);
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--zt-canvas);
+  font-feature-settings: "dlig" 1;
+}
+
+.acc {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, calc(48 * var(--u)), 48px);
+}
+.acc__item { padding-bottom: 24px; border-bottom: 1px solid rgba(14, 14, 13, 0.14); }
+.acc__item:first-child { border-bottom-color: rgba(41, 45, 50, 0.14); }
+.acc__q { margin: 0; }
+.acc__q button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: clamp(20px, calc(32 * var(--u)), 32px);
+  line-height: 1.5;
+  letter-spacing: 1px;
+  text-align: left;
+  text-transform: capitalize;
+  color: #292d32;
+  cursor: pointer;
+}
+.acc__q button:focus-visible { outline: 2px solid var(--zt-orange); outline-offset: 4px; border-radius: 2px; }
+.acc__icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #292d32;
+  border-radius: 50%;
+  transition: border-color 0.3s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.acc__icon img { grid-area: 1 / 1; width: 24px; height: 24px; }
+.acc__minus { display: none; }
+.acc__item.is-open .acc__icon { border-color: var(--zt-orange); transform: rotate(180deg); }
+.acc__item.is-open .acc__plus { display: none; }
+.acc__item.is-open .acc__minus { display: block; }
+.acc__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.acc__panel > div { overflow: hidden; }
+.acc__item.is-open .acc__panel { grid-template-rows: 1fr; }
+.acc__panel p {
+  margin: 24px 0 0;
+  font-family: var(--font-body);
+  font-size: clamp(14px, calc(16 * var(--u)), 16px);
+  line-height: 1.5;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  color: rgba(41, 45, 50, 0.65);
+}
+
+
+@media (max-width: 900px) {
+  .faq__knot { display: none; }
+  .faq__body { flex-direction: column; align-items: stretch; }
+  .help { flex: none; min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acc__panel, .acc__icon { transition: none; }
+}
+
+/* keep the intro text clear of the decorative knot */
+@media (min-width: 901px) and (max-width: 1440px) {
+  .faq__knot { left: calc(var(--frame) + 1640 * var(--u)); width: calc(420 * var(--u)); }
+  .faq .sec-head__aside { padding-right: calc(260 * var(--u)); }
+}

@@ -1,0 +1,46 @@
+/* "ZeeTech digital partners" stamp, top-right corner */
+.stamp {
+  position: absolute;
+  top: calc(-121 * var(--u));
+  right: calc(var(--frame, 0px) - 85 * var(--u));
+  z-index: 2;
+  width: max(calc(315 * var(--u)), 150px);
+  aspect-ratio: 1;
+  container-type: inline-size;
+  pointer-events: none;
+}
+.stamp__outer { position: absolute; inset: 0; width: 100%; height: 100%; animation: zt-spin 60s linear infinite; }
+.stamp__inner { position: absolute; left: 16.67%; top: 16.67%; width: 66.67%; height: 66.67%; }
+.stamp__dot { position: absolute; left: 23%; top: 69.67%; width: 4%; height: auto; }
+.stamp__title {
+  position: absolute;
+  left: 47.94%;
+  top: 50.16%;
+  transform: translateX(-50%);
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 4cqw;                  /* 12.6px @ 315 */
+  line-height: normal;
+  text-align: center;
+  white-space: nowrap;
+  color: #ff7200;
+}
+.stamp__small {
+  position: absolute;
+  left: 47.94%;
+  top: 85.71%;
+  font-family: var(--font-play), var(--font-sans);
+  font-size: 2.67cqw;               /* 8.4px @ 315 */
+  line-height: normal;
+  white-space: nowrap;
+  color: #656565;
+}
+
+
+@media (max-width: 900px) {
+  .stamp { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp__outer { animation: none; }
+}

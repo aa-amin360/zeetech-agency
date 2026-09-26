@@ -1,0 +1,1017 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ZeeTech — We design &amp; build digital products people want to use</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@500&family=Play&family=Playfair+Display:ital,wght@0,500;1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,300;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="hero" aria-labelledby="hero-title">
+
+    <!-- Dynamic fluted-glass background (hero only) -->
+    <canvas class="hero__bg" id="bg" aria-hidden="true"></canvas>
+
+    <!-- Rotated portfolio collage (tiles are filled by main.js) -->
+    <div class="collage" aria-hidden="true">
+      <div class="collage__panel">
+        <div class="collage__col" data-col="0" data-dir="up"></div>
+        <div class="collage__col" data-col="1" data-dir="down"></div>
+        <div class="collage__col" data-col="2" data-dir="up"></div>
+        <div class="collage__fade collage__fade--top"></div>
+        <div class="collage__fade collage__fade--bottom"></div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <header class="nav" id="nav">
+      <div class="nav__inner">
+        <a class="logo" href="#" aria-label="ZeeTech home">
+          <img src="assets/logo-zeetech.svg" width="180" height="60" alt="" />
+        </a>
+
+        <nav class="nav__links" aria-label="Primary">
+          <a class="roll" href="#work"><span class="roll__track"><span>Work</span><span aria-hidden="true">Work</span></span></a>
+          <a class="roll" href="#expertise"><span class="roll__track"><span>Expertise</span><span aria-hidden="true">Expertise</span></span></a>
+          <a class="roll" href="#studio"><span class="roll__track"><span>Studio</span><span aria-hidden="true">Studio</span></span></a>
+          <a class="roll" href="#insights"><span class="roll__track"><span>Insights</span><span aria-hidden="true">Insights</span></span></a>
+        </nav>
+
+        <a class="btn btn--primary btn--nav" href="#contact">
+          <span>Start a project</span>
+          <svg class="btn__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <button class="nav__burger" id="burger" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+          <span></span><span></span>
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobile-menu" hidden>
+        <a href="#work">Work</a>
+        <a href="#expertise">Expertise</a>
+        <a href="#studio">Studio</a>
+        <a href="#insights">Insights</a>
+        <a class="btn btn--primary" href="#contact">
+          <span>Start a project</span>
+          <svg class="btn__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <!-- Copy -->
+    <div class="hero__content">
+      <div class="hero__text">
+        <p class="trust">
+          <span>Trusted by</span>
+          <span class="trust__badge">40+</span>
+          <span class="avatars" aria-hidden="true">
+            <span class="avatar"><img src="assets/faq-avatar-1.jpg" alt="" /></span>
+            <span class="avatar"><img src="assets/faq-avatar-2.jpg" alt="" /></span>
+            <span class="avatar"><img src="assets/faq-avatar-3.jpg" alt="" /></span>
+          </span>
+          <span>product teams worldwide</span>
+        </p>
+
+        <h1 class="headline" id="hero-title">
+          <span class="headline__line">We design &amp; build</span>
+          <span class="headline__line">digital products</span>
+          <span class="headline__line">people <em class="headline__hl">want to use.</em></span>
+        </h1>
+
+        <p class="lede">Strategy, product design and engineering under one roof. Senior designers and engineers sit on your product from week one — no handover between agencies, no six-week kickoff, no guessing what ships next.</p>
+      </div>
+
+      <div class="hero__ctas">
+        <a class="btn btn--primary" href="#contact">
+          <span>Book Intro Call</span>
+          <svg class="btn__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M6.667 1.667v2.5M13.333 1.667v2.5M2.917 7.575h14.166M17.5 7.083v7.084c0 2.5-1.25 4.166-4.167 4.166H6.667c-2.917 0-4.167-1.666-4.167-4.166V7.083c0-2.5 1.25-4.166 4.167-4.166h6.666c2.917 0 4.167 1.666 4.167 4.166Z" stroke="currentColor" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13.08 11.417h.007M13.08 13.917h.007M9.996 11.417h.008M9.996 13.917h.008M6.912 11.417h.008M6.912 13.917h.008" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a class="btn btn--secondary" href="#work">
+          <span>Explore Our Works</span>
+          <svg class="btn__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Backdrop palette studio (corner) -->
+    <aside class="studio idle" id="dock" role="toolbar" aria-label="Background palette">
+      <div class="studio__meta">
+        <span class="studio__kicker">Backdrop</span>
+        <span class="studio__name" id="label" aria-live="polite">Solstice</span>
+      </div>
+      <div class="studio__swatches" id="swatches"></div>
+      <span class="studio__sep" aria-hidden="true"></span>
+      <button class="studio__toggle" id="toggle" type="button" aria-pressed="false" aria-label="Pause motion">
+        <svg class="studio__ring" viewBox="0 0 36 36" aria-hidden="true">
+          <circle class="studio__ring-track" cx="18" cy="18" r="16" />
+          <circle class="studio__ring-bar" id="ring" cx="18" cy="18" r="16" pathLength="100" />
+        </svg>
+        <svg class="i-pause" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><rect x="3" y="2" width="2.6" height="10" rx="1"/><rect x="8.4" y="2" width="2.6" height="10" rx="1"/></svg>
+        <svg class="i-play" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M4 2.3v9.4a.7.7 0 0 0 1.07.6l7.5-4.7a.7.7 0 0 0 0-1.2l-7.5-4.7A.7.7 0 0 0 4 2.3z"/></svg>
+      </button>
+    </aside>
+  </section>
+
+  <!-- ================= STATEMENT (Figma 452:459) ================= -->
+  <section class="statement" aria-label="What we believe">
+    <div class="statement__inner">
+      <h2 class="statement__title">
+        <span class="statement__line">Not more software.</span>
+        <span class="statement__line">Better tools <span class="statement__accent">
+          <span class="statement__accent-text">for real people.</span>
+          <svg class="statement__swash" viewBox="0 0 528 7" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M.6 6.1C1.4 4.6 3 3.6 6.4 3.3 70 2.2 190 1.3 300 1.5c90 .2 170 1.2 227.4 2.6-.1.9-.3 1.4-.8 1.6C470 4.5 390 3.7 300 3.4 190 3.1 80 3.7 8 4.6 5 4.8 3 5.4 1.9 6.6z" fill="currentColor"/>
+          </svg>
+        </span></span>
+      </h2>
+    </div>
+  </section>
+
+  <!-- ================= CLIENT LOGOS (Figma 148:2240) ================= -->
+  <section class="clients" aria-labelledby="clients-title">
+    <div class="clients__inner">
+      <div class="clients__head">
+        <span class="clients__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>
+        <h2 class="clients__title" id="clients-title">Trusted by 40+ of the world’s top brands</h2>
+      </div>
+
+      <!-- Logo rows are filled by main.js. Replace a placeholder by putting an
+           <img> inside its .logo-slot (keep the --w / --h design size). -->
+      <div class="clients__rows">
+        <div class="marquee" data-row="0" data-dir="left" role="list" aria-label="Client logos, row 1"></div>
+        <div class="marquee" data-row="1" data-dir="right" role="list" aria-label="Client logos, row 2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROOF: QUOTE + STATS (Figma 154:278) ================= -->
+  <section class="sec proof" aria-label="Client proof">
+    <div class="sec__inner proof__inner">
+      <figure class="proof__person" data-reveal>
+        <img class="proof__photo" src="assets/quote-andrew.png" width="273" height="317" alt="Andrew Baker" loading="lazy" />
+        <figcaption>
+          <strong class="proof__name">Andrew Baker</strong>
+          <span class="proof__role">Retirement Specialist, ARHQ<br />Ohio, United States</span>
+        </figcaption>
+      </figure>
+
+      <div class="proof__main">
+        <blockquote class="proof__quote" data-reveal>
+          <p>“ It’s great that I can work with just ZEE // TECH to get every aspect of what I need completed.” <span class="proof__source"><img src="assets/logo-fiverr.png" width="150" height="54" alt="Review on Fiverr" loading="lazy" /></span></p>
+        </blockquote>
+
+        <ul class="proof__badges" data-reveal>
+          <li class="proof__badge">
+            <img class="proof__badge-img is-round" src="assets/badge-fiverr-fi.png" width="80" height="80" alt="" loading="lazy" />
+            <div class="proof__rating">
+              <span class="stars" role="img" aria-label="Rated 4.9 out of 5">
+                <span class="star"><img src="assets/star-full.svg" alt="" /></span>
+                <span class="star"><img src="assets/star-full.svg" alt="" /></span>
+                <span class="star"><img src="assets/star-full.svg" alt="" /></span>
+                <span class="star"><img src="assets/star-full.svg" alt="" /></span>
+                <span class="star"><img src="assets/star-half.svg" alt="" /></span>
+              </span>
+              <strong>4.9/5</strong>
+            </div>
+          </li>
+          <li class="proof__rule" aria-hidden="true"><img src="assets/rule-v-grey.svg" width="1" height="115" alt="" /></li>
+          <li class="proof__badge">
+            <span class="proof__badge-label proof__badge-label--wide">Top product design agency 2025</span>
+            <img class="proof__badge-img" src="assets/badge-fiverr-award.png" width="100" height="115" alt="Fiverr award badge" loading="lazy" />
+          </li>
+          <li class="proof__rule" aria-hidden="true"><img src="assets/rule-v-grey.svg" width="1" height="115" alt="" /></li>
+          <li class="proof__badge">
+            <span class="proof__badge-label">Top design agency</span>
+            <img class="proof__badge-img is-round" src="assets/badge-upwork-award.png" width="100" height="100" alt="Upwork award badge" loading="lazy" />
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stats__inner">
+        <div class="stat" data-reveal>
+          <p class="stat__num" data-count="150" data-suffix="+">150+</p>
+          <p class="stat__label">Countries served</p>
+          <p class="stat__note">Metric pending verification</p>
+        </div>
+        <img class="stat__rule" src="assets/rule-v-white.svg" width="1" height="170" alt="" aria-hidden="true" />
+        <div class="stat" data-reveal>
+          <p class="stat__num" data-count="14" data-suffix="+">14+</p>
+          <p class="stat__label">Projects shipped</p>
+          <p class="stat__note">Metric pending verification</p>
+        </div>
+        <img class="stat__rule" src="assets/rule-v-white.svg" width="1" height="170" alt="" aria-hidden="true" />
+        <div class="stat" data-reveal>
+          <p class="stat__num" data-count="98" data-suffix="%">98%</p>
+          <p class="stat__label">Client retention</p>
+          <p class="stat__note">Metric pending verification</p>
+        </div>
+        <img class="stat__rule" src="assets/rule-v-white.svg" width="1" height="170" alt="" aria-hidden="true" />
+        <div class="stat" data-reveal>
+          <p class="stat__num" data-count="5" data-suffix="+">5+</p>
+          <p class="stat__label">Years building</p>
+          <p class="stat__note">Metric pending verification</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SELECTED WORK (Figma 148:2332) ================= -->
+  <section class="sec work" id="work" aria-labelledby="work-title">
+    <div class="sec__inner">
+      <header class="work__head" data-reveal>
+        <div class="work__intro">
+          <p class="eyebrow"><span class="eyebrow__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>Selected work</p>
+          <p class="sub">Sample cases — client names pending approval</p>
+        </div>
+        <h2 class="display work__title" id="work-title">
+          <span class="display__line">Work that solves</span>
+          <em class="display__em">real problems.</em>
+        </h2>
+        <a class="btn btn--ink" href="#work">
+          <span>All Works</span>
+          <svg class="btn__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </header>
+
+      <div class="work__list">
+        <article class="case" style="--case-bg: #ff8648">
+          <div class="case__body">
+            <p class="case__kicker"><span>Project 01</span> <span class="case__client">// FleetPulse Global</span></p>
+            <h3 class="case__title">Real-Time Dispatch &amp; Telematics Platform</h3>
+            <p class="case__desc">A fleet coordination platform handling live telemetry, routing and driver allocation at scale.</p>
+            <dl class="case__meta">
+              <div><dt>Scope</dt><dd>Product strategy UX research Design system Web app engineering</dd></div>
+              <div><dt>Duration</dt><dd>3 Weeks</dd></div>
+            </dl>
+            <a class="case__person" href="#work">
+              <img src="assets/avatar-avneet.jpg" width="80" height="80" alt="" loading="lazy" />
+              <span class="case__person-text"><strong>avneet Chattha</strong><span>Bearister AI CEO</span></span>
+              <span class="case__go" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="visually-hidden">View case study</span>
+            </a>
+          </div>
+          <figure class="case__media"><img src="assets/work-laptop.png" width="799" height="506" alt="FleetPulse dispatch dashboard on a laptop" loading="lazy" /></figure>
+        </article>
+
+        <article class="case" style="--case-bg: #b9f227">
+          <div class="case__body">
+            <p class="case__kicker"><span>Project 02</span> <span class="case__client">// FleetPulse Global</span></p>
+            <h3 class="case__title">Real-Time Dispatch &amp; Telematics Platform</h3>
+            <p class="case__desc">A fleet coordination platform handling live telemetry, routing and driver allocation at scale.</p>
+            <dl class="case__meta">
+              <div><dt>Scope</dt><dd>Product strategy UX research Design system Web app engineering</dd></div>
+              <div><dt>Duration</dt><dd>3 Weeks</dd></div>
+            </dl>
+            <a class="case__person" href="#work">
+              <img src="assets/avatar-avneet.jpg" width="80" height="80" alt="" loading="lazy" />
+              <span class="case__person-text"><strong>avneet Chattha</strong><span>Bearister AI CEO</span></span>
+              <span class="case__go" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="visually-hidden">View case study</span>
+            </a>
+          </div>
+          <figure class="case__media"><img src="assets/work-laptop.png" width="799" height="506" alt="FleetPulse dispatch dashboard on a laptop" loading="lazy" /></figure>
+        </article>
+
+        <article class="case" style="--case-bg: #27d4f2">
+          <div class="case__body">
+            <p class="case__kicker"><span>Project 03</span> <span class="case__client">// FleetPulse Global</span></p>
+            <h3 class="case__title">Real-Time Dispatch &amp; Telematics Platform</h3>
+            <p class="case__desc">A fleet coordination platform handling live telemetry, routing and driver allocation at scale.</p>
+            <dl class="case__meta">
+              <div><dt>Scope</dt><dd>Product strategy UX research Design system Web app engineering</dd></div>
+              <div><dt>Duration</dt><dd>3 Weeks</dd></div>
+            </dl>
+            <a class="case__person" href="#work">
+              <img src="assets/avatar-avneet.jpg" width="80" height="80" alt="" loading="lazy" />
+              <span class="case__person-text"><strong>avneet Chattha</strong><span>Bearister AI CEO</span></span>
+              <span class="case__go" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="visually-hidden">View case study</span>
+            </a>
+          </div>
+          <figure class="case__media"><img src="assets/work-laptop.png" width="799" height="506" alt="FleetPulse dispatch dashboard on a laptop" loading="lazy" /></figure>
+        </article>
+
+        <article class="case" style="--case-bg: #d66dff">
+          <div class="case__body">
+            <p class="case__kicker"><span>Project 04</span> <span class="case__client">// FleetPulse Global</span></p>
+            <h3 class="case__title">Real-Time Dispatch &amp; Telematics Platform</h3>
+            <p class="case__desc">A fleet coordination platform handling live telemetry, routing and driver allocation at scale.</p>
+            <dl class="case__meta">
+              <div><dt>Scope</dt><dd>Product strategy UX research Design system Web app engineering</dd></div>
+              <div><dt>Duration</dt><dd>3 Weeks</dd></div>
+            </dl>
+            <a class="case__person" href="#work">
+              <img src="assets/avatar-avneet.jpg" width="80" height="80" alt="" loading="lazy" />
+              <span class="case__person-text"><strong>avneet Chattha</strong><span>Bearister AI CEO</span></span>
+              <span class="case__go" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="visually-hidden">View case study</span>
+            </a>
+          </div>
+          <figure class="case__media"><img src="assets/work-laptop.png" width="799" height="506" alt="FleetPulse dispatch dashboard on a laptop" loading="lazy" /></figure>
+        </article>
+
+        <article class="case" style="--case-bg: #ff8db7">
+          <div class="case__body">
+            <p class="case__kicker"><span>Project 05</span> <span class="case__client">// FleetPulse Global</span></p>
+            <h3 class="case__title">Real-Time Dispatch &amp; Telematics Platform</h3>
+            <p class="case__desc">A fleet coordination platform handling live telemetry, routing and driver allocation at scale.</p>
+            <dl class="case__meta">
+              <div><dt>Scope</dt><dd>Product strategy UX research Design system Web app engineering</dd></div>
+              <div><dt>Duration</dt><dd>3 Weeks</dd></div>
+            </dl>
+            <a class="case__person" href="#work">
+              <img src="assets/avatar-avneet.jpg" width="80" height="80" alt="" loading="lazy" />
+              <span class="case__person-text"><strong>avneet Chattha</strong><span>Bearister AI CEO</span></span>
+              <span class="case__go" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="visually-hidden">View case study</span>
+            </a>
+          </div>
+          <figure class="case__media"><img src="assets/work-laptop.png" width="799" height="506" alt="FleetPulse dispatch dashboard on a laptop" loading="lazy" /></figure>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WHY ZEETECH / HUMAN PROOF (Figma 247:106) ================= -->
+  <section class="sec why" id="studio" aria-labelledby="why-title">
+    <div class="sec__inner">
+      <header class="sec-head sec-head--center" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>What sets us apart</p>
+        <h2 class="display" id="why-title">
+          <span class="display__line">Why ZeeTech? Because your</span>
+          <em class="display__em">growth is a shared outcome.</em>
+        </h2>
+        <p class="sub">A senior product team stays close from the first question to launch and beyond — fewer handoffs, clearer decisions, and better momentum.</p>
+      </header>
+
+      <!-- Studio reel. Set data-video="assets/your-reel.mp4" to play a real video;
+           until then a Three.js wave field runs as the live poster. -->
+      <div class="reel" id="reel" data-video="" data-reveal>
+        <canvas class="reel__gl" aria-hidden="true"></canvas>
+        <button class="reel__play" type="button" aria-label="Play studio reel">
+          <span class="reel__play-inner">
+            <span class="reel__play-icon"><img src="assets/icon-play-circle.svg" width="24" height="24" alt="" /></span>
+            PLAY
+          </span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CLIENT STORIES (Figma 197:562) ================= -->
+  <section class="sec testi" id="testimonials" aria-labelledby="testi-title">
+    <div class="sec__inner">
+      <header class="sec-head sec-head--split" data-reveal>
+        <div class="sec-head__main">
+          <p class="eyebrow"><span class="eyebrow__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>Client Stories</p>
+          <h2 class="display" id="testi-title">
+            <span class="display__line">VERIFIED CLIENT</span>
+            <span class="display__line display__accent"><em class="display__em">ENDORSEMENTS</em>.</span>
+          </h2>
+        </div>
+        <div class="sec-head__aside">
+          <div class="arrows">
+            <button class="arrow" type="button" data-testi="prev" aria-label="Previous story">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="arrow" type="button" data-testi="next" aria-label="Next story">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <p class="sub sub--narrow">We value each and every client’s feedback which helps us to improve.</p>
+        </div>
+      </header>
+
+      <div class="testi__viewport">
+        <div class="testi__track" aria-live="polite">
+          <article class="testi__slide is-active" aria-roledescription="slide" aria-label="Story 1 of 2">
+            <figure class="testi__media">
+              <img src="assets/testi-marcus.jpg" width="460" height="534" alt="Marcus Vance at his desk" loading="lazy" />
+              <img class="testi__play" src="assets/icon-play-lg.svg" width="48" height="48" alt="" aria-hidden="true" />
+            </figure>
+            <div class="testi__body">
+              <blockquote class="testi__quote">
+                <p>“ZeeTech re-architected our entire telematics ingestion pipeline. We went from dropping WebSocket packets during morning dispatch rushes to handling 50,000 live vehicle GPS streams with 18ms latency.” <span class="testi__source"><span class="testi__crop"><img src="assets/logo-upwork.png" alt="Review on Upwork" loading="lazy" /></span></span></p>
+              </blockquote>
+              <div class="testi__person">
+                <div>
+                  <p class="testi__name">Marcus Vance</p>
+                  <p class="testi__role">VP of Engineering — FleetPulse Logistics</p>
+                </div>
+                <img class="testi__crest" src="assets/badge-crest.png" width="80" height="80" alt="" loading="lazy" />
+              </div>
+            </div>
+          </article>
+
+          <article class="testi__slide" aria-roledescription="slide" aria-label="Story 2 of 2">
+            <figure class="testi__media">
+              <img src="assets/testi-next.jpg" width="460" height="534" alt="Client recording a video review" loading="lazy" />
+              <img class="testi__play" src="assets/icon-play-sm.svg" width="48" height="48" alt="" aria-hidden="true" />
+            </figure>
+            <div class="testi__body">
+              <blockquote class="testi__quote">
+                <p>“ZeeTech re-architected our entire telematics ingestion pipeline. We went from dropping WebSocket packets during morning dispatch rushes to handling 50,000 live vehicle GPS streams with 18ms latency.” <span class="testi__source"><span class="testi__crop"><img src="assets/logo-upwork.png" alt="Review on Upwork" loading="lazy" /></span></span></p>
+              </blockquote>
+              <div class="testi__person">
+                <div>
+                  <p class="testi__name">Marcus Vance</p>
+                  <p class="testi__role">VP of Engineering — FleetPulse Logistics</p>
+                </div>
+                <img class="testi__crest" src="assets/badge-crest.png" width="80" height="80" alt="" loading="lazy" />
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW WE DELIVER (Figma 261:51717) ================= -->
+  <section class="sec deliver" id="expertise" aria-labelledby="deliver-title">
+    <div class="sec__inner">
+      <header class="sec-head sec-head--center" data-reveal>
+        <p class="eyebrow eyebrow--light"><span class="eyebrow__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>How we deliver</p>
+        <h2 class="display display--light" id="deliver-title">
+          <span class="display__line">From architecture to launch.</span>
+          <span class="display__line"><span class="deliver__orange">One team,</span> <em class="display__em">engineered end to end.</em></span>
+        </h2>
+        <p class="sub sub--dim">We plan the system, design the experience, build the frontend and backend, implement AI where it adds real value, test rigorously and deploy — with the same team staying involved.</p>
+      </header>
+
+      <div class="deliver__body">
+        <ol class="deliver__list">
+          <li class="svc is-active">
+            <h3 class="svc__title">System Architecture &amp; Planning</h3>
+            <p class="svc__desc">We define the system structure, technical requirements, data flows and delivery roadmap before development begins.</p>
+            <div class="svc__meta">
+              <span class="svc__tag">01 / ARCHITECTURE</span>
+              <a class="svc__link" href="#contact">EXPLORE <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </li>
+          <li class="svc">
+            <h3 class="svc__title">UI/UX Design</h3>
+            <p class="svc__desc">User flows, wireframes, polished Figma interfaces, prototypes and reusable design systems for web and mobile products.</p>
+            <div class="svc__meta">
+              <span class="svc__tag">02 / DESIGN</span>
+              <a class="svc__link" href="#contact">EXPLORE <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </li>
+          <li class="svc">
+            <h3 class="svc__title">Backend Development &amp; AI</h3>
+            <p class="svc__desc">Business logic, APIs, databases, integrations and AI implementation engineered around the product's real requirements.</p>
+            <div class="svc__meta">
+              <span class="svc__tag">03 / BACKEND + AI</span>
+              <a class="svc__link" href="#contact">EXPLORE <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </li>
+          <li class="svc">
+            <h3 class="svc__title">Frontend Development</h3>
+            <p class="svc__desc">Responsive, production-ready interfaces built from the approved design system with clean and maintainable implementation.</p>
+            <div class="svc__meta">
+              <span class="svc__tag">04 / FRONTEND</span>
+              <a class="svc__link" href="#contact">EXPLORE <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </li>
+          <li class="svc">
+            <h3 class="svc__title">SQA &amp; Security Testing</h3>
+            <p class="svc__desc">Unit, integration and end-to-end testing, usability checks and security-focused QA before release.</p>
+            <div class="svc__meta">
+              <span class="svc__tag">05 / QA</span>
+              <a class="svc__link" href="#contact">EXPLORE <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </li>
+          <li class="svc">
+            <h3 class="svc__title">Deployment &amp; Ongoing Support</h3>
+            <p class="svc__desc">Production deployment, monitoring, upgrades and ongoing customization so the product keeps improving after launch.</p>
+            <div class="svc__meta">
+              <span class="svc__tag">06 / DEPLOYMENT</span>
+              <a class="svc__link" href="#contact">EXPLORE <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </li>
+        </ol>
+
+        <aside class="deliver__preview" aria-hidden="true">
+          <figure class="deliver__frame"><img src="assets/deliver-preview.png" width="579" height="425" alt="" loading="lazy" /></figure>
+          <p class="deliver__caption">
+            <span class="deliver__active">ACTIVE DISCIPLINE / <span id="deliver-num">01</span></span>
+            <span class="deliver__hint">Hover a discipline to explore how we deliver</span>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW WE BUILD (Figma 274:52903) ================= -->
+  <section class="sec build" id="process" aria-labelledby="build-title">
+    <img class="build__bg" src="assets/build-bg.png" alt="" aria-hidden="true" loading="lazy" />
+    <div class="sec__inner">
+      <header class="sec-head sec-head--center" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>How we build</p>
+        <h2 class="display" id="build-title">
+          <span class="display__line">One connected delivery system.</span>
+          <em class="display__em">From plan to production.</em>
+        </h2>
+        <p class="sub">Architecture, design, engineering, QA and deployment stay connected in one delivery loop — fewer handoffs, fewer surprises and a clearer path to launch.</p>
+      </header>
+
+      <div class="build__stage">
+        <!-- tool rows are filled by main.js -->
+        <div class="build__tools" aria-hidden="true">
+          <div class="build__row" data-tools="0" data-dir="left"></div>
+          <div class="build__row" data-tools="1" data-dir="right"></div>
+        </div>
+
+        <div class="build__map">
+          <div class="build__hub"><img src="assets/mark-z-orange.svg" width="60" height="60" alt="ZeeTech" /></div>
+
+          <svg class="build__wires" viewBox="0 120 1664 155" fill="none" aria-hidden="true">
+            <path class="wire" d="M832 126V176" />
+            <path class="wire" d="M128.7 176H1535.3" />
+            <path class="wire" d="M128.7 176c0 12-8 20-17 20s-13-7-13-13c0-9 9-13 16-9 9 5 14 16 14 32v58M121.7 259l7 7 7-7" />
+            <path class="wire" d="M410 176c0 12-8 20-17 20s-13-7-13-13c0-9 9-13 16-9 9 5 14 16 14 32v58M403 259l7 7 7-7" />
+            <path class="wire" d="M691.3 176c0 12-8 20-17 20s-13-7-13-13c0-9 9-13 16-9 9 5 14 16 14 32v58M684.3 259l7 7 7-7" />
+            <path class="wire" d="M972.7 176c0 12-8 20-17 20s-13-7-13-13c0-9 9-13 16-9 9 5 14 16 14 32v58M965.7 259l7 7 7-7" />
+            <path class="wire" d="M1254 176c0 12-8 20-17 20s-13-7-13-13c0-9 9-13 16-9 9 5 14 16 14 32v58M1247 259l7 7 7-7" />
+            <path class="wire" d="M1535.3 176c0 12-8 20-17 20s-13-7-13-13c0-9 9-13 16-9 9 5 14 16 14 32v58M1528.3 259l7 7 7-7" />
+          </svg>
+
+          <ol class="build__cards">
+            <li class="stage">
+              <div class="stage__top">
+                <span class="stage__num">01</span>
+                <h3 class="stage__title">Architecture &amp; Planning</h3>
+                <span class="stage__tools"><img src="assets/tool-0.png" alt="" /><img src="assets/tool-5.png" alt="" /><img src="assets/tool-1.png" alt="" /></span>
+              </div>
+              <p class="stage__label">DELIVERS</p>
+              <ul class="chips"><li>System blueprint</li><li>Scope map</li><li>Tech stack</li></ul>
+            </li>
+            <li class="stage">
+              <div class="stage__top">
+                <span class="stage__num">02</span>
+                <h3 class="stage__title">UI/UX Design</h3>
+                <span class="stage__tools"><img src="assets/tool-6.png" alt="" /><img src="assets/tool-2.png" alt="" /><img src="assets/tool-3.png" alt="" /></span>
+              </div>
+              <p class="stage__label">DELIVERS</p>
+              <ul class="chips"><li>User flows</li><li>Prototype</li><li>Design system</li></ul>
+            </li>
+            <li class="stage">
+              <div class="stage__top">
+                <span class="stage__num">03</span>
+                <h3 class="stage__title">Backend &amp; AI</h3>
+                <span class="stage__tools"><img src="assets/tool-7.png" alt="" /><img src="assets/tool-4.png" alt="" /><img src="assets/tool-8.png" alt="" /></span>
+              </div>
+              <p class="stage__label">DELIVERS</p>
+              <ul class="chips"><li>API layer</li><li>Database</li><li>AI workflows</li></ul>
+            </li>
+            <li class="stage">
+              <div class="stage__top">
+                <span class="stage__num">04</span>
+                <h3 class="stage__title">Frontend Development</h3>
+                <span class="stage__tools"><img src="assets/tool-4.png" alt="" /><img src="assets/tool-8.png" alt="" /><img src="assets/tool-9.png" alt="" /></span>
+              </div>
+              <p class="stage__label">DELIVERS</p>
+              <ul class="chips"><li>API layer</li><li>Database</li><li>AI workflows</li></ul>
+            </li>
+            <li class="stage">
+              <div class="stage__top">
+                <span class="stage__num">05</span>
+                <h3 class="stage__title">SQA &amp; Security</h3>
+                <span class="stage__tools"><img src="assets/tool-4.png" alt="" /><img src="assets/tool-8.png" alt="" /><img src="assets/tool-9.png" alt="" /></span>
+              </div>
+              <p class="stage__label">DELIVERS</p>
+              <ul class="chips"><li>Test plan</li><li>QA report</li><li>Security checks</li></ul>
+            </li>
+            <li class="stage">
+              <div class="stage__top">
+                <span class="stage__num">06</span>
+                <h3 class="stage__title">Deployment &amp; Support</h3>
+                <span class="stage__tools"><img src="assets/tool-4.png" alt="" /><img src="assets/tool-8.png" alt="" /><img src="assets/tool-9.png" alt="" /></span>
+              </div>
+              <p class="stage__label">DELIVERS</p>
+              <ul class="chips"><li>CI/CD</li><li>Cloud deploy</li><li>Monitoring</li></ul>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <footer class="build__foot" data-reveal>
+        <p class="sub">One connected workflow. Clear ownership at every stage.</p>
+        <a class="btn btn--signal" href="#contact">
+          <span>EXPLORE OUR PROCESS</span>
+          <svg class="btn__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </footer>
+    </div>
+  </section>
+
+  <!-- ================= DELIVERY PRINCIPLES (Figma 324:1201) ================= -->
+  <section class="sec principles" aria-labelledby="principles-title">
+    <img class="principles__deco" src="assets/principles-deco.svg" width="800" height="800" alt="" aria-hidden="true" />
+    <div class="stamp" aria-hidden="true">
+      <img class="stamp__outer" src="assets/stamp-ring-outer.svg" width="315" height="315" alt="" />
+      <img class="stamp__inner" src="assets/stamp-ring-inner.svg" width="210" height="210" alt="" />
+      <img class="stamp__dot" src="assets/stamp-dot.svg" width="13" height="13" alt="" />
+      <span class="stamp__title">ZEETECH<br />DIGITAL PARTNERS</span>
+      <span class="stamp__small">IDEAS<br />SYSTEMS<br />REAL IMPACT</span>
+    </div>
+
+    <div class="sec__inner">
+      <header class="sec-head sec-head--split" data-reveal>
+        <div class="sec-head__main principles__main">
+          <p class="eyebrow"><span class="eyebrow__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>Delivery principles</p>
+          <h2 class="display" id="principles-title">Speed comes from structure. <em class="display__em">Not shortcuts.</em></h2>
+        </div>
+        <p class="sub sec-head__aside">We reduce delay by making important decisions early, keeping design and engineering connected, testing throughout the build, and carrying ownership through deployment.</p>
+      </header>
+
+      <div class="principles__grid">
+        <article class="pcard pcard--dark">
+          <div class="pcard__copy">
+            <p class="pcard__kicker">01 / Architecture first</p>
+            <h3 class="pcard__title">Architecture before <em>implementation</em></h3>
+            <p class="pcard__desc">We define scope, system boundaries, data flow, integrations and the tech stack before development starts — reducing rework later.</p>
+            <a class="pcard__link" href="#contact">PLAN SMARTER <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+          <div class="orbit" aria-hidden="true">
+            <img class="orbit__ring" src="assets/orbit-ring.png" alt="" />
+            <img class="orbit__tick orbit__tick--n" src="assets/orbit-tick-n.svg" alt="" />
+            <img class="orbit__tick orbit__tick--s" src="assets/orbit-tick-s.svg" alt="" />
+            <img class="orbit__tick orbit__tick--e" src="assets/orbit-tick-e.svg" alt="" />
+            <img class="orbit__tick orbit__tick--w" src="assets/orbit-tick-w.svg" alt="" />
+            <span class="orbit__hub"><img src="assets/mark-z-green.svg" alt="" /></span>
+            <span class="orbit__node orbit__node--api"><img class="is-round" src="assets/orbit-api.gif" alt="" />API</span>
+            <span class="orbit__node orbit__node--web"><img class="is-laptop" src="assets/orbit-web.gif" alt="" />WEB</span>
+            <span class="orbit__node orbit__node--db"><span class="orbit__db"><img src="assets/orbit-db.svg" alt="" /></span>DB</span>
+            <span class="orbit__node orbit__node--ai"><img class="is-round" src="assets/orbit-ai.gif" alt="" />AI</span>
+          </div>
+        </article>
+
+        <article class="pcard pcard--fill" style="--pcard-bg: #fff">
+          <div class="pcard__copy">
+            <p class="pcard__kicker">02 / Design → code</p>
+            <h3 class="pcard__title">The design system <em>survives the handoff</em></h3>
+            <p class="pcard__desc">Reusable Figma components, interaction states and responsive rules stay connected to implementation instead of being reinterpreted from screenshots.</p>
+            <a class="pcard__link" href="#contact">From Design to Reality <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+          <figure class="pcard__media pcard__media--fill"><img src="assets/principle-02.png" alt="Figma design next to the matching code" loading="lazy" /></figure>
+        </article>
+
+        <article class="pcard" style="--pcard-bg: #fff7a3">
+          <div class="pcard__copy">
+            <p class="pcard__kicker">03 / full-stack alignment</p>
+            <h3 class="pcard__title">Frontend and backend <em>stay connected</em></h3>
+            <p class="pcard__desc">we build UI implementation, aPIs, databases, and integrations as one system, keeping design and engineering in sync.</p>
+            <a class="pcard__link" href="#contact">PLAN SMARTER <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+          <figure class="pcard__media pcard__media--shadow"><img src="assets/principle-03.png" alt="Interface connected to API, database and integrations" loading="lazy" /></figure>
+        </article>
+
+        <article class="pcard" style="--pcard-bg: #afd6ff">
+          <div class="pcard__copy">
+            <p class="pcard__kicker">04 / Quality throughout</p>
+            <h3 class="pcard__title">QA is part of the build, <em>not the last week</em></h3>
+            <p class="pcard__desc">Functional QA, responsive checks, edge states, security and performance review happen alongside development — not after everything is “done.”</p>
+          </div>
+          <figure class="pcard__media pcard__media--shadow"><img src="assets/principle-04.png" alt="QA checklist" loading="lazy" /></figure>
+        </article>
+
+        <article class="pcard" style="--pcard-bg: #ffc9dd">
+          <div class="pcard__copy">
+            <p class="pcard__kicker">05 / Ownership after launch</p>
+            <h3 class="pcard__title">Deployment is a stage, <em>not a goodbye</em></h3>
+            <p class="pcard__desc">We handle cloud deployment, CI/CD, monitoring and post-launch support so the same context stays with the product after release.</p>
+          </div>
+          <figure class="pcard__media pcard__media--center"><img src="assets/principle-05.png" alt="CI/CD, cloud deploy, monitor and live flow" loading="lazy" /></figure>
+        </article>
+
+        <article class="pcard" style="--pcard-bg: #cbc5ff">
+          <div class="pcard__copy">
+            <p class="pcard__kicker">06 / Support for what’s next</p>
+            <h3 class="pcard__title">Support continues <em>after launch</em></h3>
+            <p class="pcard__desc">We provide ongoing support, iteration, fixes, and long-term product ownership to help you grow with confidence</p>
+          </div>
+          <figure class="pcard__media pcard__media--shadow"><img src="assets/principle-03.png" alt="Interface connected to API, database and integrations" loading="lazy" /></figure>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COMPARISON (Figma 334:3440) ================= -->
+  <section class="sec compare" aria-labelledby="compare-title">
+    <img class="compare__bg" src="assets/compare-bg.png" alt="" aria-hidden="true" loading="lazy" />
+    <div class="sec__inner">
+      <header class="sec-head sec-head--center" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>Why Zee Tech</p>
+        <h2 class="display" id="compare-title">
+          <span class="display__line">A connected team. Better outcomes.</span>
+          <em class="display__em">Built to move products forward.</em>
+        </h2>
+        <p class="sub sub--soft">A typical digital product can involve separate strategy, design, frontend, backend, QA and deployment teams. ZeeTech keeps those disciplines in one delivery loop.</p>
+      </header>
+
+      <div class="cmp-scroll" data-reveal>
+        <div class="cmp" role="table" aria-label="Delivery model comparison">
+          <div class="cmp__row cmp__row--head" role="row">
+            <span class="cmp__label" role="columnheader">Delivery Model</span>
+            <span class="cmp__cell" role="columnheader">Strategy</span>
+            <span class="cmp__cell" role="columnheader">Design</span>
+            <span class="cmp__cell" role="columnheader">Engineering</span>
+            <span class="cmp__cell" role="columnheader">QA</span>
+            <span class="cmp__cell" role="columnheader">Launch</span>
+            <span class="cmp__cell" role="columnheader">Support</span>
+          </div>
+          <!-- rows are filled by main.js from the COMPARE table -->
+          <div class="cmp__body" id="cmp-body"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MORE OF WHAT WE BUILD (Figma 392:1359) ================= -->
+  <section class="sec showreel" aria-labelledby="showreel-title">
+    <div class="sec__inner showreel__inner">
+      <header class="sec-head sec-head--center" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>More of what we build</p>
+        <h2 class="display" id="showreel-title">
+          <span class="display__line">Different problems. One product team.</span>
+          <em class="display__em">From first idea to what ships.</em>
+        </h2>
+        <p class="sub sub--soft">A quick reel across the products, interfaces and systems we help clients plan, design, build, test and launch.</p>
+      </header>
+
+      <div class="ticker" data-dir="left" aria-label="Capabilities">
+        <ul class="ticker__set">
+          <li>Product Strategy</li><li>UI/UX Design</li><li>Design Systems</li><li>SaaS Platforms</li><li>AI Products</li><li>Mobile Apps</li><li>CRM &amp; Internal Tools</li>
+        </ul>
+      </div>
+
+      <div class="ticker ticker--media" data-dir="left" data-speed="60" aria-label="Recent product work">
+        <ul class="ticker__set">
+          <li><img src="assets/reel-1.png" width="539" height="497" alt="SaaS landing page" loading="lazy" /></li>
+          <li><img class="is-top" src="assets/reel-2.png" width="539" height="497" alt="iPhone device mockups" loading="lazy" /></li>
+          <li><img src="assets/reel-1.png" width="539" height="497" alt="SaaS landing page" loading="lazy" /></li>
+          <li><img src="assets/reel-3.png" width="539" height="497" alt="Link Bank mobile banking app" loading="lazy" /></li>
+          <li><img class="is-top" src="assets/reel-2.png" width="539" height="497" alt="iPhone device mockups" loading="lazy" /></li>
+          <li><img src="assets/reel-4.png" width="539" height="497" alt="Online marketing mobile app" loading="lazy" /></li>
+          <li><img src="assets/reel-3.png" width="539" height="497" alt="Link Bank mobile banking app" loading="lazy" /></li>
+          <li><img src="assets/reel-4.png" width="539" height="497" alt="Online marketing mobile app" loading="lazy" /></li>
+        </ul>
+      </div>
+
+      <div class="ticker ticker--navy" data-dir="right" aria-label="Engineering services">
+        <ul class="ticker__set">
+          <li>System Architecture</li><li>Backend Development</li><li>Frontend Development</li><li>SQA &amp; Security</li><li>Cloud &amp; DevOps</li><li>Deployment</li><li>Ongoing Support</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FAQ (Figma 394:2249) ================= -->
+  <section class="sec faq" id="faq" aria-labelledby="faq-title">
+    <img class="faq__knot" src="assets/faq-knot.png" width="501" height="511" alt="" aria-hidden="true" loading="lazy" />
+    <div class="stamp" aria-hidden="true">
+      <img class="stamp__outer" src="assets/stamp-ring-outer.svg" width="315" height="315" alt="" />
+      <img class="stamp__inner" src="assets/stamp-ring-inner.svg" width="210" height="210" alt="" />
+      <img class="stamp__dot" src="assets/stamp-dot.svg" width="13" height="13" alt="" />
+      <span class="stamp__title">ZEETECH<br />DIGITAL PARTNERS</span>
+      <span class="stamp__small">IDEAS<br />SYSTEMS<br />REAL IMPACT</span>
+    </div>
+
+    <div class="sec__inner">
+      <header class="sec-head sec-head--split" data-reveal>
+        <div class="sec-head__main faq__main">
+          <p class="eyebrow"><span class="eyebrow__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>FAQ / Before we start</p>
+          <h2 class="display" id="faq-title">Questions before we build? <em class="display__em">Good. Ask them early.</em></h2>
+        </div>
+        <p class="sub sec-head__aside">Clear answers on scope, product design, engineering, AI, QA and what happens after launch.</p>
+      </header>
+
+      <div class="faq__body">
+        <aside class="help" data-reveal>
+          <img class="help__bg" src="assets/faq-card.png" alt="" aria-hidden="true" loading="lazy" />
+          <span class="help__avatars" aria-hidden="true">
+            <img src="assets/faq-avatar-1.jpg" alt="" loading="lazy" /><img src="assets/faq-avatar-2.jpg" alt="" loading="lazy" /><img src="assets/faq-avatar-3.jpg" alt="" loading="lazy" />
+          </span>
+          <h3 class="help__title">Still figuring out the brief? <em>That’s a valid starting point.</em></h3>
+          <p class="help__text">Tell us what exists, what feels stuck, and what you want the product to do next. We can help define the right first step.</p>
+          <a class="btn btn--signal" href="#contact">
+            <span>START A CONVERSATION</span>
+            <svg class="btn__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </aside>
+
+        <div class="acc" id="faq-list">
+          <div class="acc__item is-open">
+            <h3 class="acc__q"><button type="button" aria-expanded="true" aria-controls="faq-a1" id="faq-q1">What can ZeeTech help us build?<span class="acc__icon" aria-hidden="true"><img class="acc__plus" src="assets/icon-plus.svg" alt="" /><img class="acc__minus" src="assets/icon-minus.svg" alt="" /></span></button></h3>
+            <div class="acc__panel" id="faq-a1" role="region" aria-labelledby="faq-q1"><div><p>We work across SaaS platforms, web and mobile products, CRM and internal tools, AI-enabled workflows, dashboards, and the systems behind them. We can own the full delivery path or join at a focused stage.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <h3 class="acc__q"><button type="button" aria-expanded="false" aria-controls="faq-a2" id="faq-q2">Can you join an existing product or codebase?<span class="acc__icon" aria-hidden="true"><img class="acc__plus" src="assets/icon-plus.svg" alt="" /><img class="acc__minus" src="assets/icon-minus.svg" alt="" /></span></button></h3>
+            <div class="acc__panel" id="faq-a2" role="region" aria-labelledby="faq-q2"><div><p>Yes. We start with a short review of what already exists — codebase, design files, infrastructure and backlog — then agree where we add the most value, from a focused feature to taking over delivery.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <h3 class="acc__q"><button type="button" aria-expanded="false" aria-controls="faq-a3" id="faq-q3">Do you handle both UI/UX and development?<span class="acc__icon" aria-hidden="true"><img class="acc__plus" src="assets/icon-plus.svg" alt="" /><img class="acc__minus" src="assets/icon-minus.svg" alt="" /></span></button></h3>
+            <div class="acc__panel" id="faq-a3" role="region" aria-labelledby="faq-q3"><div><p>Yes. The same team plans the system, designs the experience in Figma and builds the frontend and backend, so the design system carries straight into production code without a handoff between agencies.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <h3 class="acc__q"><button type="button" aria-expanded="false" aria-controls="faq-a4" id="faq-q4">Where does AI fit into your process?<span class="acc__icon" aria-hidden="true"><img class="acc__plus" src="assets/icon-plus.svg" alt="" /><img class="acc__minus" src="assets/icon-minus.svg" alt="" /></span></button></h3>
+            <div class="acc__panel" id="faq-a4" role="region" aria-labelledby="faq-q4"><div><p>Where it adds real value — search, automation, assistants, classification or data workflows. We scope AI features against the actual requirement, then build, test and monitor them like any other part of the system.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <h3 class="acc__q"><button type="button" aria-expanded="false" aria-controls="faq-a5" id="faq-q5">How do you handle QA, security and responsive testing?<span class="acc__icon" aria-hidden="true"><img class="acc__plus" src="assets/icon-plus.svg" alt="" /><img class="acc__minus" src="assets/icon-minus.svg" alt="" /></span></button></h3>
+            <div class="acc__panel" id="faq-a5" role="region" aria-labelledby="faq-q5"><div><p>Testing runs alongside development: unit, integration and end-to-end tests, responsive and cross-browser checks, edge states, plus security and performance review before each release.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <h3 class="acc__q"><button type="button" aria-expanded="false" aria-controls="faq-a6" id="faq-q6">How do you define timeline and budget?<span class="acc__icon" aria-hidden="true"><img class="acc__plus" src="assets/icon-plus.svg" alt="" /><img class="acc__minus" src="assets/icon-minus.svg" alt="" /></span></button></h3>
+            <div class="acc__panel" id="faq-a6" role="region" aria-labelledby="faq-q6"><div><p>After a short discovery call we map scope, priorities and technical risk, then share a phased plan with a timeline and cost for each stage — so you can start focused and expand with confidence.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECT INQUIRY (Figma 397:3187) ================= -->
+  <section class="sec inquiry" id="contact" aria-labelledby="inquiry-title">
+    <div class="sec__inner">
+      <header class="sec-head" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>Start a project / Project inquiry</p>
+        <h2 class="display" id="inquiry-title">
+          <span class="display__line">Tell us what you’re building.</span>
+          <em class="display__em">A few useful details are enough.</em>
+        </h2>
+        <p class="sub">We use the context to understand the problem before suggesting scope, timeline or the right next step.</p>
+      </header>
+
+      <div class="inquiry__card" data-reveal>
+        <div class="inquiry__side">
+          <div class="inquiry__prep">
+            <p class="eyebrow eyebrow--light"><span class="eyebrow__badge" aria-hidden="true"><img src="assets/icon-badge.svg" width="18" height="18" alt="" /></span>Before you send it</p>
+            <h3 class="inquiry__title">Three things make the first conversation useful.</h3>
+            <ol class="steps">
+              <li><span class="steps__num">01</span><span><strong>What exists today?</strong>A new idea, a current product, or a system that already has users.</span></li>
+              <li><span class="steps__num">02</span><span><strong>What is getting in the way?</strong>User problems, technical debt, missing workflows, or delivery bottlenecks.</span></li>
+              <li><span class="steps__num">03</span><span><strong>What should change?</strong>The result you want for users, the team, or the business.</span></li>
+            </ol>
+          </div>
+          <figure class="inquiry__person">
+            <img src="assets/cta-iqbal.png" width="366" height="369" alt="MD Iqbal Hasan" loading="lazy" />
+            <figcaption><strong>MD Iqbal Hasan</strong><span>COO &amp; Co-founder</span></figcaption>
+          </figure>
+        </div>
+
+        <form class="form" id="inquiry-form" novalidate>
+          <div class="field">
+            <label for="f-name">Full Name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" placeholder="E.G. ALEX MORGAN" required />
+          </div>
+          <div class="form__row">
+            <div class="field">
+              <label for="f-email">Your Email</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" placeholder="yourmail@gmail.com" required />
+            </div>
+            <div class="field">
+              <label for="f-phone">Whatsapp Number</label>
+              <div class="field__phone">
+                <img src="assets/icon-whatsapp.svg" width="20" height="20" alt="" aria-hidden="true" />
+                <select name="dial" aria-label="Country code">
+                  <option value="+880">+880</option>
+                  <option value="+1">+1</option>
+                  <option value="+44">+44</option>
+                  <option value="+61">+61</option>
+                  <option value="+91">+91</option>
+                  <option value="+971">+971</option>
+                </select>
+                <input id="f-phone" name="phone" type="tel" autocomplete="tel-national" placeholder="123 456 7890" />
+              </div>
+            </div>
+          </div>
+          <fieldset class="field budget">
+            <legend>Project Budget</legend>
+            <div class="budget__chips">
+              <label><input type="radio" name="budget" value="Less than $5k" /><span>Less than $5k</span></label>
+              <label><input type="radio" name="budget" value="$5k - $20k" /><span>$5k - $20k</span></label>
+              <label><input type="radio" name="budget" value="$10k - $20k" /><span>$10k - $20k</span></label>
+              <label><input type="radio" name="budget" value="$20k - $50k" /><span>$20k - $50k</span></label>
+              <label><input type="radio" name="budget" value="More than $50k" /><span>More than $50k</span></label>
+            </div>
+          </fieldset>
+          <div class="field">
+            <label for="f-details">Project Details</label>
+            <textarea id="f-details" name="details" rows="3" placeholder="I want to redesign my website....." required></textarea>
+          </div>
+          <div class="form__actions">
+            <button class="btn btn--signal" type="submit">
+              <span>Send Inquiry</span>
+              <svg class="btn__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER (Figma 383:361) ================= -->
+  <footer class="sec footer" aria-label="Site footer">
+    <div class="footer__inner">
+      <div class="footer__cta" data-reveal>
+        <div class="footer__pitch">
+          <p class="footer__kicker">NEXT PROJECT</p>
+          <p class="footer__title">Have something ambitious in mind?</p>
+          <p class="footer__tagline">Good. We like complicated things.</p>
+        </div>
+        <div class="footer__actions">
+          <a class="footer__email" href="mailto:hello@zeetech.studio"><span>EMAIL THE STUDIO</span>hello@zeetech.studio</a>
+          <a class="footer__start" href="#contact">START A PROJECT <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <img src="assets/logo-zeetech.svg" width="180" height="60" alt="ZeeTech" />
+          <p>A technology studio working across strategy, product design and engineering — for teams building what comes next.</p>
+          <p class="footer__kicker">DHAKA → WORLDWIDE</p>
+        </div>
+        <nav class="footer__col" aria-label="Footer">
+          <p class="footer__kicker">NAVIGATE</p>
+          <ul>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#expertise">Expertise</a></li>
+            <li><a href="#studio">Studio</a></li>
+            <li><a href="#faq">Insights</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#process">Lab</a></li>
+          </ul>
+        </nav>
+        <div class="footer__col footer__col--wide">
+          <p class="footer__kicker">SERVICES</p>
+          <ul>
+            <li><a href="#expertise">System Architecture &amp; Planning</a></li>
+            <li><a href="#expertise">UI/UX Design</a></li>
+            <li><a href="#expertise">Backend Development &amp; AI</a></li>
+            <li><a href="#expertise">Frontend Development</a></li>
+            <li><a href="#expertise">SQA &amp; Security</a></li>
+            <li><a href="#expertise">Deployment &amp; Ongoing Support</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <p class="footer__kicker">CONTACT</p>
+          <ul>
+            <li><a href="mailto:hello@zeetech.studio">hello@zeetech.studio</a></li>
+            <li>Dhaka, Bangladesh</li>
+            <li>Working worldwide</li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="footer__rule" />
+
+      <dl class="footer__strip">
+        <div><dt>BASE</dt><dd>Dhaka, Bangladesh</dd></div>
+        <div><dt>REACH</dt><dd>Working worldwide</dd></div>
+        <div><dt>DELIVERY</dt><dd>Strategy → Design → Engineering</dd></div>
+        <div><dt>CONTACT</dt><dd>hello@zeetech.studio</dd></div>
+      </dl>
+
+      <div class="footer__finale">
+        <p class="footer__meta"><span>INDEPENDENT TECHNOLOGY STUDIO</span><span>STRATEGY • PRODUCT • ENGINEERING</span></p>
+        <div class="footer__wordmark">
+          <span class="wordmark" role="img" aria-label="ZeeTech">
+            <img style="--t:40.47%;--r:79.5%;--b:20.26%;--l:5.06%" src="assets/wordmark-1.svg" alt="" />
+            <img style="--t:21.83%;--r:72.94%;--b:36.88%;--l:11.52%" src="assets/wordmark-2.svg" alt="" />
+            <img style="--t:32.94%;--r:60.26%;--b:32.3%;--l:30.06%" src="assets/wordmark-3.svg" alt="" />
+            <img style="--t:31.93%;--r:4.74%;--b:32.3%;--l:86.6%" src="assets/wordmark-4.svg" alt="" />
+            <img style="--t:41.3%;--r:23.54%;--b:31.68%;--l:67.39%" src="assets/wordmark-5.svg" alt="" />
+            <img style="--t:41.28%;--r:40.83%;--b:31.66%;--l:50.11%" src="assets/wordmark-6.svg" alt="" />
+            <img style="--t:41.26%;--r:50.6%;--b:31.72%;--l:40.37%" src="assets/wordmark-7.svg" alt="" />
+            <img style="--t:32.94%;--r:31.85%;--b:32.31%;--l:58.86%" src="assets/wordmark-8.svg" alt="" />
+            <img style="--t:41.26%;--r:14.3%;--b:31.69%;--l:77.21%" src="assets/wordmark-9.svg" alt="" />
+          </span>
+          <span class="footer__studio">studio</span>
+        </div>
+      </div>
+
+      <div class="footer__base">
+        <p>© 2026 ZeeTech. All rights reserved.</p>
+        <p class="footer__built">Built from Dhaka for teams building what comes next.</p>
+        <a class="footer__top" href="#hero">BACK TO TOP ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="main.js" defer></script>
+</body>
+</html>

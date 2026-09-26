@@ -1,0 +1,66 @@
+/* ---------------------------------------------------------
+   Why ZeeTech / studio reel (Figma 247:106)
+   --------------------------------------------------------- */
+.why { background: #fff; }
+.reel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1664 / 720;
+  border: 1px solid #d8d5cd;
+  border-radius: clamp(16px, calc(28 * var(--u)), 28px);
+  background: #000;
+  overflow: hidden;
+}
+.reel__gl, .reel video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.reel video { object-fit: cover; }
+.reel__play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: 127px;
+  padding: 4px;
+  border: 1px dashed var(--zt-orange);
+  border-radius: 999px;
+  background: rgba(255, 114, 0, 0.08);
+  box-shadow: 0 0 20px #000;
+  opacity: 0.9;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+}
+.reel__play:hover { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
+.reel__play:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+.reel__play-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--zt-orange);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.2;
+}
+.reel__play-icon {
+  display: flex;
+  padding: 2px;
+  border: 1px dashed #ededed;
+  border-radius: 88px;
+}
+.reel__play-icon img { display: block; width: 24px; height: 24px; }
+.reel.is-playing .reel__play { display: none; }
+
+
+@media (max-width: 900px) {
+  .reel { aspect-ratio: 4 / 3; }
+}

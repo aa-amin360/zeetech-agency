@@ -1,0 +1,28 @@
+# PostgreSQL for the ZeeTech site on the VPS.
+# The Next.js app itself runs with PM2 (see ecosystem.config.cjs) so it can be
+# built on the server with the database available.
+#
+#   cd deploy && docker compose up -d
+#
+# Set POSTGRES_PASSWORD in deploy/.env (same value as in the app's DATABASE_URL).
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: zeetech
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in deploy/.env}
+      POSTGRES_DB: zeetech
+      POSTGRES_INITDB_ARGS: --encoding=UTF8 --locale=C
+    # only reachable from the server itself
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U zeetech']
+      interval: 10s
+      retries: 5
+
+volumes:
+  pgdata:
