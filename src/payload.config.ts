@@ -85,7 +85,10 @@ export default buildConfig({
       clientUploads: true,
       // same database columns whether or not Blob is in use, so one set of migrations fits all
       alwaysInsertFields: true,
-      addRandomSuffix: true,
+      // keep this off: image URLs are built from the stored filename, and a random suffix
+      // on the Blob object (but not on the resized copies) makes those URLs 404.
+      // Payload already makes filenames unique (photo.png → photo-1.png).
+      addRandomSuffix: false,
     }),
     seoPlugin({
       collections: ['pages', 'case-studies'],

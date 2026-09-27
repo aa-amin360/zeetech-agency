@@ -13,7 +13,9 @@ import config from '../src/payload.config'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 const ASSETS = path.resolve(dirname, '../legacy/assets')
-const ctx = { disableRevalidate: true }
+// a fresh object per call: Payload and its plugins keep per-request state in `context`
+// (the Blob storage plugin stores the file being uploaded there), so it must not be shared
+const ctx = () => ({ disableRevalidate: true })
 
 const payload: Payload = await getPayload({ config })
 
@@ -26,7 +28,7 @@ if (existing.docs.length && !process.env.SEED_FORCE) {
 if (process.env.SEED_FORCE) {
   payload.logger.info('SEED_FORCE: removing existing content…')
   for (const collection of ['pages', 'case-studies', 'testimonials', 'faqs', 'media'] as const) {
-    await payload.delete({ collection, where: { id: { exists: true } }, context: ctx })
+    await payload.delete({ collection, where: { id: { exists: true } }, context: ctx() })
   }
 }
 
@@ -49,7 +51,7 @@ async function upload(file: string, alt = '', focal?: { x: number; y: number }) 
     collection: 'media',
     data: { alt, ...(focal ? { focalX: focal.x, focalY: focal.y } : {}) },
     filePath: path.join(ASSETS, file),
-    context: ctx,
+    context: ctx(),
   })
   media[file] = doc.id as number
   return media[file]
@@ -95,7 +97,7 @@ for (let i = 0; i < 10; i++) tools.push(await upload(`tool-${i}.png`, ''))
 payload.logger.info('Creating testimonials, case studies and FAQs…')
 const andrew = await payload.create({
   collection: 'testimonials',
-  context: ctx,
+  context: ctx(),
   data: {
     _status: 'published',
     name: 'Andrew Baker',
@@ -112,7 +114,7 @@ const marcusQuote =
   'ZeeTech re-architected our entire telematics ingestion pipeline. We went from dropping WebSocket packets during morning dispatch rushes to handling 50,000 live vehicle GPS streams with 18ms latency.'
 const marcus = await payload.create({
   collection: 'testimonials',
-  context: ctx,
+  context: ctx(),
   data: {
     _status: 'published',
     name: 'Marcus Vance',
@@ -126,7 +128,7 @@ const marcus = await payload.create({
 })
 const marcusReview = await payload.create({
   collection: 'testimonials',
-  context: ctx,
+  context: ctx(),
   data: {
     _status: 'published',
     name: 'Marcus Vance',
@@ -145,7 +147,7 @@ const studies: number[] = []
 for (let i = 0; i < colours.length; i++) {
   const doc = await payload.create({
     collection: 'case-studies',
-    context: ctx,
+    context: ctx(),
     data: {
       _status: 'published',
       title: 'Real-Time Dispatch & Telematics Platform',
@@ -193,7 +195,7 @@ const faqData = [
 ]
 const faqs: number[] = []
 for (const [question, answer] of faqData) {
-  faqs.push((await payload.create({ collection: 'faqs', data: { question, answer }, context: ctx })).id as number)
+  faqs.push((await payload.create({ collection: 'faqs', data: { question, answer }, context: ctx() })).id as number)
 }
 
 /* ---------- home page ---------- */
@@ -389,7 +391,7 @@ const layout = [
 
 await payload.create({
   collection: 'pages',
-  context: ctx,
+  context: ctx(),
   data: {
     _status: 'published',
     title: 'Home',
@@ -408,7 +410,7 @@ await payload.create({
 payload.logger.info('Filling in the header, footer and site settings…')
 await payload.updateGlobal({
   slug: 'header',
-  context: ctx,
+  context: ctx(),
   data: {
     links: [
       { link: { label: 'Work', href: '/#work' } },
@@ -422,7 +424,7 @@ await payload.updateGlobal({
 
 await payload.updateGlobal({
   slug: 'footer',
-  context: ctx,
+  context: ctx(),
   data: {
     pitch: { kicker: 'NEXT PROJECT', title: 'Have something ambitious in mind?', tagline: 'Good. We like complicated things.' },
     emailLabel: 'EMAIL THE STUDIO',
@@ -481,7 +483,7 @@ await payload.updateGlobal({
 
 await payload.updateGlobal({
   slug: 'site-settings',
-  context: ctx,
+  context: ctx(),
   data: {
     siteName: 'ZeeTech',
     titleTemplate: '%s — ZeeTech',
@@ -493,6 +495,26 @@ await payload.updateGlobal({
     address: 'Dhaka, Bangladesh',
   },
 })
+
+/* ---------- check the uploaded files are really reachable (Blob) ---------- */
+if (process.env.BLOB_READ_WRITE_TOKEN) {
+  const all = await payload.find({ collection: 'media', limit: 500, pagination: false, depth: 0 })
+  const urls = all.docs.flatMap((d) => [d.url, ...Object.values(d.sizes ?? {}).map((s) => s?.url)])
+  const missing: string[] = []
+  for (const url of urls) {
+    if (!url || !url.startsWith('http')) continue
+    let status = 0
+    for (let attempt = 0; attempt < 3 && !status; attempt++) {
+      status = await fetch(url, { method: 'HEAD' }).then((r) => r.status, () => 0)
+    }
+    if (status !== 200) missing.push(`${status || 'no response'} ${url}`)
+  }
+  if (missing.length) {
+    payload.logger.error(`${missing.length} image files are not reachable:\n${missing.join('\n')}`)
+    process.exit(1)
+  }
+  payload.logger.info(`All ${urls.filter(Boolean).length} image files are reachable on Vercel Blob.`)
+}
 
 payload.logger.info('Done. Open /admin to edit the content.')
 process.exit(0)
