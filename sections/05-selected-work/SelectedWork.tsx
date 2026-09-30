@@ -4,6 +4,7 @@ import { getPayloadClient, isPreview } from '@/lib/payload'
 import { StickyHead } from '@/components/StickyHead'
 import { Cta, DisplayTitle, Eyebrow } from '@/components/ui'
 import { CaseCard } from './CaseCard'
+import { WorkBar } from './WorkBar'
 import './selected-work.css'
 
 export async function SelectedWork({ block }: { block: SelectedWorkBlock }) {
@@ -29,13 +30,15 @@ export async function SelectedWork({ block }: { block: SelectedWorkBlock }) {
             <Cta link={block.button} className="btn btn--ink" />
           </header>
 
+          <WorkBar label={block.eyebrow || 'Selected work'} total={studies.length} />
+
           <div className="work__list">
             {studies.map((s) => (
               <CaseCard key={s.id} study={s} />
             ))}
           </div>
         </div>
-        <StickyHead section=".work" head=".work__head" last=".case:last-child" />
+        <StickyHead section=".work" head=".work__head, .work__bar" last=".case:last-child" items=".case" />
       </div>
     </section>
   )

@@ -118,11 +118,55 @@
   .deliver__stack { margin-bottom: var(--sticky-release, 0px); }
 }
 
+/* the preview bar only exists on phones and tablets */
+.deliver__bar { display: none; }
+
 @media (max-width: 900px) {
   .deliver__preview { display: none; }
   .deliver__list { flex: 1 1 auto; }
   .svc { width: 100%; opacity: 1; }
   .svc__title { line-height: 1.15; }
+}
+
+/* phones and tablets: the preview sticks under the top of the screen, the disciplines scroll
+   up beneath it and the one below it lights up (ServicesList.tsx) */
+@media (max-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .deliver__bar {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    margin-inline: calc(-1 * var(--pad));
+    padding: 12px var(--pad) 18px;
+    background: #000;
+    box-shadow: 0 16px 24px -8px #000;          /* soft edge as the list slides under it */
+  }
+  .deliver__bar-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0 0 12px;
+  }
+  .deliver__bar-head .deliver__active { flex-shrink: 0; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .deliver__bar-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 16px;
+    color: #fff;
+  }
+  .deliver__bar .deliver__frame {
+    aspect-ratio: auto;
+    height: min(26svh, 52vw);
+    box-shadow: 0 0 22px rgba(253, 86, 0, 0.55);
+  }
+  .svc { opacity: 0.3; }
+  .svc.is-active { opacity: 1; }
+  /* the bar lets go when the last discipline sits just below it */
+  .deliver__body { margin-bottom: calc(-1 * var(--sticky-release, 0px)); }
+  .deliver__stack { margin-bottom: var(--sticky-release, 0px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

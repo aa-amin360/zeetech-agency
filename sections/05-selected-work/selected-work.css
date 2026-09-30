@@ -171,11 +171,16 @@
     /* --sticky-head-h is measured by components/StickyHead.tsx; the fallback is close to the real height */
     top: calc(var(--sticky-head-h, calc(192 * var(--u) + 64px)) + 16px + var(--i, 0) * 16px);
   }
-  .case:nth-child(2) { --i: 1; }
-  .case:nth-child(3) { --i: 2; }
-  .case:nth-child(4) { --i: 3; }
-  .case:nth-child(5) { --i: 4; }
 }
+
+/* position in the stack — each card stops a little lower than the one before */
+.case:nth-child(2) { --i: 1; }
+.case:nth-child(3) { --i: 2; }
+.case:nth-child(4) { --i: 3; }
+.case:nth-child(n + 5) { --i: 4; }
+
+/* the slim bar (WorkBar.tsx) only exists on phones and tablets */
+.work__bar { display: none; }
 
 
 @media (max-width: 900px) {
@@ -183,10 +188,73 @@
   .work__intro { flex: 1 1 100%; }
   .case { flex-direction: column; align-items: stretch; }
   .case__media { flex: none; order: -1; }
+  .case__media img { aspect-ratio: 16 / 9; }    /* tablets: wide and short, so a card fits the screen */
   .case__meta { flex-wrap: wrap; }
+}
+
+/* phones and tablets: the header scrolls away, a slim bar slides in at the top and the cards
+   stack below it. A card taller than the free space scrolls until its bottom is on screen
+   before it stops, so nothing is ever hidden. */
+@media (max-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .work__stack { --bar-h: 52px; }
+  .work__bar {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    height: 0;                                   /* takes no room: it floats over the cards */
+    margin-inline: calc(-1 * var(--pad));
+    margin-bottom: calc(-1 * clamp(40px, calc(80 * var(--u)), 80px));   /* cancels the extra gap */
+  }
+  .work__bar-in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: var(--bar-h);
+    padding-inline: var(--pad);
+    background: rgba(246, 246, 246, 0.86);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    backdrop-filter: blur(14px) saturate(1.4);
+    border-bottom: 1px solid rgba(14, 14, 13, 0.08);
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .work__bar.is-stuck .work__bar-in { opacity: 1; transform: none; }
+  .work__bar-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--zt-ink-strong);
+  }
+  .work__bar-label .eyebrow__badge { padding: 5px; }
+  .work__bar-count {
+    font-weight: 700;
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    color: var(--zt-ink-strong);
+  }
+  .work__bar-count span { font-weight: 500; color: #8a8a8a; }
+
+  .work__list { margin-bottom: calc(-1 * var(--sticky-release, 0px)); }
+  .work__stack { margin-bottom: var(--sticky-release, 0px); }
+  .case {
+    position: sticky;
+    top: min(
+      calc(var(--bar-h) + 12px + var(--i, 0) * 10px),
+      calc(100svh - var(--sticky-item-h, 0px) - 12px)
+    );
+    box-shadow: 0 -8px 24px rgba(14, 14, 13, 0.08);
+  }
 }
 
 /* phones: the title gets the full width, the button drops below it */
 @media (max-width: 700px) {
   .work__title { flex: 1 1 100%; }
+  .case__media img { aspect-ratio: 16 / 10; }    /* a little shorter, so a card fits the screen */
 }

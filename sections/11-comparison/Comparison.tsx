@@ -34,7 +34,7 @@ export function Comparison({ block }: { block: ComparisonBlock }) {
       <div className="sec__inner">
         <SectionHead heading={block.heading} id="compare-title" subClassName="sub--soft" />
 
-        <div className="cmp-scroll" data-reveal>
+        <div className="cmp-scroll">
           <div className="cmp" role="table" aria-label="Delivery model comparison" style={cols}>
             <div className="cmp__row cmp__row--head" role="row">
               <span className="cmp__label" role="columnheader">
@@ -50,7 +50,7 @@ export function Comparison({ block }: { block: ComparisonBlock }) {
               {(block.rows ?? []).map((r, i) => {
                 const ring = RINGS[r.ring || 'orange'] ?? RINGS.orange
                 return (
-                  <div className={`cmp__row${r.highlight ? ' cmp__row--zee' : ''}`} role="row" key={r.id ?? i}>
+                  <div className={`cmp__row${r.highlight ? ' cmp__row--zee' : ''}`} role="row" key={r.id ?? i} data-reveal>
                     <div className="cmp__label" role="rowheader">
                       <span
                         className="cmp__bubble"
@@ -63,11 +63,13 @@ export function Comparison({ block }: { block: ComparisonBlock }) {
                         {r.description ? <span>{r.description}</span> : null}
                       </span>
                     </div>
-                    {columns.map((_, j) => {
+                    {columns.map((c, j) => {
                       const mark = MARKS[r.cells?.[j]?.mark ?? 'dot'] ?? MARKS.dot
                       return (
                         <span className="cmp__cell" role="cell" key={j}>
                           <img className={`cmp__mark ${mark.cls}`.trim()} src={mark.src} alt={mark.label} />
+                          {/* phones and tablets show each row as a card, so every mark carries its column name */}
+                          <span className="cmp__crit" aria-hidden="true">{c}</span>
                         </span>
                       )
                     })}
@@ -77,6 +79,16 @@ export function Comparison({ block }: { block: ComparisonBlock }) {
             </div>
           </div>
         </div>
+
+        {/* phones and tablets: what the marks mean (the column headings are gone there) */}
+        <ul className="cmp-key" aria-hidden="true">
+          {Object.values(MARKS).map((m) => (
+            <li key={m.label}>
+              <img className={`cmp__mark ${m.cls}`.trim()} src={m.src} alt="" />
+              {m.label}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )

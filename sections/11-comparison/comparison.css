@@ -86,17 +86,77 @@
 .cmp__mark--check { width: clamp(30px, calc(44.8 * var(--u)), 45px); }
 .cmp__mark--dot { width: 24px; }
 
-
-@media (max-width: 900px) {
-  .cmp-scroll { margin-right: calc(-1 * var(--pad)); padding-right: var(--pad); }
-  .cmp { min-width: 0; width: max-content; }
-  .cmp__row { grid-template-columns: 320px repeat(var(--cols, 6), 104px); }
-}
+/* card view only (phones and tablets) */
+.cmp__crit,
+.cmp-key { display: none; }
 
 /* laptops / tablets in landscape: give the row labels room to read */
 @media (min-width: 901px) and (max-width: 1280px) {
   .cmp__row { grid-template-columns: minmax(280px, 2.6fr) repeat(var(--cols, 6), minmax(64px, 1fr)); }
   .cmp__bubble { width: 64px; }
   .cmp__label { gap: 12px; }
-  .cmp__row--head { font-size: 13px; }
+  .cmp__row--head { font-size: clamp(11px, 1.15vw, 13px); letter-spacing: 0; }
+  .cmp__row--head .cmp__cell { padding-inline: 4px; }
+}
+
+/* phones and tablets: every delivery model becomes a card with its own grid of marks,
+   so nothing needs sideways scrolling */
+@media (max-width: 900px) {
+  .cmp { min-width: 0; gap: 12px; padding: 12px; }
+  .cmp__row--head { display: none; }
+  .cmp__body { gap: 12px; }
+  .cmp__row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 16px;
+    border: 1px solid rgba(14, 14, 13, 0.12);
+    border-radius: 14px;
+    background: #fff;
+  }
+  .cmp__body .cmp__row:not(.cmp__row--zee):not(:last-child) { border-bottom: 1px solid rgba(14, 14, 13, 0.12); }
+  .cmp__row--zee { border: 2px solid #b9f227; box-shadow: 0 10px 30px rgba(35, 212, 0, 0.14); }
+  .cmp__label { grid-column: 1 / -1; align-items: flex-start; gap: 14px; padding: 0 0 8px; }
+  .cmp__bubble { width: 56px; }
+  .cmp__name { gap: 4px; }
+  .cmp__name strong { font-size: 18px; line-height: 1.3; }
+  .cmp__cell {
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+    padding: 10px 4px;
+    border-radius: 10px;
+    background: rgba(14, 14, 13, 0.04);
+  }
+  .cmp__row--zee .cmp__cell { background: rgba(255, 255, 255, 0.7); }
+  .cmp__cell::before { content: none; }
+  .cmp__mark { width: 26px; }
+  .cmp__mark--check { width: 25px; }
+  .cmp__mark--dot { width: 14px; height: 26px; object-fit: contain; }
+  .cmp__crit {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--zt-ink-strong);
+  }
+  .cmp-key {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: #585858;
+  }
+  .cmp-key li { display: inline-flex; align-items: center; gap: 6px; }
+  .cmp-key .cmp__mark { width: 18px; }
+  .cmp-key .cmp__mark--dot { width: 10px; height: 18px; }
+}
+
+/* wider tablets: all six marks on one line */
+@media (min-width: 640px) and (max-width: 900px) {
+  .cmp__row { grid-template-columns: repeat(var(--cols, 6), minmax(0, 1fr)); }
 }

@@ -23,7 +23,7 @@ export function HowWeDeliver({ block }: { block: HowWeDeliverBlock }) {
           <SectionHead heading={block.heading} id="deliver-title" light subClassName="sub--dim" />
           <ServicesList services={services} fallback={img(block.preview)} />
         </div>
-        <StickyHead section=".deliver" head=".sec-head" last=".deliver__preview" />
+        <StickyHead section=".deliver" head=".sec-head, .deliver__bar" last=".deliver__preview, .svc:last-child" />
       </div>
     </section>
   )
