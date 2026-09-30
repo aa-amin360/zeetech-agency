@@ -31,13 +31,23 @@ export function ServicesList({
       const [{ gsap }, { ScrollTrigger }] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
       if (cancelled || !list.current) return
       gsap.registerPlugin(ScrollTrigger)
+      // the reading line sits in the part of the screen the sticky header leaves free
+      const section = list.current.closest<HTMLElement>('.deliver')
+      const lineAt = () => {
+        const head = section?.querySelector('.sec-head')
+        const h = head && getComputedStyle(head).position === 'sticky' ? parseFloat(section!.style.getPropertyValue('--sticky-head-h')) || 0 : 0
+        return h ? h + (innerHeight - h) * 0.3 : innerHeight * 0.55
+      }
       const mm = gsap.matchMedia()
       mm.add('(min-width: 901px)', () => {
-        list.current?.querySelectorAll<HTMLElement>('.svc').forEach((el, i) =>
+        const items = [...(list.current?.querySelectorAll<HTMLElement>('.svc') ?? [])]
+        items.forEach((el, i) =>
           ScrollTrigger.create({
             trigger: el,
-            start: 'top 55%',
-            end: 'bottom 55%',
+            // the last one also counts once it is fully on screen, since it may never reach the line
+            start: () =>
+              `top ${i === items.length - 1 ? Math.max(lineAt(), innerHeight - el.offsetHeight - 24) : lineAt()}px`,
+            end: () => `bottom ${lineAt()}px`,
             onToggle: (self) => self.isActive && setActive(i),
           }),
         )

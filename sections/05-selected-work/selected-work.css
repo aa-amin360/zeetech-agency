@@ -2,6 +2,8 @@
    Selected work (Figma 148:2332) — cards stack while scrolling
    --------------------------------------------------------- */
 .work { background: #f6f6f6; }
+/* header + cards share one box, so the sticky header can leave together with the last card */
+.work__stack { display: flex; flex-direction: column; gap: inherit; }
 .work__head { display: flex; align-items: flex-end; gap: 24px; }
 .work__intro {
   flex: 0 0 calc(458 * var(--u));
@@ -149,8 +151,26 @@
   object-fit: cover;
 }
 
+/* tall-enough screens: the header sticks to the top and the cards stack below it */
 @media (min-width: 901px) and (min-height: 720px) {
-  .case { position: sticky; top: calc(72px + var(--i, 0) * 16px); }
+  .work__head {
+    --head-pad: clamp(16px, calc(32 * var(--u)), 32px);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding-block: var(--head-pad);
+    margin-block: calc(-1 * var(--head-pad));   /* same spacing as before it became sticky */
+    background: #f6f6f6;                        /* cards slide underneath it */
+  }
+  /* the header's box ends early by the last card's stop distance, so both scroll away together
+     (--sticky-release is measured by components/StickyHead.tsx); the outer margin gives the space back */
+  .work__list { margin-bottom: calc(-1 * var(--sticky-release, 0px)); }
+  .work__stack { margin-bottom: var(--sticky-release, 0px); }
+  .case {
+    position: sticky;
+    /* --sticky-head-h is measured by components/StickyHead.tsx; the fallback is close to the real height */
+    top: calc(var(--sticky-head-h, calc(192 * var(--u) + 64px)) + 16px + var(--i, 0) * 16px);
+  }
   .case:nth-child(2) { --i: 1; }
   .case:nth-child(3) { --i: 2; }
   .case:nth-child(4) { --i: 3; }

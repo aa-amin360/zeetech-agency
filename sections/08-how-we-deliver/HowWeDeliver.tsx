@@ -1,5 +1,6 @@
 import type { HowWeDeliverBlock } from '@/payload-types'
 import { asMedia, mediaSrcSet, mediaUrl, type MediaRef } from '@/lib/media'
+import { StickyHead } from '@/components/StickyHead'
 import { SectionHead } from '@/components/ui'
 import { ServicesList } from './ServicesList'
 import './how-we-deliver.css'
@@ -18,8 +19,11 @@ export function HowWeDeliver({ block }: { block: HowWeDeliverBlock }) {
   return (
     <section className="sec deliver" id="expertise" aria-labelledby="deliver-title">
       <div className="sec__inner">
-        <SectionHead heading={block.heading} id="deliver-title" light subClassName="sub--dim" />
-        <ServicesList services={services} fallback={img(block.preview)} />
+        <div className="deliver__stack">
+          <SectionHead heading={block.heading} id="deliver-title" light subClassName="sub--dim" />
+          <ServicesList services={services} fallback={img(block.preview)} />
+        </div>
+        <StickyHead section=".deliver" head=".sec-head" last=".deliver__preview" />
       </div>
     </section>
   )
