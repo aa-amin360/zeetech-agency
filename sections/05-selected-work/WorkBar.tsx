@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-/** Phones and tablets: a slim bar that slides in at the top once the section header has
- *  scrolled away, with the number of the card currently on top of the stack. */
+/** Screens where the full header and a card don't fit together: a slim bar that slides in at
+ *  the top once the section header has scrolled away, with the number of the card on top. */
 export function WorkBar({ label, total }: { label: string; total: number }) {
   const bar = useRef<HTMLDivElement>(null)
   const [stuck, setStuck] = useState(false)
@@ -16,7 +16,7 @@ export function WorkBar({ label, total }: { label: string; total: number }) {
     let frame = 0
     const update = () => {
       frame = 0
-      if (getComputedStyle(el).position !== 'sticky') return setStuck(false)
+      if (!el.getClientRects().length || getComputedStyle(el).position !== 'sticky') return setStuck(false)
       setStuck(el.getBoundingClientRect().top <= 0.5 && section.getBoundingClientRect().bottom > 0)
       // the card on top is the last one that has reached its stopping point
       let n = 1

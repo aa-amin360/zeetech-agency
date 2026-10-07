@@ -38,7 +38,7 @@ export async function SelectedWork({ block }: { block: SelectedWorkBlock }) {
             ))}
           </div>
         </div>
-        <StickyHead section=".work" head=".work__head, .work__bar" last=".case:last-child" items=".case" />
+        <StickyHead section=".work" head=".work__head, .work__bar" last=".case:last-child" items=".case" fullHead=".work__head" />
       </div>
     </section>
   )

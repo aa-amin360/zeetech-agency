@@ -10,6 +10,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { getPayload, type Payload } from 'payload'
 import config from '../src/payload.config'
+import { CLIENT_LOGOS } from './client-logos.data'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 const ASSETS = path.resolve(dirname, '../legacy/assets')
@@ -92,6 +93,8 @@ const img = {
 }
 const tools: number[] = []
 for (let i = 0; i < 10; i++) tools.push(await upload(`tool-${i}.png`, ''))
+const clientLogos: { name: string; logo: number }[] = []
+for (const { name, file } of CLIENT_LOGOS) clientLogos.push({ name, logo: await upload(`clients/${file}`, name) })
 
 /* ---------- testimonials ---------- */
 payload.logger.info('Creating testimonials, case studies and FAQs…')
@@ -213,7 +216,11 @@ const layout = [
     showBackdropControls: true,
   },
   { blockType: 'statement', line1: 'Not more software.', line2: 'Better tools', accent: 'for real people.' },
-  { blockType: 'clientLogos', title: 'Trusted by 40+ of the world’s top brands', logos: [] },
+  {
+    blockType: 'clientLogos',
+    title: 'Trusted by 40+ of the world’s top brands',
+    logos: clientLogos,
+  },
   {
     blockType: 'proofStats',
     testimonial: andrew.id,

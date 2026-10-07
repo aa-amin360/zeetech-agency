@@ -13,7 +13,8 @@ type Logo = NonNullable<ClientLogosBlock['logos']>[number]
 
 const LogoItem = ({ logo }: { logo: Logo }) => {
   const inner = logo.logo ? (
-    <Img media={logo.logo} alt={logo.name} sizes="280px" />
+    // eager: the scrolling copies slide in from off-screen, and lazy loading would leave gaps
+    <Img media={logo.logo} alt={logo.name} sizes="280px" loading="eager" />
   ) : (
     <span className="logo-slot__name">{logo.name}</span>
   )

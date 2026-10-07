@@ -15,23 +15,39 @@ const isSticky = (el: Element) => shown(el) && getComputedStyle(el).position ===
  *   --sticky-release  how far past the header `last` stops; the section CSS uses it so the
  *                     header scrolls away together with `last` instead of covering it
  * and --sticky-item-h on each `items` element (its own height, for cards taller than the screen).
+ *
+ * With `fullHead`, it also picks the mode: data-stack="full" on the section when that header,
+ * the tallest item and the stack offsets fit on the screen together; otherwise the section CSS
+ * falls back to its slim bar.
  */
 export function StickyHead({
   section,
   head,
   last,
   items,
+  fullHead,
 }: {
   section: string
   head: string
   last: string
   items?: string
+  fullHead?: string
 }) {
   useEffect(() => {
     const sections = [...document.querySelectorAll<HTMLElement>(section)]
     const measure = () => {
       for (const s of sections) {
-        if (items) s.querySelectorAll<HTMLElement>(items).forEach((el) => el.style.setProperty('--sticky-item-h', `${el.offsetHeight}px`))
+        const list = items ? [...s.querySelectorAll<HTMLElement>(items)] : []
+        list.forEach((el) => el.style.setProperty('--sticky-item-h', `${el.offsetHeight}px`))
+
+        const full = fullHead ? s.querySelector<HTMLElement>(fullHead) : null
+        if (full) {
+          const tallest = Math.max(0, ...list.map((el) => el.offsetHeight))
+          const offsets = Math.min(list.length - 1, 4) * 16
+          const fits = full.offsetHeight + 16 + offsets + tallest <= window.innerHeight
+          if (fits) s.dataset.stack = 'full'
+          else delete s.dataset.stack
+        }
 
         const h = [...s.querySelectorAll<HTMLElement>(head)].find(isSticky)
         if (!h) {
@@ -54,7 +70,12 @@ export function StickyHead({
       ro.observe(s)
       s.querySelectorAll([head, last, items].filter(Boolean).join(', ')).forEach((el) => ro.observe(el))
     }
-    return () => ro.disconnect()
-  }, [section, head, last, items])
+    // a window that only gets taller or shorter doesn't resize the section, so listen too
+    window.addEventListener('resize', measure)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [section, head, last, items, fullHead])
   return null
 }

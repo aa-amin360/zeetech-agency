@@ -96,9 +96,8 @@ export function Motion() {
 
         const mm = gsap.matchMedia()
 
-        // work cards: each card eases back as the next one slides over it
-        // (desktop stack, and the phone / tablet stack under the slim bar)
-        mm.add('(min-width: 901px) and (min-height: 720px), (max-width: 900px)', () => {
+        // work cards: each card eases back as the next one slides over it (every screen size)
+        {
           const cards = $$('.case')
           cards.forEach((card, i) => {
             const next = cards[i + 1]
@@ -114,7 +113,7 @@ export function Motion() {
               },
             })
           })
-        })
+        }
 
         // delivery map: hub pops, wires draw, stages rise
         if (has('.build__map')) {
