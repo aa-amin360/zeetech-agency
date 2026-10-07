@@ -1991,12 +1991,15 @@ export interface Header {
  */
 export interface Footer {
   id: number;
-  pitch?: {
-    kicker?: string | null;
-    title?: string | null;
-    tagline?: string | null;
+  brand?: {
+    /**
+     * Short line under the logo.
+     */
+    text?: string | null;
   };
-  emailLabel?: string | null;
+  /**
+   * Shown in the white pill under the logo (opens the visitor’s email app).
+   */
   email?: string | null;
   cta?: {
     label?: string | null;
@@ -2005,10 +2008,9 @@ export interface Footer {
      */
     href?: string | null;
   };
-  brand?: {
-    text?: string | null;
-    location?: string | null;
-  };
+  /**
+   * The link columns (Navigate, Services, Contact).
+   */
   columns?:
     | {
         title: string;
@@ -2030,19 +2032,34 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
-  strip?:
+  /**
+   * Round icons in the bottom row. Icons without an address are not clickable.
+   */
+  socials?:
     | {
-        label?: string | null;
-        value?: string | null;
+        platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin';
+        url?: string | null;
         id?: string | null;
       }[]
     | null;
   bottom?: {
-    metaLeft?: string | null;
-    metaRight?: string | null;
     copyright?: string | null;
-    builtWith?: string | null;
   };
+  /**
+   * Bottom-right links, e.g. Terms of Use, Privacy Policy, Sitemap.
+   */
+  legal?:
+    | {
+        link?: {
+          label?: string | null;
+          /**
+           * e.g. #contact, /work, https://…
+           */
+          href?: string | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2118,26 +2135,17 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  pitch?:
+  brand?:
     | T
     | {
-        kicker?: T;
-        title?: T;
-        tagline?: T;
+        text?: T;
       };
-  emailLabel?: T;
   email?: T;
   cta?:
     | T
     | {
         label?: T;
         href?: T;
-      };
-  brand?:
-    | T
-    | {
-        text?: T;
-        location?: T;
       };
   columns?:
     | T
@@ -2156,20 +2164,28 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
-  strip?:
+  socials?:
     | T
     | {
-        label?: T;
-        value?: T;
+        platform?: T;
+        url?: T;
         id?: T;
       };
   bottom?:
     | T
     | {
-        metaLeft?: T;
-        metaRight?: T;
         copyright?: T;
-        builtWith?: T;
+      };
+  legal?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+            };
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

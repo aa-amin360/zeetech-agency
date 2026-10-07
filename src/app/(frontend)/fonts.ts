@@ -1,4 +1,4 @@
-import { Inter, Montserrat, Play, Playfair_Display, Plus_Jakarta_Sans } from 'next/font/google'
+import { Inter, Montserrat, Play, Playfair_Display, Plus_Jakarta_Sans, Zilla_Slab } from 'next/font/google'
 
 // Self-hosted at build time by next/font — no request to Google from visitors.
 export const jakarta = Plus_Jakarta_Sans({
@@ -23,4 +23,7 @@ export const montserrat = Montserrat({ subsets: ['latin'], weight: ['500'], vari
 
 export const play = Play({ subsets: ['latin'], weight: ['400'], variable: '--font-play', display: 'swap' })
 
-export const fontVariables = [jakarta, inter, playfair, montserrat, play].map((f) => f.variable).join(' ')
+// footer legal links
+export const zilla = Zilla_Slab({ subsets: ['latin'], weight: ['400'], variable: '--font-zilla', display: 'swap' })
+
+export const fontVariables = [jakarta, inter, playfair, montserrat, play, zilla].map((f) => f.variable).join(' ')

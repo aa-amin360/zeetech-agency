@@ -433,24 +433,20 @@ await payload.updateGlobal({
   slug: 'footer',
   context: ctx(),
   data: {
-    pitch: { kicker: 'NEXT PROJECT', title: 'Have something ambitious in mind?', tagline: 'Good. We like complicated things.' },
-    emailLabel: 'EMAIL THE STUDIO',
-    email: 'hello@zeetech.studio',
-    cta: { label: 'START A PROJECT', href: '/#contact' },
     brand: {
       text: 'A technology studio working across strategy, product design and engineering — for teams building what comes next.',
-      location: 'DHAKA → WORLDWIDE',
     },
+    email: 'hello@zeetech.studio',
+    cta: { label: 'START A PROJECT', href: '/#contact' },
     columns: [
       {
         title: 'NAVIGATE',
         links: [
-          ['Work', '/#work'],
-          ['Expertise', '/#expertise'],
-          ['Studio', '/#studio'],
-          ['Insights', '/#faq'],
+          ['Our Work', '/#work'],
+          ['Services', '/#expertise'],
+          ['About Us', '/#studio'],
+          ['Careers', ''],
           ['Contact', '/#contact'],
-          ['Lab', '/#process'],
         ].map(([label, href]) => ({ link: { label, href } })),
       },
       {
@@ -473,18 +469,14 @@ await payload.updateGlobal({
         ],
       },
     ],
-    strip: [
-      { label: 'BASE', value: 'Dhaka, Bangladesh' },
-      { label: 'REACH', value: 'Working worldwide' },
-      { label: 'DELIVERY', value: 'Strategy → Design → Engineering' },
-      { label: 'CONTACT', value: 'hello@zeetech.studio' },
+    // add the real profile addresses in the admin (Site → Footer → Social links)
+    socials: (['facebook', 'twitter', 'instagram', 'linkedin'] as const).map((platform) => ({ platform, url: '' })),
+    bottom: { copyright: '© All the rights reserved to @ZeeTech' },
+    legal: [
+      { link: { label: 'Terms of Use', href: '' } },
+      { link: { label: 'Privacy Policy', href: '' } },
+      { link: { label: 'Sitemap', href: '/sitemap.xml' } },
     ],
-    bottom: {
-      metaLeft: 'INDEPENDENT TECHNOLOGY STUDIO',
-      metaRight: 'STRATEGY • PRODUCT • ENGINEERING',
-      copyright: `© ${new Date().getFullYear()} ZeeTech. All rights reserved.`,
-      builtWith: 'Built from Dhaka for teams building what comes next.',
-    },
   },
 })
 
