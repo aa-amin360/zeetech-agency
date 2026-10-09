@@ -50,7 +50,9 @@ export function ProofStats({ block }: { block: ProofStatsBlock }) {
           <div className="proof__main">
             <blockquote className="proof__quote" data-reveal>
               <p>
-                “ {t.quote}”{' '}
+                <span className="proof__mark" aria-hidden="true">“ </span>
+                {t.quote}
+                <span className="proof__mark" aria-hidden="true">”</span>{' '}
                 {t.source?.logo ? (
                   <span className="proof__source">
                     {t.source.reviewUrl ? (
