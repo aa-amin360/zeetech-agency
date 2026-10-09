@@ -44,7 +44,11 @@ export function StickyHead({
         if (full) {
           const tallest = Math.max(0, ...list.map((el) => el.offsetHeight))
           const offsets = Math.min(list.length - 1, 4) * 16
-          const fits = full.offsetHeight + 16 + offsets + tallest <= window.innerHeight
+          // the whole stack fits below the header (with a little room to spare), and the header
+          // itself doesn't take more than 40% of the screen
+          const fits =
+            full.offsetHeight + 16 + offsets + tallest + 8 <= window.innerHeight &&
+            full.offsetHeight <= window.innerHeight * 0.4
           if (fits) s.dataset.stack = 'full'
           else delete s.dataset.stack
         }
