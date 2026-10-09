@@ -3,6 +3,8 @@ import { headingField } from '@/fields'
 
 export const ClientStoriesBlock: Block = {
   slug: 'clientStories',
+  imageURL: '/admin/blocks/clientStories.jpg',
+  imageAltText: 'Testimonial slider with photos and video',
   interfaceName: 'ClientStoriesBlock',
   labels: { singular: 'Client stories (testimonial slider)', plural: 'Client stories' },
   fields: [

@@ -2,6 +2,8 @@ import type { Block } from 'payload'
 
 export const ClientLogosBlock: Block = {
   slug: 'clientLogos',
+  imageURL: '/admin/blocks/clientLogos.jpg',
+  imageAltText: 'Two scrolling rows of client logos',
   interfaceName: 'ClientLogosBlock',
   labels: { singular: 'Client logos', plural: 'Client logos' },
   fields: [

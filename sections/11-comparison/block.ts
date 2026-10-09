@@ -10,6 +10,8 @@ export const COMPARISON_MARKS = [
 
 export const ComparisonBlock: Block = {
   slug: 'comparison',
+  imageURL: '/admin/blocks/comparison.jpg',
+  imageAltText: 'Comparison table against other options',
   interfaceName: 'ComparisonBlock',
   labels: { singular: 'Comparison table', plural: 'Comparison tables' },
   fields: [

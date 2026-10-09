@@ -3,6 +3,8 @@ import { linkField } from '@/fields'
 
 export const SelectedWorkBlock: Block = {
   slug: 'selectedWork',
+  imageURL: '/admin/blocks/selectedWork.jpg',
+  imageAltText: 'Project cards that stack while scrolling',
   interfaceName: 'SelectedWorkBlock',
   labels: { singular: 'Selected work', plural: 'Selected work' },
   fields: [

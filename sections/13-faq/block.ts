@@ -3,6 +3,8 @@ import { headingField, linkField } from '@/fields'
 
 export const FaqBlock: Block = {
   slug: 'faq',
+  imageURL: '/admin/blocks/faq.jpg',
+  imageAltText: 'Questions and answers',
   interfaceName: 'FaqBlock',
   labels: { singular: 'FAQ', plural: 'FAQs' },
   fields: [

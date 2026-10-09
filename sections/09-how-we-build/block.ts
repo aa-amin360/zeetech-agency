@@ -3,6 +3,8 @@ import { headingField, linkField } from '@/fields'
 
 export const HowWeBuildBlock: Block = {
   slug: 'howWeBuild',
+  imageURL: '/admin/blocks/howWeBuild.jpg',
+  imageAltText: 'Delivery map connecting the stages',
   interfaceName: 'HowWeBuildBlock',
   labels: { singular: 'How we build (delivery map)', plural: 'How we build' },
   fields: [

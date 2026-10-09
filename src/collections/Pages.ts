@@ -36,6 +36,7 @@ export const Pages: CollectionConfig = {
       name: 'layout',
       type: 'blocks',
       label: 'Sections',
+      labels: { singular: 'Section', plural: 'Sections' },   // "Add Section" in the editor
       localized: true,
       blocks: pageBlocks,
       admin: { initCollapsed: true },

@@ -3,6 +3,8 @@ import { headingField } from '@/fields'
 
 export const ProjectInquiryBlock: Block = {
   slug: 'projectInquiry',
+  imageURL: '/admin/blocks/projectInquiry.jpg',
+  imageAltText: 'Project inquiry form',
   interfaceName: 'ProjectInquiryBlock',
   labels: { singular: 'Project inquiry form', plural: 'Project inquiry forms' },
   fields: [

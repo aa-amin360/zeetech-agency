@@ -998,13 +998,13 @@ export interface ProjectInquiryBlock {
  */
 export interface Lead {
   id: number;
+  status?: ('new' | 'contacted' | 'proposal' | 'won' | 'lost') | null;
+  notes?: string | null;
   name: string;
   email: string;
   phone?: string | null;
   budget?: string | null;
   details: string;
-  status?: ('new' | 'contacted' | 'proposal' | 'won' | 'lost') | null;
-  notes?: string | null;
   attribution?: {
     utmSource?: string | null;
     utmMedium?: string | null;
@@ -1820,13 +1820,13 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "leads_select".
  */
 export interface LeadsSelect<T extends boolean = true> {
+  status?: T;
+  notes?: T;
   name?: T;
   email?: T;
   phone?: T;
   budget?: T;
   details?: T;
-  status?: T;
-  notes?: T;
   attribution?:
     | T
     | {

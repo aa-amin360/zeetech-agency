@@ -42,7 +42,19 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
-    meta: { titleSuffix: ' — ZeeTech admin' },
+    meta: {
+      titleSuffix: ' — ZeeTech admin',
+      icons: [{ rel: 'icon', type: 'image/svg+xml', url: '/brand/mark-z-orange.svg' }],
+    },
+    // ZeeTech look: logo, menu icon, sign-in line and the home dashboard (src/admin, styles in
+    // app/(payload)/custom.css)
+    components: {
+      graphics: { Logo: '/admin/Logo#Logo', Icon: '/admin/Icon#Icon' },
+      beforeLogin: ['/admin/BeforeLogin#BeforeLogin'],
+      beforeDashboard: ['/admin/Dashboard#Dashboard'],
+      beforeNavLinks: ['/admin/NavBrand#NavBrand'],
+      afterNavLinks: ['/admin/NavFooter#NavFooter'],
+    },
     livePreview: {
       breakpoints: [
         { label: 'Mobile', name: 'mobile', width: 390, height: 844 },

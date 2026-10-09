@@ -2,7 +2,10 @@ import type { Block } from 'payload'
 
 export const StatementBlock: Block = {
   slug: 'statement',
+  imageURL: '/admin/blocks/statement.jpg',
+  imageAltText: 'Short statement line',
   interfaceName: 'StatementBlock',
+  labels: { singular: 'Statement line', plural: 'Statement lines' },
   fields: [
     { name: 'line1', type: 'text', required: true },
     {

@@ -26,6 +26,13 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { StatusCell as StatusCell_f059236e80cb25265249a16c63870d10 } from '../../../admin/StatusCell'
+import { Icon as Icon_ecb2d425e0c47f2704e0f6c0188b49d0 } from '../../../admin/Icon'
+import { Logo as Logo_8c3bf6d9c8d24e4e81ab6192a4938147 } from '../../../admin/Logo'
+import { NavFooter as NavFooter_6b4600da45e053e463c7bc4fbb1d00bb } from '../../../admin/NavFooter'
+import { Dashboard as Dashboard_b1da18705623495fe0da513a008df5f5 } from '../../../admin/Dashboard'
+import { BeforeLogin as BeforeLogin_7c1a55be352b3f1b9b1733a61137e6fe } from '../../../admin/BeforeLogin'
+import { NavBrand as NavBrand_6b669b45df30db16e1bd122a34acce44 } from '../../../admin/NavBrand'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e } from '@payloadcms/storage-vercel-blob/client'
 
@@ -59,6 +66,13 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "/admin/StatusCell#StatusCell": StatusCell_f059236e80cb25265249a16c63870d10,
+  "/admin/Icon#Icon": Icon_ecb2d425e0c47f2704e0f6c0188b49d0,
+  "/admin/Logo#Logo": Logo_8c3bf6d9c8d24e4e81ab6192a4938147,
+  "/admin/NavFooter#NavFooter": NavFooter_6b4600da45e053e463c7bc4fbb1d00bb,
+  "/admin/Dashboard#Dashboard": Dashboard_b1da18705623495fe0da513a008df5f5,
+  "/admin/BeforeLogin#BeforeLogin": BeforeLogin_7c1a55be352b3f1b9b1733a61137e6fe,
+  "/admin/NavBrand#NavBrand": NavBrand_6b669b45df30db16e1bd122a34acce44,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
   "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e
 }

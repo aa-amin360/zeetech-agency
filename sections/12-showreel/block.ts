@@ -3,6 +3,8 @@ import { headingField } from '@/fields'
 
 export const ShowreelBlock: Block = {
   slug: 'showreel',
+  imageURL: '/admin/blocks/showreel.jpg',
+  imageAltText: 'Scrolling strips of project screens',
   interfaceName: 'ShowreelBlock',
   labels: { singular: 'Showreel (scrolling strips)', plural: 'Showreels' },
   fields: [

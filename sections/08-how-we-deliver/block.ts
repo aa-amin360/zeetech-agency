@@ -3,6 +3,8 @@ import { headingField, linkField } from '@/fields'
 
 export const HowWeDeliverBlock: Block = {
   slug: 'howWeDeliver',
+  imageURL: '/admin/blocks/howWeDeliver.jpg',
+  imageAltText: 'Services list with a preview image',
   interfaceName: 'HowWeDeliverBlock',
   labels: { singular: 'How we deliver (services list)', plural: 'How we deliver' },
   fields: [

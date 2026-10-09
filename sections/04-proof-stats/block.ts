@@ -2,6 +2,8 @@ import type { Block } from 'payload'
 
 export const ProofStatsBlock: Block = {
   slug: 'proofStats',
+  imageURL: '/admin/blocks/proofStats.jpg',
+  imageAltText: 'Client quote, award badges and four stats',
   interfaceName: 'ProofStatsBlock',
   labels: { singular: 'Quote & stats', plural: 'Quote & stats' },
   fields: [

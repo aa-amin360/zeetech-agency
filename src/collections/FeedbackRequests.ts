@@ -59,7 +59,7 @@ export const FeedbackRequests: CollectionConfig = {
         { label: 'Feedback received', value: 'submitted' },
         { label: 'Closed', value: 'closed' },
       ],
-      admin: { position: 'sidebar' },
+      admin: { position: 'sidebar', components: { Cell: '/admin/StatusCell#StatusCell' } },
     },
     {
       name: 'expiresAt',

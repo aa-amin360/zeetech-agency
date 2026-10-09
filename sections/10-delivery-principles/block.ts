@@ -3,6 +3,8 @@ import { headingField, linkField } from '@/fields'
 
 export const DeliveryPrinciplesBlock: Block = {
   slug: 'deliveryPrinciples',
+  imageURL: '/admin/blocks/deliveryPrinciples.jpg',
+  imageAltText: 'Coloured principle cards',
   interfaceName: 'DeliveryPrinciplesBlock',
   labels: { singular: 'Delivery principles (cards)', plural: 'Delivery principles' },
   fields: [

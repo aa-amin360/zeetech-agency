@@ -7,6 +7,7 @@ import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
 import React from 'react'
 
 import { importMap } from './admin/importMap.js'
+import { jakarta } from '../(frontend)/fonts'
 import './custom.css'
 
 type Args = {
@@ -23,7 +24,8 @@ const serverFunction: ServerFunctionClient = async function (args) {
 }
 
 const Layout = ({ children }: Args) => (
-  <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
+  // the site's font (Plus Jakarta Sans) for the admin too — used in custom.css
+  <RootLayout config={config} htmlProps={{ className: jakarta.variable }} importMap={importMap} serverFunction={serverFunction}>
     {children}
   </RootLayout>
 )

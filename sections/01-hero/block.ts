@@ -3,6 +3,8 @@ import { linkField } from '@/fields'
 
 export const HeroBlock: Block = {
   slug: 'hero',
+  imageURL: '/admin/blocks/hero.jpg',
+  imageAltText: 'Hero: big headline, buttons and image collage',
   interfaceName: 'HeroBlock',
   labels: { singular: 'Hero', plural: 'Heroes' },
   fields: [
