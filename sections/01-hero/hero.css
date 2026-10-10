@@ -219,110 +219,6 @@
 .ph--mint  { --bg: #e7f3ee; }
 
 
-/* ---------------------------------------------------------
-   Backdrop studio — palette controls, bottom-left corner
-   --------------------------------------------------------- */
-.studio {
-  position: absolute;
-  left: calc(var(--frame) + var(--pad));
-  bottom: calc(28px + env(safe-area-inset-bottom, 0px));
-  z-index: 6;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 8px 8px 8px 16px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow:
-    0 18px 40px -18px rgba(11, 23, 51, 0.28),
-    0 2px 6px -2px rgba(11, 23, 51, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  -webkit-backdrop-filter: blur(18px) saturate(1.6);
-  backdrop-filter: blur(18px) saturate(1.6);
-  color: var(--zt-ink);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.studio.idle { opacity: 0.55; }
-.studio:hover, .studio:focus-within { opacity: 1; }
-
-.studio__meta {
-  display: flex;
-  flex-direction: column;
-  min-width: 78px;
-  user-select: none;
-}
-.studio__kicker {
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1.3;
-  color: rgba(11, 23, 51, 0.55);
-}
-.studio__name {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 1.15;
-}
-
-.studio__swatches { display: flex; gap: 8px; }
-.swatch {
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 1px 3px rgba(0, 0, 0, 0.18);
-  outline: 1.5px solid transparent;
-  outline-offset: 2px;
-  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), outline-color 0.25s ease;
-}
-.swatch:hover { transform: scale(1.12); }
-.swatch[aria-pressed="true"],
-.swatch:focus-visible { outline-color: var(--zt-ink); }
-
-.studio__sep { width: 1px; height: 22px; background: currentColor; opacity: 0.16; }
-
-.studio__toggle {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--zt-ink);
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-.studio__toggle:hover { background: rgba(11, 23, 51, 0.06); }
-.studio__toggle:focus-visible { outline: 2px solid var(--zt-ink); outline-offset: 1px; }
-.studio__toggle > svg:not(.studio__ring) { width: 13px; height: 13px; }
-.studio__ring {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-.studio__ring circle { fill: none; stroke-width: 1.5; }
-.studio__ring-track { stroke: rgba(11, 23, 51, 0.12); }
-.studio__ring-bar {
-  stroke: var(--zt-orange);
-  stroke-linecap: round;
-  stroke-dasharray: 100;
-  stroke-dashoffset: calc(100 - var(--p, 0) * 100);
-}
-.studio__toggle .i-play { display: none; }
-.studio__toggle[aria-pressed="true"] .i-play { display: block; }
-.studio__toggle[aria-pressed="true"] .i-pause { display: none; }
-
-.hide-ui .studio,
-.hero.no-gl .studio { display: none; }
 
 
 @media (max-width: 900px) {
@@ -346,9 +242,6 @@
     mask-image: linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.08) 58%, #000 80%); }
   .collage__panel { pointer-events: none; }
   .collage__panel { left: 50%; --collage-top: 50%; }
-  .studio { left: 50%;
-    transform: translateX(-50%);
-    bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
 }
 
 @media (max-width: 520px) {
@@ -356,8 +249,6 @@
   .hero__ctas .btn { flex: 1 1 100%; }
   .trust { font-size: 12px; letter-spacing: 1.4px; column-gap: 6px; }
   .lede { font-size: 15px; letter-spacing: 0.6px; }
-  .studio__meta { display: none; }
-  .studio { padding-left: 12px; gap: 12px; }
 }
 
 /* small laptops / tablets in landscape: keep the collage clear of the copy */
@@ -377,6 +268,62 @@
   .hero__ctas { flex-wrap: nowrap; }
 }
 
-/* colour swatches: 32px touch area around the 20px dot */
-.swatch { position: relative; }
-.swatch::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; }
+
+/* tablets and phones: the copy stays left-aligned but sits in the vertical middle of the
+   first screen (between the fixed header and the buttons); the collage follows below */
+@media (max-width: 900px) {
+  /* tablets: text + buttons (about 470px together) centred as one group */
+  .hero__content { padding-top: max(calc(var(--nav-h, 69px) + 24px), calc(var(--nav-h, 69px) + (100svh - var(--nav-h, 69px) - 470px) / 2)); }
+}
+@media (max-width: 767px) {
+  /* phones: the buttons float, so the text alone is centred in the space between the header
+     and the floating bar */
+  .hero__content { padding-top: calc(var(--nav-h, 69px) + 24px); }
+  .hero__text {
+    justify-content: center;
+    min-height: calc(100svh - var(--nav-h, 69px) - var(--float-h, 76px) - 48px);
+  }
+}
+
+/* the floating copy of the hero buttons only exists on phones */
+.hero-float { display: none; }
+
+/* phones: the two hero buttons float in a bar at the bottom of the screen; it tucks away
+   while the contact form or the footer is on screen (HeroScene.tsx) */
+@media (max-width: 767px) {
+  .hero__ctas { display: none; }
+  .hero-float {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 35;
+    display: flex;
+    gap: 8px;
+    max-width: 520px;
+    margin-inline: auto;
+    padding: 8px;
+    border: 1px solid rgba(14, 14, 13, 0.08);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow: 0 14px 34px -14px rgba(14, 14, 13, 0.45);
+    transition: translate 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: hero-float-in 0.6s 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .hero-float .btn {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 48px;
+    padding-inline: 10px;
+    gap: 8px;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .hero-float.is-tucked { translate: 0 calc(100% + 32px); pointer-events: none; }
+}
+@keyframes hero-float-in { from { opacity: 0; transform: translateY(24px); } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-float { transition: none; animation: none; }
+}

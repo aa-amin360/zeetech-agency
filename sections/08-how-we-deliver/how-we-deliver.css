@@ -71,7 +71,7 @@
 
 .deliver__preview {
   position: sticky;
-  top: 120px;
+  top: calc(var(--nav-h, 0px) + 48px);
   flex: 0 0 calc(579 * var(--u));
   min-width: 280px;
   display: flex;
@@ -106,13 +106,13 @@
   .deliver .sec-head {
     --head-pad: clamp(16px, calc(32 * var(--u)), 32px);
     position: sticky;
-    top: 0;
+    top: var(--nav-h, 0px);                     /* just below the fixed site header */
     z-index: 2;
     padding-block: var(--head-pad);
     margin-block: calc(-1 * var(--head-pad));   /* same spacing as before it became sticky */
     background: #000;
   }
-  .deliver__preview { top: calc(var(--sticky-head-h, calc(361 * var(--u) + 64px)) + 24px); }
+  .deliver__preview { top: calc(var(--nav-h, 0px) + var(--sticky-head-h, calc(361 * var(--u) + 64px)) + 24px); }
   /* the header's box ends early by the preview's stop distance, so both scroll away together */
   .deliver__body { margin-bottom: calc(-1 * var(--sticky-release, 0px)); }
   .deliver__stack { margin-bottom: var(--sticky-release, 0px); }
@@ -134,7 +134,7 @@
   .deliver__bar {
     display: block;
     position: sticky;
-    top: 0;
+    top: var(--nav-h, 0px);
     z-index: 2;
     margin-inline: calc(-1 * var(--pad));
     padding: 12px var(--pad) 18px;

@@ -1,5 +1,6 @@
 import type { Header as HeaderData } from '@/payload-types'
 import { ArrowUpRight } from './ui'
+import { HeaderState } from './HeaderState'
 import { MobileMenu } from './MobileMenu'
 import './header.css'
 
@@ -36,6 +37,7 @@ export function Header({ data }: { data: HeaderData }) {
           <MobileMenu links={links} cta={data.cta?.label ? { label: data.cta.label, href: data.cta.href || '#contact' } : null} />
         </div>
       </div>
+      <HeaderState />
     </header>
   )
 }

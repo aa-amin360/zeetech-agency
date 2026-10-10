@@ -54,11 +54,13 @@ export const HeroBlock: Block = {
       minRows: 3,
       admin: { description: 'Project images for the rotating collage (6–12 works best).' },
     },
+    // no longer used (the corner colour / pause controls were removed); kept hidden so the
+    // database needs no change
     {
       name: 'showBackdropControls',
       type: 'checkbox',
       defaultValue: true,
-      label: 'Show the colour / pause controls in the corner',
+      admin: { hidden: true },
     },
   ],
 }

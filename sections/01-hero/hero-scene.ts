@@ -2,7 +2,6 @@
  * 1. Rotated collage — every column rolls forever; scroll adds momentum,
  *    mouse / pen drag grabs and flings it
  * 2. Fluted-glass WebGL backdrop with a palette that cycles
- * 3. Backdrop studio — swatches, play/pause and the progress ring
  * Returns a cleanup function.
  */
 
@@ -439,27 +438,6 @@ export function initHero(hero: HTMLElement, tiles: HeroTile[]): () => void {
     gl.uniform3fv(U.uB, fromArr)
     gl.uniform1f(U.uMix, 0)
 
-    const label = hero.querySelector('.studio__name')
-    const swatchWrap = hero.querySelector('.studio__swatches')
-    const ring = hero.querySelector<HTMLElement>('.studio__ring-bar')
-    const swatches = PALETTES.map((p, i) => {
-      const b = document.createElement('button')
-      b.className = 'swatch'
-      b.type = 'button'
-      b.title = p.name
-      b.setAttribute('aria-label', `${p.name} backdrop`)
-      b.style.background = `linear-gradient(135deg, ${p.stops.join(', ')})`
-      on(b, 'click', () => goTo(i))
-      swatchWrap?.appendChild(b)
-      return b
-    })
-    cleanups.push(() => swatches.forEach((b) => b.remove()))
-    const syncUI = (i: number) => {
-      swatches.forEach((b, j) => b.setAttribute('aria-pressed', String(i === j)))
-      if (label) label.textContent = PALETTES[i].name
-    }
-    syncUI(0)
-
     const ease = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2)
     const currentMix = () => (fadeStart < 0 ? 0 : ease(Math.min(1, (performance.now() - fadeStart) / FADE_MS)))
 
@@ -476,50 +454,10 @@ export function initHero(hero: HTMLElement, tiles: HeroTile[]): () => void {
       toIdx = i
       fadeStart = performance.now()
       lastSwitch = fadeStart
-      syncUI(i)
       if (!running) kick()
     }
 
-    let playing = true
-    let pausedProgress = 0
-    const toggle = hero.querySelector<HTMLButtonElement>('.studio__toggle')
-    const setPlaying = (v: boolean) => {
-      playing = v
-      hero.classList.toggle('is-paused', !v)
-      if (toggle) {
-        toggle.setAttribute('aria-pressed', String(!v))
-        toggle.setAttribute('aria-label', v ? 'Pause motion' : 'Play motion')
-      }
-      if (v) lastSwitch = performance.now() - pausedProgress * CYCLE_MS
-    }
-    if (toggle) on(toggle, 'click', () => setPlaying(!playing))
-
     let heroVisible = true
-    on(window, 'keydown', (e: KeyboardEvent) => {
-      if (!heroVisible) return
-      const t = e.target as HTMLElement | null
-      const tag = t?.tagName
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || t?.isContentEditable) return
-      if ((tag === 'BUTTON' || tag === 'A') && (e.code === 'Space' || e.code === 'Enter')) return
-      if (e.code === 'Space') {
-        e.preventDefault()
-        setPlaying(!playing)
-      }
-      if (e.code === 'ArrowRight') goTo((toIdx + 1) % PALETTES.length)
-      if (e.code === 'ArrowLeft') goTo((toIdx - 1 + PALETTES.length) % PALETTES.length)
-    })
-
-    const dock = hero.querySelector('.studio')
-    let idleTimer = 0
-    const wake = () => {
-      if (!dock) return
-      dock.classList.remove('idle')
-      clearTimeout(idleTimer)
-      idleTimer = window.setTimeout(() => dock.classList.add('idle'), 2800)
-    }
-    on(hero, 'pointermove', wake, { passive: true })
-    wake()
-    cleanups.push(() => clearTimeout(idleTimer))
 
     let time = 12.0
     let last = performance.now()
@@ -532,16 +470,10 @@ export function initHero(hero: HTMLElement, tiles: HeroTile[]): () => void {
     const frame = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000)
       last = now
-      if (playing) time += dt * SPEED
+      time += dt * SPEED
 
-      if (fadeStart < 0) {
-        const prog = Math.min(1, (now - lastSwitch) / CYCLE_MS)
-        if (playing) pausedProgress = prog
-        ring?.style.setProperty('--p', (playing ? prog : pausedProgress).toFixed(4))
-        if (playing && prog >= 1) goTo((toIdx + 1) % PALETTES.length)
-      } else {
-        ring?.style.setProperty('--p', '0')
-      }
+      // the backdrop moves on to the next palette every CYCLE_MS
+      if (fadeStart < 0 && now - lastSwitch >= CYCLE_MS) goTo((toIdx + 1) % PALETTES.length)
 
       if (fadeStart >= 0) {
         const m = currentMix()
@@ -554,7 +486,6 @@ export function initHero(hero: HTMLElement, tiles: HeroTile[]): () => void {
           gl!.uniform1f(U.uMix, 0)
           fadeStart = -1
           lastSwitch = now
-          pausedProgress = 0
         }
       }
 

@@ -41,8 +41,30 @@ export function Hero({ block, isFirst }: { block: HeroBlock; isFirst?: boolean }
   }))
   const Title = isFirst ? 'h1' : 'h2'
 
+  const buttons =
+    primaryCta?.label || secondaryCta?.label ? (
+      <>
+        {primaryCta?.label ? (
+          <a className="btn btn--primary" href={primaryCta.href || '#contact'}>
+            <span>{primaryCta.label}</span>
+            <CalendarIcon />
+          </a>
+        ) : null}
+        {secondaryCta?.label ? (
+          <a className="btn btn--secondary" href={secondaryCta.href || '#work'}>
+            <span>{secondaryCta.label}</span>
+            <ArrowIcon />
+          </a>
+        ) : null}
+      </>
+    ) : null
+
   return (
-    <HeroScene tiles={tiles} showControls={block.showBackdropControls !== false}>
+    <HeroScene
+      tiles={tiles}
+      // phones: the same buttons float at the bottom of the screen (see HeroScene)
+      floating={buttons ? <div className="hero-float">{buttons}</div> : null}
+    >
       <div className="hero__content">
         <div className="hero__text">
           {trust?.badge || trust?.prefix ? (
@@ -86,20 +108,9 @@ export function Hero({ block, isFirst }: { block: HeroBlock; isFirst?: boolean }
           ) : null}
         </div>
 
-        {primaryCta?.label || secondaryCta?.label ? (
+        {buttons ? (
           <div className="hero__ctas" data-intro>
-            {primaryCta?.label ? (
-              <a className="btn btn--primary" href={primaryCta.href || '#contact'}>
-                <span>{primaryCta.label}</span>
-                <CalendarIcon />
-              </a>
-            ) : null}
-            {secondaryCta?.label ? (
-              <a className="btn btn--secondary" href={secondaryCta.href || '#work'}>
-                <span>{secondaryCta.label}</span>
-                <ArrowIcon />
-              </a>
-            ) : null}
+            {buttons}
           </div>
         ) : null}
       </div>

@@ -39,8 +39,10 @@ export function ServicesList({
         const head = [...(section?.querySelectorAll<HTMLElement>('.sec-head, .deliver__bar') ?? [])].find(
           (el) => el.getClientRects().length && getComputedStyle(el).position === 'sticky',
         )
-        const h = head?.offsetHeight ?? 0
-        return h ? h + (innerHeight - h) * 0.3 : innerHeight * 0.55
+        const navH = document.querySelector<HTMLElement>('.site-header .nav')?.offsetHeight ?? 0
+        // bottom edge of whatever is stuck at the top (site header + section header / preview)
+        const h = head ? (parseFloat(getComputedStyle(head).top) || 0) + head.offsetHeight : navH
+        return h + (innerHeight - h) * (head ? 0.3 : 0.45)
       }
       const mm = gsap.matchMedia()
       // phones and tablets follow the scroll too (they have no hover), unless motion is reduced

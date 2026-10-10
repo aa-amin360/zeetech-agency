@@ -36,6 +36,11 @@ export function StickyHead({
   useEffect(() => {
     const sections = [...document.querySelectorAll<HTMLElement>(section)]
     const measure = () => {
+      // space under the fixed site header (see HeaderState.tsx)
+      const navH = document.querySelector<HTMLElement>('.site-header .nav')?.offsetHeight ?? 0
+      // …and above the floating button bar on phones (see HeroScene.tsx)
+      const floatH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--float-h')) || 0
+      const room = window.innerHeight - navH - floatH
       for (const s of sections) {
         const list = items ? [...s.querySelectorAll<HTMLElement>(items)] : []
         list.forEach((el) => el.style.setProperty('--sticky-item-h', `${el.offsetHeight}px`))
@@ -46,9 +51,7 @@ export function StickyHead({
           const offsets = Math.min(list.length - 1, 4) * 16
           // the whole stack fits below the header (with a little room to spare), and the header
           // itself doesn't take more than 40% of the screen
-          const fits =
-            full.offsetHeight + 16 + offsets + tallest + 8 <= window.innerHeight &&
-            full.offsetHeight <= window.innerHeight * 0.4
+          const fits = full.offsetHeight + 16 + offsets + tallest + 8 <= room && full.offsetHeight <= room * 0.4
           if (fits) s.dataset.stack = 'full'
           else delete s.dataset.stack
         }
@@ -64,8 +67,11 @@ export function StickyHead({
         // scrolls normally and should end up just below the header
         const candidates = [...s.querySelectorAll<HTMLElement>(last)].filter(shown)
         const l = candidates.find(isSticky) ?? candidates.at(-1)
-        const top = l && isSticky(l) ? parseFloat(getComputedStyle(l).top) || 0 : h.offsetHeight + 16
-        const release = l ? top + l.offsetHeight - h.offsetHeight : 0
+        // the header sticks at headTop (below the site header); it lets go when the stack's box
+        // ends at its bottom edge, so the box ends early by how far past that `last` reaches
+        const headTop = parseFloat(getComputedStyle(h).top) || 0
+        const top = l && isSticky(l) ? parseFloat(getComputedStyle(l).top) || 0 : headTop + h.offsetHeight + 16
+        const release = l ? top + l.offsetHeight - (headTop + h.offsetHeight) : 0
         s.style.setProperty('--sticky-release', `${Math.max(0, release)}px`)
       }
     }

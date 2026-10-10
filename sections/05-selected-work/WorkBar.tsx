@@ -17,7 +17,8 @@ export function WorkBar({ label, total }: { label: string; total: number }) {
     const update = () => {
       frame = 0
       if (!el.getClientRects().length || getComputedStyle(el).position !== 'sticky') return setStuck(false)
-      setStuck(el.getBoundingClientRect().top <= 0.5 && section.getBoundingClientRect().bottom > 0)
+      const stickAt = parseFloat(getComputedStyle(el).top) || 0     // just below the site header
+      setStuck(el.getBoundingClientRect().top <= stickAt + 0.5 && section.getBoundingClientRect().bottom > stickAt)
       // the card on top is the last one that has reached its stopping point
       let n = 1
       section.querySelectorAll<HTMLElement>('.case').forEach((card, i) => {

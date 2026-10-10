@@ -35,6 +35,8 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 body { overflow-x: hidden; }
+/* anchor links (#contact, #work…) stop below the fixed header instead of under it */
+html { scroll-padding-top: var(--nav-h, 72px); }
 a { color: inherit; text-decoration: none; }
 
 /* ---------------------------------------------------------

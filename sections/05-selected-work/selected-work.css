@@ -231,12 +231,12 @@
   .work__list { margin-bottom: calc(-1 * var(--sticky-release, 0px)); }
   .work__stack { margin-bottom: var(--sticky-release, 0px); }
   .case {
-    --stack-top: calc(var(--bar-h) + 12px);
+    --stack-top: calc(var(--nav-h, 0px) + var(--bar-h) + 12px);
     --stack-step: 10px;
     position: sticky;
     top: min(
       calc(var(--stack-top) + var(--i, 0) * var(--stack-step)),
-      calc(100svh - var(--sticky-item-h, 0px) - 12px)
+      calc(100svh - var(--float-h, 0px) - var(--sticky-item-h, 0px) - 12px)
     );
     box-shadow: 0 -8px 24px rgba(14, 14, 13, 0.08);
   }
@@ -245,7 +245,7 @@
   .work:not([data-stack="full"]) .work__bar {
     display: block;
     position: sticky;
-    top: 0;
+    top: var(--nav-h, 0px);                     /* just below the fixed site header */
     z-index: 3;
     height: 0;
     margin-inline: calc(-1 * var(--pad));
@@ -255,12 +255,12 @@
   /* full header: sticks itself, cards stop just below it */
   .work[data-stack="full"] .work__head {
     position: sticky;
-    top: 0;
+    top: var(--nav-h, 0px);
     z-index: 2;
     background: #f6f6f6;                        /* cards slide underneath it */
   }
   .work[data-stack="full"] .case {
-    --stack-top: calc(var(--sticky-head-h, 0px) + 16px);
+    --stack-top: calc(var(--nav-h, 0px) + var(--sticky-head-h, 0px) + 16px);
     --stack-step: 16px;
     box-shadow: none;
   }
