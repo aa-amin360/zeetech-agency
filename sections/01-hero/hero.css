@@ -338,3 +338,31 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-float { transition: none; animation: none; }
 }
+/* small phones: slightly smaller copy so it fits above the floating buttons */
+@media (max-width: 374px) {
+  .headline { font-size: 30px; }
+  .lede { font-size: 13.5px; line-height: 1.6; }
+}
+
+/* the wrapper around the copy is only a grouping box */
+.hero__glass { display: contents; }
+
+/* phones: a soft white mist over the top of the hero keeps the copy on a calm, light surface;
+   it fades out lower down, where the colour glow and the collage show through */
+@media (max-width: 767px) {
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    z-index: 2;                                  /* above the backdrop + collage, below the copy */
+    height: calc(100svh - var(--float-h, 76px));
+    pointer-events: none;
+    background:
+      radial-gradient(120% 70% at 30% 42%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 70%),
+      linear-gradient(180deg,
+        rgba(253, 251, 255, 0.92) 0%,
+        rgba(253, 251, 255, 0.86) 58%,
+        rgba(253, 251, 255, 0.5) 76%,
+        rgba(253, 251, 255, 0) 100%);
+  }
+}

@@ -67,45 +67,48 @@ export function Hero({ block, isFirst }: { block: HeroBlock; isFirst?: boolean }
     >
       <div className="hero__content">
         <div className="hero__text">
-          {trust?.badge || trust?.prefix ? (
-            <p className="trust" data-intro>
-              {trust.prefix ? <span>{trust.prefix}</span> : null}
-              {trust.badge ? <span className="trust__badge">{trust.badge}</span> : null}
-              {trust.avatars?.length ? (
-                <span className="avatars" aria-hidden="true">
-                  {mediaList(trust.avatars).map((m) => (
-                    <span className="avatar" key={m.id}>
-                      <Img media={m} alt="" sizes="28px" priority={isFirst} />
-                    </span>
-                  ))}
+          {/* frosted panel behind the copy on phones (hero.css) */}
+          <div className="hero__glass">
+            {trust?.badge || trust?.prefix ? (
+              <p className="trust" data-intro>
+                {trust.prefix ? <span>{trust.prefix}</span> : null}
+                {trust.badge ? <span className="trust__badge">{trust.badge}</span> : null}
+                {trust.avatars?.length ? (
+                  <span className="avatars" aria-hidden="true">
+                    {mediaList(trust.avatars).map((m) => (
+                      <span className="avatar" key={m.id}>
+                        <Img media={m} alt="" sizes="28px" priority={isFirst} />
+                      </span>
+                    ))}
+                  </span>
+                ) : null}
+                {trust.suffix ? <span>{trust.suffix}</span> : null}
+              </p>
+            ) : null}
+
+            <Title className="headline" id="hero-title">
+              <span className="headline__line" data-intro>
+                {headline.line1}
+              </span>
+              {headline.line2 ? (
+                <span className="headline__line" data-intro>
+                  {headline.line2}
                 </span>
               ) : null}
-              {trust.suffix ? <span>{trust.suffix}</span> : null}
-            </p>
-          ) : null}
+              {headline.line3 || headline.highlight ? (
+                <span className="headline__line" data-intro>
+                  {headline.line3}
+                  {headline.highlight ? <> <em className="headline__hl">{headline.highlight}</em></> : null}
+                </span>
+              ) : null}
+            </Title>
 
-          <Title className="headline" id="hero-title">
-            <span className="headline__line" data-intro>
-              {headline.line1}
-            </span>
-            {headline.line2 ? (
-              <span className="headline__line" data-intro>
-                {headline.line2}
-              </span>
+            {lede ? (
+              <p className="lede" data-intro>
+                {lede}
+              </p>
             ) : null}
-            {headline.line3 || headline.highlight ? (
-              <span className="headline__line" data-intro>
-                {headline.line3}
-                {headline.highlight ? <> <em className="headline__hl">{headline.highlight}</em></> : null}
-              </span>
-            ) : null}
-          </Title>
-
-          {lede ? (
-            <p className="lede" data-intro>
-              {lede}
-            </p>
-          ) : null}
+          </div>
         </div>
 
         {buttons ? (
