@@ -1,8 +1,7 @@
 /* ---------------------------------------------------------
-   Work index + case study pages
+   Case study pages (the Work index is a page built from sections 16 and 17)
    Built from the same tokens as the homepage sections.
    --------------------------------------------------------- */
-.work-index .sec__inner { padding-top: clamp(120px, calc(180 * var(--u)), 180px); }
 
 .study {
   container-type: inline-size;

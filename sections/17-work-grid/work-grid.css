@@ -1,0 +1,117 @@
+/* ---------------------------------------------------------
+   Project grid with filters (Work page, Figma 599:855 + 599:883)
+   --------------------------------------------------------- */
+.wgrid { container-type: inline-size; }
+.wgrid > * {
+  --u: calc(min(100cqw, 1920px) / 1920);
+  --pad: clamp(20px, calc(128 * var(--u)), 128px);
+}
+
+/* filter bar */
+.wgrid__bar { background: #f6f6f6; padding: clamp(32px, calc(80 * var(--u)), 80px) var(--pad); }
+.wgrid__filters { display: flex; flex-wrap: wrap; gap: 16px; max-width: 1664px; margin-inline: auto; }
+.wgrid__filter {
+  display: inline-flex;
+  align-items: center;
+  height: 52px;
+  padding: 0 28px;
+  border: 1px solid #000;
+  border-radius: 999px;
+  background: transparent;
+  font: 500 16px/1.2 var(--font-sans);
+  color: var(--zt-ink);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.wgrid__filter:hover { background: rgba(14, 14, 13, 0.06); }
+.wgrid__filter[aria-pressed="true"] { border-color: var(--zt-orange); background: var(--zt-orange); color: #fff; }
+.wgrid__filter:focus-visible { outline: 2px solid var(--zt-orange); outline-offset: 3px; }
+
+/* grid */
+.wgrid__inner { padding: clamp(40px, calc(80 * var(--u)), 80px) var(--pad); }
+.wgrid__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(56px, calc(160 * var(--u)), 160px) clamp(24px, calc(48 * var(--u)), 48px);
+  max-width: 1664px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+.wgrid__item { animation: wgrid-in 0.45s ease both; }
+@keyframes wgrid-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* card */
+.wcard { display: flex; flex-direction: column; gap: 16px; color: inherit; text-decoration: none; }
+.wcard__media {
+  margin: 0;
+  aspect-ratio: 808 / 520;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(113, 113, 113, 0.25);
+}
+.wcard__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.wcard:hover .wcard__media img { transform: scale(1.03); }
+.wcard:focus-visible { outline: 2px solid var(--zt-orange); outline-offset: 6px; border-radius: 8px; }
+.wcard__body { display: flex; flex-direction: column; gap: 16px; }
+.wcard__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(22px, calc(32 * var(--u)), 32px);
+  line-height: 1.5;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  color: var(--zt-ink);
+}
+.wcard__accent {
+  display: block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--zt-orange);
+}
+.wcard__desc {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  color: rgba(14, 14, 13, 0.65);
+}
+.wcard__tags { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
+.wcard__tag {
+  padding: 4px 16px;
+  border-radius: 999px;
+  background: rgba(14, 14, 13, 0.1);
+  font: 200 clamp(16px, calc(20 * var(--u)), 20px) / 1.2 var(--font-sans);
+  color: #000;
+  white-space: nowrap;
+}
+.wcard__dot { width: 8px; height: 8px; background: var(--zt-orange); transform: rotate(45deg); flex-shrink: 0; }
+
+@media (max-width: 900px) {
+  .wgrid__list { grid-template-columns: 1fr; }
+}
+@media (max-width: 767px) {
+  /* one scrolling row of filters instead of several lines */
+  .wgrid__bar { padding-inline: 0; }
+  .wgrid__filters { flex-wrap: nowrap; overflow-x: auto; padding-inline: var(--pad); scrollbar-width: none; }
+  .wgrid__filters::-webkit-scrollbar { display: none; }
+  .wgrid__filter { height: 44px; padding: 0 20px; font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wgrid__item { animation: none; }
+  .wcard__media img { transition: none; }
+}

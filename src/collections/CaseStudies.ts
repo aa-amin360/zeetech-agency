@@ -18,8 +18,39 @@ export const CaseStudies: CollectionConfig = {
   access: { read: publishedOrLoggedIn, create: loggedIn, update: loggedIn, delete: loggedIn },
   hooks: { afterChange: [revalidateCollection] },
   fields: [
-    { name: 'title', type: 'text', required: true, localized: true },
+    {
+      type: 'row',
+      fields: [
+        { name: 'title', type: 'text', required: true, localized: true, admin: { width: '50%' } },
+        {
+          name: 'titleAccent',
+          type: 'text',
+          localized: true,
+          admin: { width: '50%', description: 'Second line in orange italic, e.g. Management Platform' },
+        },
+      ],
+    },
     slugField('title'),
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'service',
+          type: 'text',
+          localized: true,
+          admin: { width: '50%', description: 'First tag on the Work page, e.g. Branding & Product design' },
+        },
+        {
+          name: 'industry',
+          type: 'text',
+          localized: true,
+          admin: {
+            width: '50%',
+            description: 'Second tag, e.g. SaaS. The Work page makes a filter button for each industry.',
+          },
+        },
+      ],
+    },
     {
       type: 'row',
       fields: [

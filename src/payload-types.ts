@@ -172,6 +172,8 @@ export interface Page {
         | ShowreelBlock
         | FaqBlock
         | ProjectInquiryBlock
+        | WorkHeroBlock
+        | WorkGridBlock
       )[]
     | null;
   meta?: {
@@ -513,9 +515,21 @@ export interface CaseStudy {
   _order?: string | null;
   title: string;
   /**
+   * Second line in orange italic, e.g. Management Platform
+   */
+  titleAccent?: string | null;
+  /**
    * Part of the web address. Filled in automatically from the title.
    */
   slug?: string | null;
+  /**
+   * First tag on the Work page, e.g. Branding & Product design
+   */
+  service?: string | null;
+  /**
+   * Second tag, e.g. SaaS. The Work page makes a filter button for each industry.
+   */
+  industry?: string | null;
   /**
    * e.g. Project 01
    */
@@ -991,6 +1005,41 @@ export interface ProjectInquiryBlock {
   blockType: 'projectInquiry';
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WorkHeroBlock".
+ */
+export interface WorkHeroBlock {
+  /**
+   * Press Enter to start a new line, e.g. Works That Speak ↵ Things
+   */
+  title: string;
+  /**
+   * White italic words in an orange box after the title, e.g. Forward.
+   */
+  highlight?: string | null;
+  background: number | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'workHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WorkGridBlock".
+ */
+export interface WorkGridBlock {
+  /**
+   * First filter button. The other buttons are made from the projects’ Industry, one for each industry in use.
+   */
+  allLabel?: string | null;
+  /**
+   * Choose and order the projects. Leave empty to show every published case study.
+   */
+  caseStudies?: (number | CaseStudy)[] | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'workGrid';
+}
+/**
  * Project inquiries sent through the website form, with where each visitor came from.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1260,6 +1309,8 @@ export interface PagesSelect<T extends boolean = true> {
         showreel?: T | ShowreelBlockSelect<T>;
         faq?: T | FaqBlockSelect<T>;
         projectInquiry?: T | ProjectInquiryBlockSelect<T>;
+        workHero?: T | WorkHeroBlockSelect<T>;
+        workGrid?: T | WorkGridBlockSelect<T>;
       };
   meta?:
     | T
@@ -1667,12 +1718,36 @@ export interface ProjectInquiryBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WorkHeroBlock_select".
+ */
+export interface WorkHeroBlockSelect<T extends boolean = true> {
+  title?: T;
+  highlight?: T;
+  background?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WorkGridBlock_select".
+ */
+export interface WorkGridBlockSelect<T extends boolean = true> {
+  allLabel?: T;
+  caseStudies?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "case-studies_select".
  */
 export interface CaseStudiesSelect<T extends boolean = true> {
   _order?: T;
   title?: T;
+  titleAccent?: T;
   slug?: T;
+  service?: T;
+  industry?: T;
   projectLabel?: T;
   client?: T;
   color?: T;

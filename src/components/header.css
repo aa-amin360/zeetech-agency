@@ -71,6 +71,8 @@
 .roll__track > span:last-child { color: var(--zt-orange); }
 .roll:hover .roll__track,
 .roll:focus-visible .roll__track { transform: translateY(-26px); }
+.roll[aria-current="page"] .roll__track > span:first-child { color: var(--zt-orange); }
+.mobile-menu > a[aria-current="page"] { color: var(--zt-orange); }
 .roll:focus-visible { outline: 2px solid var(--zt-orange); outline-offset: 4px; }
 
 .nav__burger {

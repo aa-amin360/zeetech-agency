@@ -20,7 +20,7 @@ export function CaseCard({ study, headingLevel = 3 }: { study: CaseStudy; headin
             {study.client ? <span className="case__client">{`// ${study.client}`}</span> : null}
           </p>
         ) : null}
-        <H className="case__title">{study.title}</H>
+        <H className="case__title">{study.titleAccent ? `${study.title} ${study.titleAccent}` : study.title}</H>
         {study.summary ? <p className="case__desc">{study.summary}</p> : null}
         {study.scope || study.duration ? (
           <dl className="case__meta">

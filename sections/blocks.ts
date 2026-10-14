@@ -14,6 +14,8 @@ import { ComparisonBlock } from './11-comparison/block'
 import { ShowreelBlock } from './12-showreel/block'
 import { FaqBlock } from './13-faq/block'
 import { ProjectInquiryBlock } from './14-project-inquiry/block'
+import { WorkHeroBlock } from './16-work-hero/block'
+import { WorkGridBlock } from './17-work-grid/block'
 
 export const pageBlocks = [
   HeroBlock,
@@ -30,4 +32,6 @@ export const pageBlocks = [
   ShowreelBlock,
   FaqBlock,
   ProjectInquiryBlock,
+  WorkHeroBlock,
+  WorkGridBlock,
 ]

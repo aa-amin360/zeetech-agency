@@ -18,7 +18,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: p.updatedAt,
       priority: p.slug === 'home' ? 1 : 0.7,
     })),
-    { url: `${base}/work`, priority: 0.8 },
     ...studies.docs.map((s) => ({ url: `${base}/work/${s.slug}`, lastModified: s.updatedAt, priority: 0.7 })),
   ]
 }

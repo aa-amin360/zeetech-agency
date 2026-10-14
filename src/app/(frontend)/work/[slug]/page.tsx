@@ -51,7 +51,15 @@ export default async function CaseStudyPage({ params }: Props) {
           {study.projectLabel || study.client ? (
             <Eyebrow>{[study.projectLabel, study.client].filter(Boolean).join(' // ')}</Eyebrow>
           ) : null}
-          <h1 className="study__title">{study.title}</h1>
+          <h1 className="study__title">
+            {study.title}
+            {study.titleAccent ? (
+              <>
+                {' '}
+                <em className="display__em">{study.titleAccent}</em>
+              </>
+            ) : null}
+          </h1>
           {study.summary ? <p className="study__summary">{study.summary}</p> : null}
           <dl className="study__meta">
             {study.scope ? (

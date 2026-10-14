@@ -13,6 +13,8 @@ import { Comparison } from './11-comparison/Comparison'
 import { Showreel } from './12-showreel/Showreel'
 import { Faq } from './13-faq/Faq'
 import { ProjectInquiry } from './14-project-inquiry/ProjectInquiry'
+import { WorkHero } from './16-work-hero/WorkHero'
+import { WorkGrid } from './17-work-grid/WorkGrid'
 
 type Block = NonNullable<Page['layout']>[number]
 
@@ -51,6 +53,10 @@ export function RenderBlocks({ blocks }: { blocks: Page['layout'] }) {
             return <Faq key={key} block={block} />
           case 'projectInquiry':
             return <ProjectInquiry key={key} block={block} />
+          case 'workHero':
+            return <WorkHero key={key} block={block} isFirst={i === 0} />
+          case 'workGrid':
+            return <WorkGrid key={key} block={block} />
           default:
             return null
         }

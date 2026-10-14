@@ -1,0 +1,61 @@
+/* ---------------------------------------------------------
+   Page hero with a picture (Work page, Figma 599:813)
+   The fixed site header sits on top of the picture.
+   --------------------------------------------------------- */
+.page-hero {
+  --u: calc(min(100vw, 1920px) / 1920);
+  --pad: clamp(20px, calc(128 * var(--u)), 128px);
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: clamp(420px, calc(685 * var(--u)), 685px);
+  padding: var(--nav-h, 92px) var(--pad) 32px;
+  overflow: hidden;
+  container-type: inline-size;
+}
+.page-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.page-hero__inner { width: 100%; max-width: 1664px; display: flex; justify-content: center; }
+.page-hero__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: clamp(38px, calc(96 * var(--u)), 96px);
+  line-height: 1.2;
+  letter-spacing: 0.06em;          /* 5.76px @ 96px */
+  color: #000;
+  /* a soft white halo around the letters keeps them readable over the picture */
+  -webkit-text-stroke: 0.16em rgba(255, 255, 255, 0.55);
+  paint-order: stroke fill;
+  stroke-linejoin: round;
+}
+.page-hero__line { display: block; white-space: nowrap; }
+.page-hero__hl {
+  display: inline-block;
+  margin-left: 0.1em;
+  padding: 0.058em 0.115em;       /* 5.5px / 11px @ 64px */
+  background: var(--zt-orange);
+  color: #fff;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 0.667em;              /* 64px next to 96px */
+  line-height: 1.2;
+  letter-spacing: 0;
+  vertical-align: 0.12em;
+  -webkit-text-stroke: 0;
+}
+
+@media (max-width: 767px) {
+  .page-hero { min-height: min(72svh, 560px); }
+  .page-hero__inner { justify-content: flex-start; }
+  .page-hero__title { font-size: clamp(30px, 10.5cqw, 46px); letter-spacing: 0.03em; }
+  .page-hero__line { white-space: normal; }
+}
