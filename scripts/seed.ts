@@ -420,10 +420,11 @@ await payload.updateGlobal({
   context: ctx(),
   data: {
     links: [
-      { link: { label: 'Work', href: '/#work' } },
-      { link: { label: 'Expertise', href: '/#expertise' } },
-      { link: { label: 'Studio', href: '/#studio' } },
-      { link: { label: 'Insights', href: '/#faq' } },
+      { link: { label: 'Our Work', href: '/#work' } },
+      { link: { label: 'Services', href: '/#expertise' } },
+      { link: { label: 'About Us', href: '/#studio' } },
+      { link: { label: 'Careers', href: '' } },
+      { link: { label: 'Contact Us', href: '/#contact' } },
     ],
     cta: { label: 'Start a project', href: '/#contact' },
   },
