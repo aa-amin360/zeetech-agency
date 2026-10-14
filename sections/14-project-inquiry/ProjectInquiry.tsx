@@ -2,6 +2,7 @@ import type { ProjectInquiryBlock } from '@/payload-types'
 import { Img } from '@/components/Img'
 import { Eyebrow, SectionHead } from '@/components/ui'
 import { InquiryForm } from './InquiryForm'
+import { InquiryGlass } from './InquiryGlass'
 import './project-inquiry.css'
 
 export function ProjectInquiry({ block }: { block: ProjectInquiryBlock }) {
@@ -12,6 +13,7 @@ export function ProjectInquiry({ block }: { block: ProjectInquiryBlock }) {
         <SectionHead heading={block.heading} id="inquiry-title" layout="left" />
 
         <div className="inquiry__card" data-reveal>
+          <InquiryGlass />
           <div className="inquiry__side">
             <div className="inquiry__prep">
               {prep?.eyebrow ? <Eyebrow light>{prep.eyebrow}</Eyebrow> : null}
