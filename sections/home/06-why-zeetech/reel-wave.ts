@@ -1,6 +1,7 @@
 /* Studio reel poster — a Three.js wave field of orange points that ripples
  * under the pointer. Returns { pulse, dispose }. */
 import type * as ThreeNS from 'three'
+import { perfLevel } from '@/lib/perf'
 
 export async function createWave(reel: HTMLElement, canvas: HTMLCanvasElement) {
   const THREE: typeof ThreeNS = await import('three')
@@ -8,13 +9,14 @@ export async function createWave(reel: HTMLElement, canvas: HTMLCanvasElement) {
 
   let renderer: ThreeNS.WebGLRenderer
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'low-power' })
+    // edge smoothing and full resolution only on the top performance level
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: perfLevel() === 'high', powerPreference: 'low-power' })
   } catch {
     reel.classList.add('no-gl')
     return null
   }
   renderer.setClearColor(0x000000, 1)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
+  renderer.setPixelRatio(perfLevel() === 'high' ? Math.min(window.devicePixelRatio || 1, 1.5) : 1)
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100)

@@ -64,3 +64,12 @@
 @media (max-width: 900px) {
   .reel { aspect-ratio: 4 / 3; }
 }
+
+/* lowest performance level: a still glow of orange points instead of the 3D wave (Reel.tsx) */
+.reel.is-lite .reel__gl { display: none; }
+.reel.is-lite {
+  background:
+    radial-gradient(60% 55% at 50% 72%, rgba(253, 86, 0, 0.42), transparent 70%),
+    radial-gradient(circle, rgba(255, 170, 90, 0.75) 0 1.2px, transparent 1.8px) 0 0 / 16px 16px,
+    #000;
+}

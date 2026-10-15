@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import type { ResolvedVideo } from '@/lib/video'
 import { VideoFrame } from '@/components/VideoFrame'
+import { onPerfChange, perfLevel } from '@/lib/perf'
 
 type Wave = Awaited<ReturnType<typeof import('./reel-wave').createWave>>
 
@@ -17,6 +18,17 @@ export function Reel({ video, title }: { video: ResolvedVideo | null; title: str
     const cv = canvas.current
     if (!el || !cv) return
     let disposed = false
+    // lowest performance level: a still glow instead of the 3D wave (three.js isn't loaded at all)
+    const lite = () => {
+      wave.current?.dispose()
+      wave.current = null
+      el.classList.add('is-lite')
+    }
+    if (perfLevel() === 'low') {
+      lite()
+      return () => el.classList.remove('is-lite')
+    }
+    const stopPerf = onPerfChange((level) => level === 'low' && lite())
     // three.js only loads when the reel gets close to the viewport
     const io = new IntersectionObserver(
       (entries) => {
@@ -25,7 +37,7 @@ export function Reel({ video, title }: { video: ResolvedVideo | null; title: str
         import('./reel-wave')
           .then(({ createWave }) => createWave(el, cv))
           .then((w) => {
-            if (disposed) w?.dispose()
+            if (disposed || perfLevel() === 'low') w?.dispose()
             else wave.current = w
           })
           .catch(() => el.classList.add('no-gl'))
@@ -35,6 +47,7 @@ export function Reel({ video, title }: { video: ResolvedVideo | null; title: str
     io.observe(el)
     return () => {
       disposed = true
+      stopPerf()
       io.disconnect()
       wave.current?.dispose()
     }

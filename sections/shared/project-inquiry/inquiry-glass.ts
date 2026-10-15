@@ -8,6 +8,8 @@
  * Returns a cleanup function.
  */
 
+import { onPerfChange, perfLevel } from '@/lib/perf'
+
 const SRC = '/brand/inquiry-bg.jpg'
 // the picture: 1024 × 585; its ribs are 17.2px apart starting at x = 15, the glass ends at 512
 const ART_W = 1024
@@ -95,6 +97,8 @@ const FRAG = `
 `
 
 export function initInquiryGlass(canvas: HTMLCanvasElement, card: HTMLElement): () => void {
+  // lowest performance level: the still artwork (the card's CSS background) stays
+  if (perfLevel() === 'low') return () => {}
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const SPEED = reduceMotion ? 0.3 : 1.0
   const gl = canvas.getContext('webgl', { antialias: false, alpha: false, premultipliedAlpha: false })
@@ -137,7 +141,7 @@ export function initInquiryGlass(canvas: HTMLCanvasElement, card: HTMLElement): 
   let ready = false
 
   const resize = () => {
-    dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+    dpr = perfLevel() === 'high' ? Math.min(window.devicePixelRatio || 1, 1.5) : 1
     const W = Math.max(1, Math.round(canvas.clientWidth * dpr))
     const H = Math.max(1, Math.round(canvas.clientHeight * dpr))
     if (canvas.width !== W || canvas.height !== H) {
@@ -214,7 +218,14 @@ export function initInquiryGlass(canvas: HTMLCanvasElement, card: HTMLElement): 
 
   // only animate while the card is on screen and the tab is visible
   let visible = false
-  const updateRunning = () => (visible && !document.hidden ? kick() : halt())
+  let off = false // switched off after the level dropped to low
+  const updateRunning = () => (visible && !document.hidden && !off ? kick() : halt())
+  const stopPerf = onPerfChange((level) => {
+    if (level !== 'low') return resize()
+    off = true
+    halt()
+    canvas.classList.remove('is-live')
+  })
 
   const img = new Image()
   let tex: WebGLTexture | null = null
@@ -245,6 +256,7 @@ export function initInquiryGlass(canvas: HTMLCanvasElement, card: HTMLElement): 
 
   return () => {
     halt()
+    stopPerf()
     img.onload = null
     io.disconnect()
     ro.disconnect()

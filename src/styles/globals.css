@@ -284,3 +284,38 @@ html.motion-ready [data-intro] {
   background: #000;
   object-fit: contain;
 }
+
+/* ---------------------------------------------------------
+   Performance levels (html[data-perf], see src/lib/perf.ts)
+   Frosted glass (backdrop-filter) re-blurs whatever scrolls under it on every frame.
+   --------------------------------------------------------- */
+/* phones: the bars that stay on screen are near-solid instead of frosted */
+@media (max-width: 900px) {
+  /* (html … so these win over the section stylesheets, which load later) */
+  html .site-header.is-scrolled .nav,
+  html .mobile-menu,
+  html .hero-float,
+  html .work__bar-in {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  html .site-header.is-scrolled .nav { background: rgba(255, 255, 255, 0.96); }
+  html .mobile-menu { background: rgba(253, 250, 254, 0.98); }
+  html .hero-float { background: rgba(255, 255, 255, 0.96); }
+  html .work__bar-in { background: rgba(246, 246, 246, 0.98); }
+}
+/* lowest level, every screen: no frosted glass anywhere */
+html[data-perf="low"] .site-header .nav,
+html[data-perf="low"] .mobile-menu,
+html[data-perf="low"] .hero-float,
+html[data-perf="low"] .work__bar-in,
+html[data-perf="low"] .build__hub,
+html[data-perf="low"] .stage,
+html[data-perf="low"] .orbit__node,
+html[data-perf="low"] .cmp__bubble {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+html[data-perf="low"] .site-header.is-scrolled .nav { background: rgba(255, 255, 255, 0.96); }
+html[data-perf="low"] .hero-float { background: rgba(255, 255, 255, 0.96); }
+html[data-perf="low"] .work__bar-in { background: rgba(246, 246, 246, 0.98); }

@@ -8,8 +8,10 @@ import { Attribution } from '@/components/Attribution'
 import { Header } from '@/components/Header'
 import { JsonLd } from '@/components/JsonLd'
 import { Motion } from '@/components/Motion'
+import { PerfWatch } from '@/components/PerfWatch'
 import { Tracking } from '@/components/Tracking'
 import { Footer } from '@sections/layout/footer/Footer'
+import { PERF_HEAD_SCRIPT } from '@/lib/perf'
 import { fontVariables } from './fonts'
 
 // cached pages (including the 404 page) refresh at least hourly; admin edits refresh them at once
@@ -61,6 +63,8 @@ export default async function FrontendLayout({ children }: { children: ReactNode
     <html lang="en" className={fontVariables} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: motionReady }} />
+        {/* picks the performance level (data-perf) before the first paint — see src/lib/perf.ts */}
+        <script dangerouslySetInnerHTML={{ __html: PERF_HEAD_SCRIPT }} />
       </head>
       <body id="top">
         <a className="skip-link" href="#main">
@@ -70,6 +74,7 @@ export default async function FrontendLayout({ children }: { children: ReactNode
         <main id="main">{children}</main>
         <Footer data={footer} />
         <Motion />
+        <PerfWatch />
         <Attribution />
         <Tracking settings={settings} />
         <JsonLd data={organization} />

@@ -44,6 +44,24 @@ legacy/                   original static HTML/CSS/JS build
 
 ---
 
+## Performance levels
+
+Each visitor's device gets a level that decides how much animation runs (`src/lib/perf.ts`):
+
+| Level | What runs |
+|---|---|
+| **high** | everything as designed |
+| **mid** | effects stay, but WebGL draws at lower resolution; half the petals, no petal blur |
+| **low** | no WebGL / canvas effects (still pictures instead), collage stands still, no frosted glass |
+
+A small script in `<head>` picks the starting level from the device (CPU cores, memory, Data Saver,
+slow network). `PerfWatch` then measures the real frame rate and steps down if the page keeps
+struggling; the level is remembered for a week. On phones the bars that stay on screen are
+always solid rather than frosted.
+
+To test a level, add `?perf=low`, `?perf=mid` or `?perf=high` to any address (kept in that
+browser until `?perf=auto`).
+
 ## Run it locally
 
 Needs Node 22.12+ (Node 24 recommended).

@@ -3,6 +3,7 @@
  * cosine of a flip angle, so it seems to turn in 3D). Petals further away are smaller, paler,
  * softer and slower. Moving the pointer across the hero stirs the ones nearby.
  * Pauses while off screen, and doesn't start at all for visitors who ask for reduced motion.
+ * Performance level (src/lib/perf.ts): mid → half as many petals and no blur; low → none.
  * Returns a cleanup function.
  */
 
@@ -23,6 +24,8 @@ type Petal = {
   tint: number // 0 white-pink … 1 deeper pink
 }
 
+import { onPerfChange, perfLevel, type PerfLevel } from '@/lib/perf'
+
 const COLORS = [
   ['#fff4f7', '#ffc9d8'],
   ['#ffe3ec', '#ffa9c2'],
@@ -30,7 +33,7 @@ const COLORS = [
 ]
 
 export function initPetals(canvas: HTMLCanvasElement, host: HTMLElement): () => void {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {}
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || perfLevel() === 'low') return () => {}
   const ctx = canvas.getContext('2d')
   if (!ctx) return () => {}
 
@@ -43,6 +46,7 @@ export function initPetals(canvas: HTMLCanvasElement, host: HTMLElement): () => 
   let last = performance.now()
   let wind = 0
   let t = 0
+  let level: PerfLevel = perfLevel()
 
   const spawn = (p: Partial<Petal> = {}): Petal => {
     const z = Math.random() ** 1.4
@@ -73,7 +77,8 @@ export function initPetals(canvas: HTMLCanvasElement, host: HTMLElement): () => 
     canvas.height = Math.round(H * dpr)
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     // about one petal per 14 000 px², fewer on small screens
-    const want = Math.round(Math.min(90, Math.max(22, (W * H) / 14000)))
+    const full = Math.min(90, Math.max(22, (W * H) / 14000))
+    const want = Math.round(level === 'high' ? full : full / 2)
     if (petals.length > want) petals.length = want
     while (petals.length < want) petals.push(spawn({ y: Math.random() * H }))
   }
@@ -119,11 +124,11 @@ export function initPetals(canvas: HTMLCanvasElement, host: HTMLElement): () => 
       p.y += p.vy * dt
       p.x += (wind * (0.4 + p.z) + p.vx) * dt + Math.cos(p.phase) * p.sway * dt
       if (p.y > H + 30 || p.x < -60 || p.x > W + 60) Object.assign(p, spawn({ x: Math.random() * (W + 120) - 60 }))
-      // far petals a touch out of focus
-      ctx.filter = p.z < 0.35 ? 'blur(1.2px)' : 'none'
+      // far petals a touch out of focus (a canvas blur is slow, so only on the top level)
+      if (level === 'high') ctx.filter = p.z < 0.35 ? 'blur(1.2px)' : 'none'
       drawPetal(p)
     }
-    ctx.filter = 'none'
+    if (level === 'high') ctx.filter = 'none'
     raf = requestAnimationFrame(frame)
   }
 
@@ -175,9 +180,20 @@ export function initPetals(canvas: HTMLCanvasElement, host: HTMLElement): () => 
   document.addEventListener('visibilitychange', update)
   host.addEventListener('pointermove', onMove, { passive: true })
   host.addEventListener('pointerleave', onLeave)
+  const stopPerf = onPerfChange((next) => {
+    level = next
+    ctx.filter = 'none'
+    if (next === 'low') {
+      stop()
+      visible = false
+      io.disconnect()
+      ctx.clearRect(0, 0, W, H)
+    } else resize()
+  })
 
   return () => {
     stop()
+    stopPerf()
     io.disconnect()
     ro.disconnect()
     document.removeEventListener('visibilitychange', update)

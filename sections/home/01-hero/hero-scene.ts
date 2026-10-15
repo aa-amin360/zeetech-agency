@@ -5,6 +5,8 @@
  * Returns a cleanup function.
  */
 
+import { onPerfChange, perfLevel } from '@/lib/perf'
+
 export type HeroTile = { src: string; srcSet?: string; tone: string }
 
 const PALETTES = [
@@ -32,6 +34,7 @@ const FRAG = `
   uniform vec3  uB[6];
   uniform float uMix;
   uniform vec3  uBase;
+  uniform float uAA;        // 1: two samples per pixel (smoother rib edges), 0: one
 
   vec3 palette(float t){
     t = clamp(t, 0.0, 1.0) * 4.9999;
@@ -140,7 +143,7 @@ const FRAG = `
 
   void main(){
     vec2 p = gl_FragCoord.xy;
-    vec3 col = 0.5 * (shade(p.x - 0.25, p.y) + shade(p.x + 0.25, p.y));
+    vec3 col = uAA > 0.5 ? 0.5 * (shade(p.x - 0.25, p.y) + shade(p.x + 0.25, p.y)) : shade(p.x, p.y);
     float n = fract(sin(dot(p, vec2(12.9898, 78.233)) + fract(uTime) * 7.0) * 43758.5453);
     col += (n - 0.5) * (1.5 / 255.0);
     gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
@@ -285,7 +288,7 @@ export function initHero(hero: HTMLElement, tiles: HeroTile[]): () => void {
     const tick = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000)
       last = now
-      const paused = hero.classList.contains('is-paused') || reduceMotion
+      const paused = hero.classList.contains('is-paused') || reduceMotion || perfLevel() === 'low'
       const cruise = paused ? 0 : CRUISE
       if (!dragging) {
         boost *= Math.exp(-dt * 2.2)
@@ -351,7 +354,8 @@ export function initHero(hero: HTMLElement, tiles: HeroTile[]): () => void {
         premultipliedAlpha: false,
         powerPreference: 'high-performance',
       })
-    if (!canvas || !gl) {
+    // lowest performance level: the still gradient (.no-gl) instead of the live backdrop
+    if (!canvas || !gl || perfLevel() === 'low') {
       hero.classList.add('no-gl')
       return
     }
@@ -384,7 +388,7 @@ export function initHero(hero: HTMLElement, tiles: HeroTile[]): () => void {
     gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0)
 
     const U: Record<string, WebGLUniformLocation | null> = {}
-    ;['uRes', 'uTime', 'uBarW', 'uOffset', 'uMouse', 'uMouseStr', 'uA', 'uB', 'uMix', 'uBase'].forEach(
+    ;['uRes', 'uTime', 'uBarW', 'uOffset', 'uMouse', 'uMouseStr', 'uA', 'uB', 'uMix', 'uBase', 'uAA'].forEach(
       (n) => (U[n] = gl.getUniformLocation(prog, n)),
     )
     gl.uniform3fv(U.uBase, BASE)
@@ -393,7 +397,11 @@ export function initHero(hero: HTMLElement, tiles: HeroTile[]): () => void {
     let rafId = 0
     let dpr = 1
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 2)
+      // high: up to 1.5× the screen's pixels, two samples per pixel; mid: 0.75×, one sample —
+      // the backdrop is soft, so the browser scaling it up looks the same and costs a fraction
+      const level = perfLevel()
+      dpr = level === 'high' ? Math.min(window.devicePixelRatio || 1, 1.5) : 0.75
+      gl.uniform1f(U.uAA, level === 'high' ? 1 : 0)
       const rect = hero.getBoundingClientRect()
       const cw = Math.max(1, rect.width)
       const ch = Math.max(1, rect.height)
@@ -508,7 +516,15 @@ export function initHero(hero: HTMLElement, tiles: HeroTile[]): () => void {
       running = false
       cancelAnimationFrame(rafId)
     }
-    const updateRunning = () => (heroVisible && !document.hidden ? kick() : halt())
+    let off = false // switched off after the level dropped to low
+    const updateRunning = () => (heroVisible && !document.hidden && !off ? kick() : halt())
+    const stopPerf = onPerfChange((level) => {
+      if (level === 'low') {
+        off = true
+        halt()
+        hero.classList.add('no-gl')
+      } else resize()
+    })
 
     const io = new IntersectionObserver((entries) => {
       heroVisible = entries[0].isIntersecting
@@ -522,6 +538,7 @@ export function initHero(hero: HTMLElement, tiles: HeroTile[]): () => void {
 
     cleanups.push(() => {
       halt()
+      stopPerf()
       io.disconnect()
       ro.disconnect()
       // free GPU objects but keep the context: React may mount the scene again on the same canvas
