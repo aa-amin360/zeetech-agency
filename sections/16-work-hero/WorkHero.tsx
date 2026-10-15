@@ -1,5 +1,6 @@
 import type { WorkHeroBlock } from '@/payload-types'
 import { Img } from '@/components/Img'
+import { Petals } from './Petals'
 import './work-hero.css'
 
 export function WorkHero({ block, isFirst }: { block: WorkHeroBlock; isFirst?: boolean }) {
@@ -8,6 +9,7 @@ export function WorkHero({ block, isFirst }: { block: WorkHeroBlock; isFirst?: b
   return (
     <section className="page-hero" aria-labelledby="page-hero-title">
       <Img media={block.background} className="page-hero__bg" sizes="100vw" priority={isFirst} alt="" />
+      <Petals />
       <div className="page-hero__inner">
         <Title className="page-hero__title" id="page-hero-title" data-reveal>
           {lines.map((line, i) => (
