@@ -20,7 +20,7 @@ import { Header } from './globals/Header'
 import { SiteSettings } from './globals/SiteSettings'
 import { serverUrl } from './lib/url'
 import { migrations } from './migrations'
-import { Footer } from '@sections/15-footer/global'
+import { Footer } from '@sections/layout/footer/global'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 

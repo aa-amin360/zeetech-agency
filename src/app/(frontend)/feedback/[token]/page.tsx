@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { getPayloadClient } from '@/lib/payload'
 import { Eyebrow } from '@/components/ui'
 import { FeedbackForm } from './FeedbackForm'
-import '@sections/14-project-inquiry/project-inquiry.css'
+import '@sections/shared/project-inquiry/project-inquiry.css'
 import './feedback.css'
 
 export const dynamic = 'force-dynamic'

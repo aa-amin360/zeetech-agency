@@ -9,7 +9,7 @@ import { Header } from '@/components/Header'
 import { JsonLd } from '@/components/JsonLd'
 import { Motion } from '@/components/Motion'
 import { Tracking } from '@/components/Tracking'
-import { Footer } from '@sections/15-footer/Footer'
+import { Footer } from '@sections/layout/footer/Footer'
 import { fontVariables } from './fonts'
 
 // cached pages (including the 404 page) refresh at least hourly; admin edits refresh them at once
