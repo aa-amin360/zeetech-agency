@@ -18,7 +18,7 @@ export async function Faq({ block }: { block: FaqBlock }) {
 
   return (
     <section className="sec faq" id="faq" aria-labelledby="faq-title">
-      <img className="faq__knot" src="/brand/faq-knot.png" width={501} height={511} alt="" aria-hidden="true" loading="lazy" />
+      <img className="faq__knot" src="/brand/faq-knot.webp" width={501} height={511} alt="" aria-hidden="true" loading="lazy" />
       <Stamp />
       <div className="sec__inner">
         <SectionHead heading={block.heading} id="faq-title" layout="split" mainClassName="faq__main" />

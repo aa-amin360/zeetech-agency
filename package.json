@@ -16,6 +16,8 @@
     "vercel:logos": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation payload run scripts/add-client-logos.ts",
     "work": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/add-work-page.ts",
     "vercel:work": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation payload run scripts/add-work-page.ts",
+    "images": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/convert-images.ts",
+    "vercel:images": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation payload run scripts/convert-images.ts",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",

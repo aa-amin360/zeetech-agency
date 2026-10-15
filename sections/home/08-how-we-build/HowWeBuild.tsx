@@ -31,7 +31,7 @@ export function HowWeBuild({ block }: { block: HowWeBuildBlock }) {
 
   return (
     <section className="sec build" id="process" aria-labelledby="build-title">
-      <img className="build__bg" src="/brand/build-bg.png" alt="" aria-hidden="true" loading="lazy" />
+      <img className="build__bg" src="/brand/build-bg.webp" alt="" aria-hidden="true" loading="lazy" />
       <div className="sec__inner">
         <SectionHead heading={block.heading} id="build-title" />
 

@@ -33,7 +33,7 @@ export function Comparison({ block }: { block: ComparisonBlock }) {
 
   return (
     <section className="sec compare" aria-labelledby="compare-title">
-      <img className="compare__bg" src="/brand/compare-bg.png" alt="" aria-hidden="true" loading="lazy" />
+      <img className="compare__bg" src="/brand/compare-bg.webp" alt="" aria-hidden="true" loading="lazy" />
       <div className="sec__inner">
         <SectionHead heading={block.heading} id="compare-title" subClassName="sub--soft" />
 

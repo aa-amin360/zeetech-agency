@@ -25,11 +25,11 @@ const Orbit = () => (
       <img src="/brand/mark-z-green.svg" alt="" />
     </span>
     <span className="orbit__node orbit__node--api">
-      <img src="/brand/orbit-api.gif" alt="" loading="lazy" />
+      <img src="/brand/orbit-api.webp" alt="" loading="lazy" />
       API
     </span>
     <span className="orbit__node orbit__node--web">
-      <img src="/brand/orbit-web.gif" alt="" loading="lazy" />
+      <img src="/brand/orbit-web.webp" alt="" loading="lazy" />
       WEB
     </span>
     <span className="orbit__node orbit__node--db">
@@ -39,7 +39,7 @@ const Orbit = () => (
       DB
     </span>
     <span className="orbit__node orbit__node--ai">
-      <img src="/brand/orbit-ai.gif" alt="" loading="lazy" />
+      <img src="/brand/orbit-ai.webp" alt="" loading="lazy" />
       AI
     </span>
   </div>

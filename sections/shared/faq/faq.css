@@ -10,8 +10,7 @@
   height: auto;
   aspect-ratio: 501 / 511;
   object-fit: cover;
-  filter: blur(0.9px);
-  pointer-events: none;
+  pointer-events: none;   /* the soft blur is part of the image, not a live filter */
 }
 .faq__main { flex: 0 1 59.68%; }              /* 993 / 1664 */
 .faq .sec-head__aside { flex: 1 1 0; }
