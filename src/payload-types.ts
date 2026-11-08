@@ -1174,6 +1174,7 @@ export interface Service {
         | 'image'
         | 'atom'
         | 'waves'
+        | 'shield-check'
       )
     | null;
   /**

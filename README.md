@@ -108,6 +108,7 @@ only adds what is missing, so running it twice is harmless:
 | `npm run about` / `npm run vercel:about` | The About page, and “About Us” in the menu / footer pointing at it |
 | `npm run contact-careers` / `npm run vercel:contact-careers` | The Contact and Careers pages; “Contact”, “Careers” and every “Start a project” button pointing at them |
 | `npm run update-content` / `npm run vercel:update-content` | Small content fixes from design updates (e.g. the name under the photo in the project inquiry form) |
+| `npm run cyber-blockchain` | Adds the Cybersecurity & blockchain service (page, Services list label, footer link). The Vercel build runs it once by itself |
 
 On the VPS run them with `NODE_ENV=production` after `npm run migrate`.
 

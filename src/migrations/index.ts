@@ -9,6 +9,7 @@ import * as migration_20261108_085042_service_menu_icon from './20261108_085042_
 import * as migration_20261108_091013_about_page from './20261108_091013_about_page';
 import * as migration_20261108_093455_contact_careers from './20261108_093455_contact_careers';
 import * as migration_20261108_094006_case_study_details from './20261108_094006_case_study_details';
+import * as migration_20261109_130000_service_shield_icon from './20261109_130000_service_shield_icon';
 import * as migration_20261109_120000_clear_dev_push_marker from './20261109_120000_clear_dev_push_marker';
 
 export const migrations = [
@@ -68,8 +69,13 @@ export const migrations = [
     name: '20261108_094006_case_study_details',
   },
   {
+    up: migration_20261109_130000_service_shield_icon.up,
+    down: migration_20261109_130000_service_shield_icon.down,
+    name: '20261109_130000_service_shield_icon',
+  },
+  {
     up: migration_20261109_120000_clear_dev_push_marker.up,
     down: migration_20261109_120000_clear_dev_push_marker.down,
-    name: '20261109_120000_clear_dev_push_marker',
+    name: '20261109_120000_clear_dev_push_marker'
   },
 ];

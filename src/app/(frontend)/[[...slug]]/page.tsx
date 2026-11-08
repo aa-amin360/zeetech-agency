@@ -27,7 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const image = mediaUrl(meta?.image, 'og') || mediaUrl(meta?.image)
   const path = slug === 'home' ? '/' : `/${slug}`
   return {
-    title: slug === 'home' ? { absolute: meta?.title || settings.siteName || page.title } : meta?.title || page.title,
+    // an SEO title is the full title; only the plain page title gets the " — ZeeTech" ending
+    title: slug === 'home' || meta?.title ? { absolute: meta?.title || settings.siteName || page.title } : page.title,
     description: meta?.description || settings.defaultDescription || undefined,
     alternates: { canonical: path },
     openGraph: {

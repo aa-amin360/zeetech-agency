@@ -1,4 +1,5 @@
-// The Services page (Figma 638:2111) and the six service pages (Figma 688:1996 → 688:2001).
+// The Services page (Figma 638:2111) and the service pages (Figma 688:1996 → 688:2001; the last
+// one, Cybersecurity & blockchain, has no Figma design and follows the same layout).
 // Pictures live in legacy/assets/services.
 
 export const SERVICES_HERO = {
@@ -13,7 +14,7 @@ export const SERVICES_HERO = {
 }
 
 export const SERVICES_LIST = {
-  eyebrow: 'Six disciplines.\nOne delivery team.',
+  eyebrow: 'Seven disciplines.\nOne delivery team.',
   intro: 'Bring us an idea, an existing product or a complex challenge. We’ll help define the right next step.',
 }
 
@@ -213,6 +214,35 @@ export const SERVICES: ServiceData[] = [
       ['Can you support an existing application?', 'Yes. We begin with a technical review and an operational handover to understand the system and define a realistic support scope.'],
       ['Is support available around the clock?', 'Support hours, response targets and escalation paths are agreed explicitly for your engagement.'],
       ['Who owns hosting and third-party accounts?', 'Ownership and access are agreed during setup. We can work within your organisation’s accounts and document configuration and responsibilities.'],
+    ],
+  },
+  {
+    name: 'Cybersecurity & blockchain',
+    accent: 'blockchain',
+    kicker: 'Security & Web3',
+    icon: 'shield-check',
+    summary:
+      'Protect what you build and the data it holds. We harden products against real threats and build secure blockchain features where they add genuine value.',
+    tagline: 'Security and trust, designed in from the start.',
+    highlight: 'Trust, built in.',
+    image: 'row-cyber-blockchain.webp',
+    heroImage: 'hero-cyber-blockchain.webp',
+    deliverables: [
+      ['Security assessment & threat modelling', 'Review your architecture, data flows and access paths to find realistic threats, then prioritise the fixes that reduce the most risk.'],
+      ['Application & cloud hardening', 'Strengthen authentication, secrets management, encryption, logging and infrastructure configuration across the application and its hosting.'],
+      ['Smart contracts & dApp development', 'Design, build and test smart contracts and decentralised app features with clear upgrade paths, efficient logic and documented behaviour.'],
+      ['Wallet, token & on-chain integrations', 'Connect wallets, payments, tokens and blockchain data to your product with careful key handling and transparent transaction flows.'],
+    ],
+    process: [
+      ['Assess the risks', 'Map the assets, threats and parts of the system that need protection.'],
+      ['Design for trust', 'Agree the security controls and, where useful, the on-chain architecture.'],
+      ['Build & harden', 'Implement controls, contracts and integrations with secure defaults.'],
+      ['Verify & monitor', 'Test, review and set up alerts so issues surface early.'],
+    ],
+    questions: [
+      ['Does our product need blockchain?', 'Not always. We recommend it only when shared records, transparency or digital ownership solve a real problem, and suggest simpler options when they fit better.'],
+      ['Can you review our existing application or smart contracts?', 'Yes. We review code, configuration and workflows, report issues by severity and help you fix them. Independent third-party audits can be arranged for high-value contracts.'],
+      ['Which blockchains do you work with?', 'Mainly Ethereum and EVM-compatible networks such as Polygon, Base and BNB Chain. Other networks can be scoped around your requirements.'],
     ],
   },
 ]

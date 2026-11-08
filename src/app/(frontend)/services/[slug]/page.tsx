@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const image = mediaUrl(service.meta?.image, 'og') || mediaUrl(service.hero?.image, 'og')
   const path = `/services/${service.slug}`
   return {
-    title: service.meta?.title || service.name,
+    // an SEO title is the full title; only the plain name gets the " — ZeeTech" ending
+    title: service.meta?.title ? { absolute: service.meta.title } : service.name,
     description: service.meta?.description || service.summary || undefined,
     alternates: { canonical: path },
     openGraph: { url: path, images: image ? [image] : undefined },

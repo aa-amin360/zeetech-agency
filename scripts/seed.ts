@@ -459,6 +459,7 @@ await payload.updateGlobal({
           'Frontend Development',
           'SQA & Security',
           'Deployment & Ongoing Support',
+          'Cybersecurity & Blockchain',
         ].map((label) => ({ link: { label, href: '/#expertise' } })),
       },
       {

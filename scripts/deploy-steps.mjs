@@ -23,7 +23,8 @@ const SCRIPTS = [
   'scripts/add-services-page.ts',
   'scripts/add-about-page.ts',
   'scripts/add-contact-careers.ts',
-  'scripts/update-content.ts', // last: the pages above copy the inquiry section from Home
+  'scripts/update-content.ts', // after the pages above: they copy the inquiry section from Home
+  'scripts/add-cybersecurity-blockchain.ts',
 ]
 
 const step = process.argv[2]

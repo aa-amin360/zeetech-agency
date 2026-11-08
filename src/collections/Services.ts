@@ -19,6 +19,7 @@ export const SERVICE_ICONS = [
   'image',
   'atom',
   'waves',
+  'shield-check',
 ] as const
 
 const previewUrl = (slug?: string | null) =>

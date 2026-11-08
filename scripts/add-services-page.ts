@@ -5,7 +5,7 @@
  *   npm run vercel:services  — the Vercel database + Blob (needs .env.production.local)
  *
  * Safe to run more than once; each step only happens if it hasn't already:
- *   1. adds the six services (pictures, deliverables, process, questions) as published
+ *   1. adds the services (pictures, deliverables, process, questions) as published
  *      services, each ending with the project inquiry form copied from the home page
  *   2. creates the "Services" page: dark hero, services list, then the FAQ, project inquiry
  *      and client stories sections copied from the home page
@@ -14,82 +14,19 @@
  *      new pages: each "How we deliver" service → its page, "Explore our process" → /services,
  *      the delivery principle cards → the matching service, "Explore Our Works" → /work
  */
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { getPayload } from 'payload'
 import config from '../src/payload.config'
-import { slugify } from '../src/fields/slug'
 import { SERVICES, SERVICES_HERO, SERVICES_LIST } from './services-page.data'
-
-const dirname = path.dirname(fileURLToPath(import.meta.url))
-const DIR = path.resolve(dirname, '../legacy/assets/services')
-// a fresh object per call: the Blob storage plugin marks the context it was given
-const ctx = () => ({ disableRevalidate: true })
+import { ctx, ensureService, homeSections, serviceMedia } from './service-create'
 
 const payload = await getPayload({ config })
 const log = (msg: string) => payload.logger.info(msg)
+const media = (file: string, alt: string, focalY?: number) => serviceMedia(payload, file, alt, focalY)
+const fromHome = await homeSections(payload)
 
-/** The upload with this alt text, or a new one from legacy/assets/services. */
-async function media(file: string, alt: string, focalY?: number) {
-  const found = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1, depth: 0 })
-  if (found.docs[0]) return found.docs[0].id as number
-  const doc = await payload.create({
-    collection: 'media',
-    data: focalY == null ? { alt } : { alt, focalX: 50, focalY },
-    filePath: path.join(DIR, file),
-    context: ctx(),
-  })
-  return doc.id as number
-}
-
-// copies of the home page's sections, without their ids (each block row needs its own)
-const home = await payload.find({ collection: 'pages', where: { slug: { equals: 'home' } }, limit: 1, depth: 0 })
-const strip = (v: unknown): unknown =>
-  Array.isArray(v)
-    ? v.map(strip)
-    : v && typeof v === 'object'
-      ? Object.fromEntries(Object.entries(v).filter(([k]) => k !== 'id').map(([k, x]) => [k, strip(x)]))
-      : v
-const fromHome = (type: string) => (home.docs[0]?.layout ?? []).filter((b) => b.blockType === type).slice(0, 1).map(strip)
-
-// 1. the six services
+// 1. the services
 const slugs: string[] = []
-for (const s of SERVICES) {
-  const slug = slugify(s.name)
-  slugs.push(slug)
-  const exists = await payload.find({ collection: 'services', where: { slug: { equals: slug } }, limit: 1, depth: 0, draft: true })
-  if (exists.docs.length) {
-    // services added before the menu icon existed get theirs once
-    if (!exists.docs[0].icon) {
-      await payload.update({ collection: 'services', id: exists.docs[0].id, data: { icon: s.icon as never }, depth: 0, context: ctx() })
-      log(`Gave "${s.name}" its menu icon.`)
-    }
-    continue
-  }
-  const pairs = (list: [string, string][]) => list.map(([title, text]) => ({ title, text }))
-  await payload.create({
-    collection: 'services',
-    data: {
-      name: s.name,
-      accent: s.accent,
-      slug,
-      kicker: s.kicker,
-      icon: s.icon as never,
-      summary: s.summary,
-      deliverables: pairs(s.deliverables),
-      image: await media(s.image, `${s.name} — services page`, s.imageFocalY),
-      tagline: s.tagline,
-      hero: { image: await media(s.heroImage, `${s.name} — service page hero`), highlight: s.highlight },
-      process: pairs(s.process),
-      questions: s.questions.map(([question, answer]) => ({ question, answer })),
-      layout: fromHome('projectInquiry') as never,
-      meta: { title: `${s.name} — ZeeTech`, description: s.summary },
-      _status: 'published',
-    },
-    context: ctx(),
-  })
-  log(`Added the service "${s.name}".`)
-}
+for (const s of SERVICES) slugs.push((await ensureService(payload, s, fromHome)).slug)
 
 // 2. the Services page
 const page = await payload.find({ collection: 'pages', where: { slug: { equals: 'services' } }, limit: 1, depth: 0, draft: true })
@@ -115,7 +52,7 @@ if (!page.docs.length) {
       meta: {
         title: 'Services — ZeeTech',
         description:
-          'Architecture, UI/UX design, backend and AI, frontend development, QA and ongoing support — one ZeeTech team from the first product decision to the next release.',
+          'Architecture, UI/UX design, backend and AI, frontend development, QA, ongoing support, cybersecurity and blockchain — one ZeeTech team from the first product decision to the next release.',
       },
       _status: 'published',
     },
