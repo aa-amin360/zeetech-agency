@@ -1,6 +1,9 @@
-# Not needed on Vercel (the seed script runs from your computer, see DEPLOY-VERCEL.md)
-legacy
-scripts
+# Not needed on Vercel.
+# Keep scripts/ and legacy/assets/: the build runs the new pages' content scripts once
+# (scripts/deploy-steps.mjs), and they upload their images from legacy/assets.
+legacy/index.html
+legacy/main.js
+legacy/style.css
 deploy
 .dev-db
 media
