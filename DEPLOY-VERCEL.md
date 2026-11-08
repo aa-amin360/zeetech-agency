@@ -58,7 +58,7 @@ This creates the tables and copies the current site content and images into Neon
 ```bash
 npm i -g vercel
 vercel link                                   # pick the project
-vercel env pull .env.production.local         # downloads the Vercel settings (kept out of Git)
+vercel env pull .env.production.local --environment=production   # the LIVE settings (kept out of Git)
 npm run vercel:setup                          # migrate + seed, using those settings
 ```
 
@@ -77,6 +77,13 @@ load that page's content once: `npm run vercel:work` for Our Work, `npm run verc
 content fixes from design updates. Run
 `npm run vercel:work` again to give existing case studies their new end sections.
 
+> Always pull with `--environment=production`: without it Vercel hands over the *Development* settings,
+> which may point at a different database, and the scripts then fill the wrong one.
+>
+> If a script asks "It looks like you've run Payload in dev mode … proceed?", answer **y**: a dev server
+> once changed that database directly. The migrations skip whatever already exists and then remove that
+> marker, so it is asked only once.
+>
 > While `.env.production.local` exists, `npm run build` / `npm run start` on your computer also use the
 > Vercel database. Delete the file when you're done (`npm run dev` is not affected).
 

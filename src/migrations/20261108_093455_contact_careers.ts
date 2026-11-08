@@ -1,7 +1,8 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+import { runTolerant } from '../lib/tolerant-migration'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
-  await db.execute(sql`
+  await runTolerant(db, `
    CREATE TYPE "public"."enum_pages_blocks_interest_cards_cards_icon" AS ENUM('buildings', 'frame', 'box', 'profile-2user');
   CREATE TYPE "public"."enum__pages_v_blocks_interest_cards_cards_icon" AS ENUM('buildings', 'frame', 'box', 'profile-2user');
   ALTER TYPE "public"."enum_pages_blocks_card_grid_style" ADD VALUE 'outlined';

@@ -1,7 +1,8 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+import { runTolerant } from '../lib/tolerant-migration'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
-  await db.execute(sql`
+  await runTolerant(db, `
    CREATE TYPE "public"."enum_services_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum__services_v_version_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum__services_v_published_locale" AS ENUM('en');

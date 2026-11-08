@@ -1,7 +1,8 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+import { runTolerant } from '../lib/tolerant-migration'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
-  await db.execute(sql`
+  await runTolerant(db, `
    CREATE TABLE "case_studies_blocks_project_inquiry_prep_steps" (
   	"_order" integer NOT NULL,
   	"_parent_id" varchar NOT NULL,
