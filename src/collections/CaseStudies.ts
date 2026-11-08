@@ -3,6 +3,9 @@ import { loggedIn, publishedOrLoggedIn } from '@/access'
 import { revalidateCollection } from '@/lib/revalidate'
 import { slugField } from '@/fields/slug'
 import { serverUrl } from '@/lib/url'
+import { ClientStoriesBlock } from '@sections/shared/client-stories/block'
+import { FaqBlock } from '@sections/shared/faq/block'
+import { ProjectInquiryBlock } from '@sections/shared/project-inquiry/block'
 
 export const CaseStudies: CollectionConfig = {
   slug: 'case-studies',
@@ -69,7 +72,20 @@ export const CaseStudies: CollectionConfig = {
       type: 'row',
       fields: [
         { name: 'scope', type: 'textarea', localized: true, admin: { width: '60%' } },
-        { name: 'duration', type: 'text', localized: true, admin: { width: '40%' } },
+        { name: 'duration', type: 'text', localized: true, admin: { width: '40%', description: 'e.g. 8 Weeks' } },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        { name: 'status', type: 'text', localized: true, admin: { width: '40%', description: 'e.g. Shipped ✓' } },
+        {
+          name: 'tags',
+          type: 'text',
+          hasMany: true,
+          localized: true,
+          admin: { width: '60%', description: 'Orange chips under the details, e.g. Product Strategy, UI/UX Design, QA' },
+        },
       ],
     },
     { name: 'cover', type: 'upload', relationTo: 'media', required: true },
@@ -89,7 +105,28 @@ export const CaseStudies: CollectionConfig = {
       ],
     },
     { name: 'body', type: 'richText', localized: true, label: 'Case study story' },
-    { name: 'gallery', type: 'upload', relationTo: 'media', hasMany: true },
+    {
+      name: 'gallery',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
+      admin: {
+        description:
+          'Shown full width, one under another, after the story — e.g. problem, solution, design system, user flows, results.',
+      },
+    },
     { name: 'testimonial', type: 'relationship', relationTo: 'testimonials' },
+    {
+      name: 'layout',
+      type: 'blocks',
+      label: 'Sections at the end',
+      labels: { singular: 'Section', plural: 'Sections' },
+      localized: true,
+      blocks: [ProjectInquiryBlock, ClientStoriesBlock, FaqBlock],
+      admin: {
+        initCollapsed: true,
+        description: 'After the related projects, e.g. the project inquiry form and client stories.',
+      },
+    },
   ],
 }

@@ -41,6 +41,16 @@
 /* Logo — ZeeTech SVG, 180 × 60 */
 .logo { display: block; width: 180px; height: 60px; flex-shrink: 0; }
 .logo img { display: block; width: 100%; height: 100%; }
+.logo .logo__light { display: none; }
+
+/* over a dark hero (HeaderState adds .is-on-dark until the page scrolls) */
+.site-header.is-on-dark .logo img { display: none; }
+.site-header.is-on-dark .logo .logo__light { display: block; }
+.site-header.is-on-dark .roll__track > span:first-child { color: #fff; }
+.site-header.is-on-dark .roll[aria-current="page"] .roll__track > span:first-child { color: var(--zt-orange); }
+.site-header.is-on-dark .nav__burger { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.4); }
+.site-header.is-on-dark .nav__burger span { background: #fff; }
+.site-header.is-on-dark .btn--primary:hover { box-shadow: inset 0 0 0 1px #fff; }
 
 .nav__links {
   display: flex;
@@ -74,6 +84,91 @@
 .roll[aria-current="page"] .roll__track > span:first-child { color: var(--zt-orange); }
 .mobile-menu > a[aria-current="page"] { color: var(--zt-orange); }
 .roll:focus-visible { outline: 2px solid var(--zt-orange); outline-offset: 4px; }
+
+/* ---------------------------------------------------------
+   Services menu (Figma 638:2629) — opens under the header while
+   "Services" is hovered or holds keyboard focus. It closes after a
+   short delay so the pointer can travel from the link into it.
+   --------------------------------------------------------- */
+.svc-menu {
+  position: absolute;
+  top: 100%;
+  left: max(var(--pad), (100% - 1664px) / 2);
+  right: max(var(--pad), (100% - 1664px) / 2);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: clamp(28px, calc(48 * var(--u)), 48px);
+  background: rgba(0, 28, 71, 0.6);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  color: #fff;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.25s;
+}
+/* fills the strip between the link and the panel so the pointer never "leaves" */
+.svc-menu::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 24px;
+}
+.nav__drop:hover .svc-menu,
+.nav__drop:focus-within .svc-menu {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition-delay: 0s;
+}
+/* a blur inside the frosted bar would only see the bar, not the page: while the menu is open
+   the bar drops its own blur so the menu's glass works */
+html .site-header .nav:has(.nav__drop:hover, .nav__drop:focus-within) {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* no frosted glass on weak devices (see src/lib/perf.ts) */
+html[data-perf="low"] .svc-menu { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(0, 28, 71, 0.94); }
+.svc-menu__label {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: 0.16em;          /* 2.56px @ 16px */
+  text-transform: uppercase;
+}
+.svc-menu__grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* fills top to bottom, three columns with a rule between them */
+  column-count: 3;
+  column-gap: clamp(48px, calc(97 * var(--u)), 97px);
+  column-rule: 1px solid #d9d9d9;
+}
+.svc-menu__grid > li { break-inside: avoid; border-bottom: 1px solid #d9d9d9; }
+.svc-menu__grid > li.is-last { border-bottom-color: transparent; }
+.svc-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-radius: 2px;
+}
+.svc-menu__item img { flex-shrink: 0; width: 32px; height: 32px; }
+.svc-menu__copy { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.svc-menu__name {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;          /* 0.64px @ 16px */
+  transition: color 0.2s ease;
+}
+.svc-menu__note { font-family: var(--font-montserrat), var(--font-body); font-size: 14px; color: #d9d9d9; }
+.svc-menu__item:hover .svc-menu__name { color: #ff7200; }
+.svc-menu__item:focus-visible { outline: 2px solid #ff7200; outline-offset: 4px; }
 
 .nav__burger {
   display: none;
@@ -111,12 +206,24 @@
   backdrop-filter: blur(14px);
 }
 .mobile-menu[hidden] { display: none; }
-.mobile-menu > a:not(.btn) {
+.mobile-menu > a:not(.btn),
+.mobile-menu__group > a {
+  display: block;
   padding: 12px 0;
   font-weight: 500;
   font-size: 18px;
   border-bottom: 1px solid rgba(216, 213, 206, 0.6);
 }
+.mobile-menu__group > a[aria-current="page"],
+.mobile-menu__sub a[aria-current="page"] { color: var(--zt-orange); }
+/* the services under "Services" */
+.mobile-menu__sub {
+  margin: 0;
+  padding: 4px 0 8px 16px;
+  list-style: none;
+  border-bottom: 1px solid rgba(216, 213, 206, 0.6);
+}
+.mobile-menu__sub a { display: block; padding: 9px 0; font-size: 15px; color: rgba(11, 23, 51, 0.78); }
 .mobile-menu .btn { margin-top: 12px; }
 
 
@@ -134,5 +241,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .roll__track { transition: none; }
+  .roll__track, .svc-menu, .svc-menu__name { transition: none; }
 }

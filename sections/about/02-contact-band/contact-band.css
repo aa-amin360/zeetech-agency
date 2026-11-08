@@ -1,0 +1,40 @@
+/* ---------------------------------------------------------
+   Contact banner (About, Figma 1095:3677): soft orange picture
+   under a white → orange wash, title left, email + button right
+   --------------------------------------------------------- */
+.band { isolation: isolate; background: #f3ece8; }
+.band__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.37), rgba(253, 86, 0, 0.37));
+}
+.band .sec__inner {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(32px, calc(80 * var(--u)), 80px);
+}
+.band__head { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.band__contact { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; flex-shrink: 0; }
+.band__email {
+  font-weight: 600;
+  font-size: clamp(18px, calc(24 * var(--u)), 24px);
+  color: #000;
+  border-radius: 2px;
+}
+.band__email:hover { color: var(--zt-orange); }
+.band__email:focus-visible { outline: 2px solid #ff7200; outline-offset: 4px; }
+
+@media (max-width: 900px) {
+  .band .sec__inner { flex-direction: column; align-items: flex-start; }
+}

@@ -1,0 +1,81 @@
+/* ---------------------------------------------------------
+   Areas of interest (Careers, Figma 755:3050)
+   --------------------------------------------------------- */
+.areas { background: #f8f8f7; }
+.areas .sec__inner { gap: 40px; padding-block: clamp(56px, calc(88 * var(--u)), 88px); }
+.areas__head { display: flex; gap: 48px; align-items: flex-start; }
+.areas__label {
+  flex: 0 0 auto;
+  width: calc(400 * var(--u));
+  min-width: 160px;
+  margin: 0;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.45;
+  text-transform: uppercase;
+  color: var(--zt-orange);
+}
+.areas__intro { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; text-transform: capitalize; line-height: 1.45; }
+.areas__intro > * { margin: 0; }
+.areas__title { font-weight: 600; font-size: clamp(28px, calc(48 * var(--u)), 48px); line-height: 1.2; color: var(--zt-ink-strong); }
+.areas__accent { font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: clamp(20px, calc(30 * var(--u)), 30px); color: var(--zt-orange); }
+.areas__text { font-size: clamp(15px, calc(18 * var(--u)), 18px); color: #666; }
+
+.areas__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.area {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  padding: clamp(20px, calc(28 * var(--u)), 28px);
+  border: 1px solid #dbdbd6;
+  border-radius: 8px;
+  background: #fff;
+  line-height: 1.45;
+}
+.area > p, .area > h3 { margin: 0; }
+.area__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
+.area__kicker { margin: 0; font-weight: 800; font-style: italic; font-size: clamp(24px, calc(32 * var(--u)), 32px); text-transform: uppercase; color: var(--zt-orange); }
+.area__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: clamp(56px, calc(72 * var(--u)), 72px);
+  aspect-ratio: 1;
+  border-radius: 8px;
+  background: #fff2e0;
+}
+.area__icon img { width: 36px; height: 36px; }
+.area__title { font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: clamp(22px, calc(26 * var(--u)), 26px); text-transform: capitalize; color: var(--zt-ink-strong); }
+.area__text { font-size: clamp(16px, calc(20 * var(--u)), 20px); text-transform: capitalize; color: #666; }
+.area__focus-label { font-weight: 700; font-size: clamp(12px, calc(16 * var(--u)), 16px); text-transform: uppercase; color: var(--zt-orange); }
+.area__tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.area__tags li {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: #f8f8f7;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--zt-ink-strong);
+}
+/* buttons line up along the bottom of each row */
+.area > .btn { margin-top: auto; }
+
+@media (max-width: 900px) {
+  .areas__head { flex-direction: column; gap: 16px; }
+  .areas__label { width: auto; }
+  .areas__grid { grid-template-columns: 1fr; gap: 24px; }
+}
+@media (max-width: 480px) {
+  .area > .btn { width: 100%; }
+}

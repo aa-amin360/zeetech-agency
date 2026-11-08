@@ -8,6 +8,13 @@ export const ProjectInquiryBlock: Block = {
   interfaceName: 'ProjectInquiryBlock',
   labels: { singular: 'Project inquiry form', plural: 'Project inquiry forms' },
   fields: [
+    {
+      name: 'fullWidth',
+      type: 'checkbox',
+      label: 'Edge to edge, without the title',
+      defaultValue: false,
+      admin: { description: 'The card fills the page width and the title above it is hidden (Contact and Careers pages).' },
+    },
     headingField(),
     {
       name: 'prep',

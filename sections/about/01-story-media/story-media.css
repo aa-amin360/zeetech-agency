@@ -1,0 +1,65 @@
+/* ---------------------------------------------------------
+   Text with pictures (About: 1088:3572 stack, 1088:3582 pair,
+   1088:3625 wide picture + person card)
+   --------------------------------------------------------- */
+.story .sec__inner { gap: clamp(40px, calc(64 * var(--u)), 64px); }
+.story__media { display: flex; gap: clamp(16px, calc(28 * var(--u)), 28px); }
+.story__img {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  border-radius: clamp(12px, calc(20 * var(--u)), 20px);
+  overflow: hidden;
+  background: #e9e7e2;
+}
+.story__img img,
+.person__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* pair: two pictures, 540px tall */
+.story--pair .story__img { height: clamp(240px, calc(540 * var(--u)), 540px); }
+
+/* stack: two pictures stacked on the left, one tall picture on the right, 902px tall */
+.story--stack .story__media { height: clamp(420px, calc(902 * var(--u)), 902px); }
+.story__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.story__col .story__img { flex: 1 1 0; border-radius: clamp(12px, calc(18 * var(--u)), 18px); }
+.story__img--tall { border-radius: clamp(12px, calc(16 * var(--u)), 16px); }
+
+/* person: a wide scene and a 576px card with the portrait and a name */
+.story--person .story__media { align-items: stretch; }
+.story__img--wide { min-height: clamp(260px, calc(470 * var(--u)), 470px); }
+.person {
+  flex: 0 0 auto;
+  width: min(576px, 34%);
+  height: clamp(360px, calc(470 * var(--u)), 470px);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-radius: clamp(12px, calc(20 * var(--u)), 20px);
+  overflow: hidden;
+  background: #fff;
+}
+.person__photo { position: relative; flex: 1 1 0; min-height: 0; background: #e9e7e2; }
+.person__caption { display: flex; flex-direction: column; gap: 8px; padding: 0 26px 20px; }
+.person__caption strong { font-weight: 600; font-size: 22px; line-height: 1.2; color: var(--zt-ink-strong); }
+.person__caption span { font-size: 15px; line-height: 1.3; color: #636361; }
+
+@media (max-width: 900px) {
+  .story__media,
+  .story--stack .story__media { flex-direction: column; height: auto; }
+  .story__col { flex: none; }
+  .story__img,
+  .story--pair .story__img,
+  .story__col .story__img,
+  .story__img--wide { flex: none; height: auto; min-height: 0; aspect-ratio: 4 / 3; }
+  .story__img--tall { aspect-ratio: 4 / 5; }
+  .person { width: 100%; height: auto; }
+  .person__photo { flex: none; aspect-ratio: 4 / 5; }
+}

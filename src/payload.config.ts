@@ -14,6 +14,7 @@ import { FeedbackRequests } from './collections/FeedbackRequests'
 import { Leads } from './collections/Leads'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
+import { Services } from './collections/Services'
 import { Testimonials } from './collections/Testimonials'
 import { Users } from './collections/Users'
 import { Header } from './globals/Header'
@@ -63,7 +64,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Pages, CaseStudies, Testimonials, Faqs, Media, Leads, FeedbackRequests, Users],
+  collections: [Pages, Services, CaseStudies, Testimonials, Faqs, Media, Leads, FeedbackRequests, Users],
   globals: [Header, Footer, SiteSettings],
   // English only for now. To add a language later, add it here (e.g. { label: 'বাংলা', code: 'bn' })
   // and translate the content — every text field is already set up for it.
@@ -103,15 +104,20 @@ export default buildConfig({
       addRandomSuffix: false,
     }),
     seoPlugin({
-      collections: ['pages', 'case-studies'],
+      collections: ['pages', 'case-studies', 'services'],
       uploadsCollection: 'media',
       tabbedUI: true,
-      generateTitle: ({ doc }) => (doc?.title ? `${doc.title} — ZeeTech` : 'ZeeTech'),
+      generateTitle: ({ doc }) => {
+        const title = doc?.title || doc?.name
+        return title ? `${title} — ZeeTech` : 'ZeeTech'
+      },
       generateDescription: ({ doc }) => doc?.summary || '',
       generateURL: ({ doc, collectionSlug }) =>
         collectionSlug === 'case-studies'
           ? `${serverUrl()}/work/${doc?.slug}`
-          : `${serverUrl()}${doc?.slug === 'home' ? '' : `/${doc?.slug}`}`,
+          : collectionSlug === 'services'
+            ? `${serverUrl()}/services/${doc?.slug}`
+            : `${serverUrl()}${doc?.slug === 'home' ? '' : `/${doc?.slug}`}`,
     }),
   ],
 })

@@ -147,7 +147,7 @@ export function InquiryForm({
         />
       </div>
       <div className="form__actions">
-        <button className="btn btn--signal" type="submit" disabled={state === 'sending'}>
+        <button className="btn btn--secondary" type="submit" disabled={state === 'sending'}>
           <span>{state === 'sending' ? 'Sending…' : submitLabel}</span>
           <svg className="btn__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M6 14 14 6M7.5 6H14v6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

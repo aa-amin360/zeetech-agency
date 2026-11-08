@@ -65,10 +65,22 @@ a { color: inherit; text-decoration: none; }
   transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .btn:hover .btn__icon { transform: translate(2px, -2px); }
-.btn:focus-visible { outline: 2px solid var(--zt-ink); outline-offset: 3px; }
+/* Figma "Button" states: Hover → ink, Pressed → ink at 86%, Focus → 2px orange ring, Disabled → grey */
+.btn:focus-visible { outline: 2px solid #ff7200; outline-offset: 2px; }
+.btn:active { opacity: 0.86; }
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  background: var(--zt-line);
+  border-color: var(--zt-line);
+  color: rgba(14, 14, 13, 0.6);
+  opacity: 1;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
 .btn--primary { background: var(--zt-orange); color: #fff; }
-.btn--primary:hover { background: #e64e00; }
+.btn--primary:hover,
+.btn--primary:active { background: var(--zt-ink-strong); color: #fff; }
 .btn--nav { color: var(--zt-canvas); flex-shrink: 0; }
 
 .btn--secondary {
@@ -76,7 +88,10 @@ a { color: inherit; text-decoration: none; }
   color: var(--zt-ink-strong);
   border: 1px solid var(--zt-line);
 }
-.btn--secondary:hover { background: var(--zt-ink-strong); color: var(--zt-canvas); border-color: var(--zt-ink-strong); }
+.btn--secondary:hover { background: var(--zt-ink-strong); color: #fff; border-color: #fff; }
+.btn--secondary:active { background: #ff7200; color: var(--zt-canvas); border-color: #ff7200; }
+.btn--secondary:disabled,
+.btn--secondary[aria-disabled="true"] { background: var(--zt-canvas); opacity: 0.6; }
 
 /* =========================================================
    Sections below the fold (Figma 154:278 → 383:361)
@@ -207,11 +222,31 @@ a { color: inherit; text-decoration: none; }
   gap: 24px;
 }
 
+/* grey paragraphs beside a split heading (AsideText in components/ui.tsx) */
+.aside-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(100%, max(320px, calc(605 * var(--u))));
+}
+.aside-text p {
+  margin: 0;
+  font-size: clamp(16px, calc(24 * var(--u)), 24px);
+  line-height: 1.2;
+  text-transform: capitalize;
+  color: #696969;
+  font-feature-settings: "dlig" 1;
+}
+/* section backgrounds the page builder offers */
+.sec--white { background: #fff; }
+.sec--warm { background: #f8f7f4; }
+
 /* extra button styles used below the fold */
 .btn--ink { background: var(--zt-ink-strong); color: #fff; }
 .btn--ink:hover { background: #b9f227; color: var(--zt-ink-strong); }   /* "signal lime" hover */
 .btn--signal { background: #ff7200; color: var(--zt-canvas); }
-.btn--signal:hover { background: #e66700; }
+.btn--signal:hover,
+.btn--signal:active { background: var(--zt-ink-strong); color: #fff; }
 
 
 @media (prefers-reduced-motion: reduce) {
@@ -319,3 +354,76 @@ html[data-perf="low"] .cmp__bubble {
 html[data-perf="low"] .site-header.is-scrolled .nav { background: rgba(255, 255, 255, 0.96); }
 html[data-perf="low"] .hero-float { background: rgba(255, 255, 255, 0.96); }
 html[data-perf="low"] .work__bar-in { background: rgba(246, 246, 246, 0.98); }
+
+/* ---------------------------------------------------------
+   One-line sticky section bar (components/StickySections.tsx, and Selected work's WorkBar)
+   Slides in below the site header once a section's header has scrolled away: the label on
+   the left, the section title in the middle on one line, extras (e.g. a count) on the right.
+   --------------------------------------------------------- */
+.stick-bar {
+  position: sticky;
+  top: var(--nav-h, 0px);
+  z-index: 5;
+  height: 0;                      /* takes no room; StickySections also cancels the gap after it */
+}
+.stick-bar[hidden] { display: none; }
+.stick-bar__in {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, auto) minmax(max-content, 1fr);
+  align-items: center;
+  gap: 24px;
+  height: 52px;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+.stick-bar__in::before {
+  content: "";
+  position: absolute;
+  inset: 0 -100vw;                /* full width; the section (overflow: clip) trims it */
+  z-index: -1;
+  background: color-mix(in srgb, var(--stick-bg, #f6f6f6) 92%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow: 0 1px 0 rgba(128, 128, 128, 0.18);
+}
+.stick-bar.is-stuck .stick-bar__in { opacity: 1; transform: none; }
+.stick-bar__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--stick-fg, var(--zt-ink-strong));
+}
+.stick-bar__label .eyebrow__badge { flex-shrink: 0; padding: 5px; }
+/* the section title, same fonts and colours, on one line */
+.stick-bar__title {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: center;
+  font-size: clamp(16px, 1.4vw, 22px);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.stick-bar__title .display__line { display: inline; }
+.stick-bar__title .display__line::after { content: " "; }
+.stick-bar__end { justify-self: end; }
+/* phones: just the badge on the left so the title gets the room (the label stays when there is no title) */
+@media (max-width: 640px) {
+  .stick-bar__in { gap: 12px; grid-template-columns: auto minmax(0, 1fr) auto; }
+  .stick-bar__in:has(.stick-bar__title) .stick-bar__text { display: none; }   /* keep it when there is no title */
+  .stick-bar__title { text-align: left; font-size: 16px; }
+}
+html[data-perf="low"] .stick-bar__in::before {
+  background: var(--stick-bg, #f6f6f6);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}

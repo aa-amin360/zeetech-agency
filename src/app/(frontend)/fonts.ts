@@ -3,7 +3,7 @@ import { Inter, Montserrat, Play, Playfair_Display, Plus_Jakarta_Sans, Zilla_Sla
 // Self-hosted at build time by next/font — no request to Google from visitors.
 export const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800'],
+  weight: ['200', '300', '400', '500', '600', '700', '800'],
   style: ['normal', 'italic'],
   variable: '--font-jakarta',
   display: 'swap',
@@ -13,7 +13,7 @@ export const inter = Inter({ subsets: ['latin'], weight: ['400', '600'], variabl
 
 export const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700', '900'],
   style: ['normal', 'italic'],
   variable: '--font-playfair',
   display: 'swap',

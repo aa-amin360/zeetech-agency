@@ -6,10 +6,11 @@ export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const payload = await getPayloadClient()
-  const [pages, studies] = await Promise.all([
+  const [pages, studies, services] = await Promise.all([
     // overrideAccess: false → only published documents, as a visitor would see them
     payload.find({ collection: 'pages', limit: 500, depth: 0, overrideAccess: false, select: { slug: true, updatedAt: true } }),
     payload.find({ collection: 'case-studies', limit: 500, depth: 0, overrideAccess: false, select: { slug: true, updatedAt: true } }),
+    payload.find({ collection: 'services', limit: 100, depth: 0, overrideAccess: false, select: { slug: true, updatedAt: true } }),
   ])
   const base = serverUrl()
   return [
@@ -18,6 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: p.updatedAt,
       priority: p.slug === 'home' ? 1 : 0.7,
     })),
+    ...services.docs.map((s) => ({ url: `${base}/services/${s.slug}`, lastModified: s.updatedAt, priority: 0.8 })),
     ...studies.docs.map((s) => ({ url: `${base}/work/${s.slug}`, lastModified: s.updatedAt, priority: 0.7 })),
   ]
 }

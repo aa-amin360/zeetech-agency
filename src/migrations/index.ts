@@ -4,6 +4,11 @@ import * as migration_20261007_101955_footer_add_socials_legal from './20261007_
 import * as migration_20261007_102016_footer_remove_old_fields from './20261007_102016_footer_remove_old_fields';
 import * as migration_20261014_123000_header_nav_figma from './20261014_123000_header_nav_figma';
 import * as migration_20261014_130000_work_page from './20261014_130000_work_page';
+import * as migration_20261108_074726_services from './20261108_074726_services';
+import * as migration_20261108_085042_service_menu_icon from './20261108_085042_service_menu_icon';
+import * as migration_20261108_091013_about_page from './20261108_091013_about_page';
+import * as migration_20261108_093455_contact_careers from './20261108_093455_contact_careers';
+import * as migration_20261108_094006_case_study_details from './20261108_094006_case_study_details';
 
 export const migrations = [
   {
@@ -34,6 +39,31 @@ export const migrations = [
   {
     up: migration_20261014_130000_work_page.up,
     down: migration_20261014_130000_work_page.down,
-    name: '20261014_130000_work_page'
+    name: '20261014_130000_work_page',
+  },
+  {
+    up: migration_20261108_074726_services.up,
+    down: migration_20261108_074726_services.down,
+    name: '20261108_074726_services',
+  },
+  {
+    up: migration_20261108_085042_service_menu_icon.up,
+    down: migration_20261108_085042_service_menu_icon.down,
+    name: '20261108_085042_service_menu_icon',
+  },
+  {
+    up: migration_20261108_091013_about_page.up,
+    down: migration_20261108_091013_about_page.down,
+    name: '20261108_091013_about_page',
+  },
+  {
+    up: migration_20261108_093455_contact_careers.up,
+    down: migration_20261108_093455_contact_careers.down,
+    name: '20261108_093455_contact_careers',
+  },
+  {
+    up: migration_20261108_094006_case_study_details.up,
+    down: migration_20261108_094006_case_study_details.down,
+    name: '20261108_094006_case_study_details'
   },
 ];

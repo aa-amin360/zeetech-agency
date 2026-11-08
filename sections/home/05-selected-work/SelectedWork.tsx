@@ -2,7 +2,7 @@ import type { CaseStudy, SelectedWorkBlock } from '@/payload-types'
 import { docs } from '@/lib/media'
 import { getPayloadClient, isPreview } from '@/lib/payload'
 import { StickyHead } from '@/components/StickyHead'
-import { Cta, DisplayTitle, Eyebrow } from '@/components/ui'
+import { Cta, DisplayLine, DisplayTitle, Eyebrow } from '@/components/ui'
 import { CaseCard } from './CaseCard'
 import { WorkBar } from './WorkBar'
 import './selected-work.css'
@@ -30,7 +30,7 @@ export async function SelectedWork({ block }: { block: SelectedWorkBlock }) {
             <Cta link={block.button} className="btn btn--ink" />
           </header>
 
-          <WorkBar label={block.eyebrow || 'Selected work'} total={studies.length} />
+          <WorkBar label={block.eyebrow || 'Selected work'} title={<DisplayLine heading={block} />} total={studies.length} />
 
           <div className="work__list">
             {studies.map((s) => (
@@ -38,7 +38,7 @@ export async function SelectedWork({ block }: { block: SelectedWorkBlock }) {
             ))}
           </div>
         </div>
-        <StickyHead section=".work" head=".work__head, .work__bar" last=".case:last-child" items=".case" fullHead=".work__head" />
+        <StickyHead section=".work" head=".work__head, .work__bar" last=".case:last-child" items=".case" />
       </div>
     </section>
   )

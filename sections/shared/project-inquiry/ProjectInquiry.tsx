@@ -8,9 +8,19 @@ import './project-inquiry.css'
 export function ProjectInquiry({ block }: { block: ProjectInquiryBlock }) {
   const { prep } = block
   return (
-    <section className="sec inquiry" id="contact" aria-labelledby="inquiry-title">
+    <section
+      className={`sec inquiry${block.fullWidth ? ' inquiry--full' : ''}`}
+      id="contact"
+      aria-labelledby="inquiry-title"
+    >
       <div className="sec__inner">
-        <SectionHead heading={block.heading} id="inquiry-title" layout="left" />
+        {block.fullWidth ? (
+          <h2 className="visually-hidden" id="inquiry-title">
+            {block.heading.title}
+          </h2>
+        ) : (
+          <SectionHead heading={block.heading} id="inquiry-title" layout="left" />
+        )}
 
         <div className="inquiry__card" data-reveal>
           <InquiryGlass />

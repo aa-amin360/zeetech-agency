@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import '@/styles/globals.css'
-import { getGlobals } from '@/lib/payload'
+import { getGlobals, getServices } from '@/lib/payload'
 import { mediaUrl } from '@/lib/media'
 import { serverUrl } from '@/lib/url'
 import { Attribution } from '@/components/Attribution'
 import { Header } from '@/components/Header'
+import { StickySections } from '@/components/StickySections'
 import { JsonLd } from '@/components/JsonLd'
 import { Motion } from '@/components/Motion'
 import { PerfWatch } from '@/components/PerfWatch'
@@ -44,7 +45,7 @@ export const viewport: Viewport = {
 const motionReady = `if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion-ready')`
 
 export default async function FrontendLayout({ children }: { children: ReactNode }) {
-  const { header, footer, settings } = await getGlobals()
+  const [{ header, footer, settings }, services] = await Promise.all([getGlobals(), getServices()])
 
   const organization = {
     '@context': 'https://schema.org',
@@ -70,8 +71,9 @@ export default async function FrontendLayout({ children }: { children: ReactNode
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        <Header data={header} />
+        <Header data={header} services={services} />
         <main id="main">{children}</main>
+        <StickySections />
         <Footer data={footer} />
         <Motion />
         <PerfWatch />

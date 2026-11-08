@@ -1,0 +1,60 @@
+/* ---------------------------------------------------------
+   Numbered cards (About: proof points 1088:3602, core values 1088:3640)
+   --------------------------------------------------------- */
+.cards .sec__inner { gap: clamp(40px, calc(64 * var(--u)), 64px); }
+.cards__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px;
+  border-radius: 16px;
+  background: #f8f7f4;
+  color: var(--zt-ink-strong);
+}
+/* on a warm section the cards turn white so they still stand out */
+.sec--warm .card { background: #fff; }
+.card > * { margin: 0; }
+.card__figure {
+  font-family: var(--font-serif);
+  font-style: italic;
+  line-height: 1.1;
+  color: var(--zt-orange);
+}
+.card__text { color: #636361; }
+
+/* figures: four compact cards with a hairline shadow */
+.cards--figures .card { gap: 24px; box-shadow: 0 0 2px rgba(0, 0, 0, 0.25); }
+.cards--figures .card__figure { font-weight: 500; font-size: clamp(28px, calc(36 * var(--u)), 36px); }
+.cards--figures .card__title { font-weight: 600; font-size: 20px; line-height: 1.22; }
+.cards--figures .card__text { font-size: 15px; line-height: 1.45; }
+
+/* numbered: three larger cards across, each at most the design's 540px */
+.cards--numbered .cards__grid { grid-template-columns: repeat(3, minmax(0, 540px)); }
+.cards--numbered .card { gap: 18px; min-height: clamp(180px, calc(244 * var(--u)), 244px); }
+.cards--numbered .card__figure { font-weight: 900; font-size: clamp(30px, calc(40 * var(--u)), 40px); }
+.cards--numbered .card__title { font-weight: 800; font-size: clamp(20px, calc(24 * var(--u)), 24px); line-height: 1.22; }
+.cards--numbered .card__text { font-size: clamp(16px, calc(20 * var(--u)), 20px); line-height: 1.45; }
+
+/* outlined: white cards with a hairline border (Careers 755:3030) */
+.cards--outlined .sec__inner { gap: 48px; padding-block: clamp(56px, calc(88 * var(--u)), 88px); }
+.cards--outlined .sec-head { gap: 16px; }
+.cards__lede { width: 100%; }
+.cards--outlined .cards__grid { grid-template-columns: repeat(3, minmax(0, 548px)); }
+.cards--outlined .card { gap: 16px; background: #fff; border: 1px solid #e3e3de; line-height: 1.45; }
+.cards--outlined .card__figure { font-weight: 800; font-size: clamp(36px, calc(48 * var(--u)), 48px); line-height: 1.45; }
+.cards--outlined .card__title { font-weight: 600; font-style: italic; font-size: clamp(22px, calc(32 * var(--u)), 32px); line-height: 1.45; }
+.cards--outlined .card__text { font-size: 17px; color: #5c5e59; }
+
+@media (max-width: 900px) {
+  .cards--numbered .cards__grid,
+  .cards--outlined .cards__grid { grid-template-columns: 1fr; }
+  .cards--numbered .card { min-height: 0; }
+}

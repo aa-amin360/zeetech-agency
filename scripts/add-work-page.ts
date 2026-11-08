@@ -9,6 +9,8 @@
  *   3. creates the "Work" page: hero, project grid, then the FAQ, project inquiry and client
  *      stories sections copied from the home page
  *   4. points the "Our Work" menu links (header and footer) at /work instead of /#work
+ *   5. case studies without them get the end-of-page sections (project inquiry form and client
+ *      stories copied from the home page), a status and chips made from their service and industry
  */
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -133,6 +135,31 @@ for (const slug of ['header', 'footer'] as const) {
   delete data.createdAt
   await payload.updateGlobal({ slug, data, depth: 0, context: ctx() })
   log(`"Our Work" in the ${slug} now opens /work.`)
+}
+
+// 5. case study pages: details and the sections at the end
+{
+  const home = await payload.find({ collection: 'pages', where: { slug: { equals: 'home' } }, limit: 1, depth: 0 })
+  const strip = (v: unknown): unknown =>
+    Array.isArray(v)
+      ? v.map(strip)
+      : v && typeof v === 'object'
+        ? Object.fromEntries(Object.entries(v).filter(([k]) => k !== 'id').map(([k, x]) => [k, strip(x)]))
+        : v
+  const fromHome = (type: string) =>
+    (home.docs[0]?.layout ?? []).filter((b) => b.blockType === type).slice(0, 1).map(strip)
+  const studies = await payload.find({ collection: 'case-studies', limit: 100, depth: 0, pagination: false })
+  let updated = 0
+  for (const s of studies.docs) {
+    const data: Record<string, unknown> = {}
+    if (!s.layout?.length) data.layout = [...fromHome('projectInquiry'), ...fromHome('clientStories')]
+    if (!s.status) data.status = 'Shipped ✓'
+    if (!s.tags?.length) data.tags = [s.service, s.industry].filter(Boolean)
+    if (!Object.keys(data).length) continue
+    await payload.update({ collection: 'case-studies', id: s.id, data: data as never, depth: 0, context: ctx() })
+    updated++
+  }
+  if (updated) log(`Filled in the details and end sections of ${updated} case studies.`)
 }
 
 log('Done.')

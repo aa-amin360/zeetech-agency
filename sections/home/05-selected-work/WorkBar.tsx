@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
-/** Screens where the full header and a card don't fit together: a slim bar that slides in at
- *  the top once the section header has scrolled away, with the number of the card on top. */
-export function WorkBar({ label, total }: { label: string; total: number }) {
+/** One-line bar that slides in at the top once the section header has scrolled away: the label,
+ *  the section title in the middle and the number of the card on top (same look as every other
+ *  section's bar, see components/StickySections.tsx). */
+export function WorkBar({ label, title, total }: { label: string; title?: ReactNode; total: number }) {
   const bar = useRef<HTMLDivElement>(null)
   const [stuck, setStuck] = useState(false)
   const [current, setCurrent] = useState(1)
@@ -41,15 +42,16 @@ export function WorkBar({ label, total }: { label: string; total: number }) {
 
   const pad = (n: number) => String(n).padStart(2, '0')
   return (
-    <div className={`work__bar${stuck ? ' is-stuck' : ''}`} ref={bar} aria-hidden="true">
-      <div className="work__bar-in">
-        <span className="work__bar-label">
+    <div className={`work__bar stick-bar${stuck ? ' is-stuck' : ''}`} ref={bar} aria-hidden="true">
+      <div className="stick-bar__in">
+        <span className="stick-bar__label">
           <span className="eyebrow__badge">
             <img src="/brand/icon-badge.svg" width={18} height={18} alt="" />
           </span>
-          {label}
+          <span className="stick-bar__text">{label}</span>
         </span>
-        <span className="work__bar-count">
+        {title ? <span className="stick-bar__title display">{title}</span> : <span />}
+        <span className="stick-bar__end work__bar-count">
           {pad(current)} <span>/ {pad(total)}</span>
         </span>
       </div>

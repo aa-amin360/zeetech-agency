@@ -8,7 +8,8 @@ import './work-grid.css'
 // one filter per industry, however it was typed (SaaS, SAAS, saas)
 const key = (industry?: string | null) => (industry || '').trim().toLowerCase()
 
-function WorkCard({ study }: { study: CaseStudy }) {
+/** One project card (also used for "Related projects" on case study pages). */
+export function WorkCard({ study }: { study: CaseStudy }) {
   return (
     <a className="wcard" href={`/work/${study.slug}`}>
       <figure className="wcard__media">

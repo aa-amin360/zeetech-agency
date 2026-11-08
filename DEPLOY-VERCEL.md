@@ -71,6 +71,12 @@ $env:SEED_ADMIN_EMAIL="you@example.com"; $env:SEED_ADMIN_PASSWORD="a-strong-pass
 
 Otherwise open `/admin` after deploying — it asks you to create the first user.
 
+**Already set up before a page existed?** Deploy first (the build adds the new database tables), then
+load that page's content once: `npm run vercel:work` for Our Work, `npm run vercel:services` for Services,
+`npm run vercel:about` for About, `npm run vercel:contact-careers` for Contact and Careers, `npm run vercel:update-content` for small
+content fixes from design updates. Run
+`npm run vercel:work` again to give existing case studies their new end sections.
+
 > While `.env.production.local` exists, `npm run build` / `npm run start` on your computer also use the
 > Vercel database. Delete the file when you're done (`npm run dev` is not affected).
 
@@ -83,7 +89,7 @@ Every push to `main` deploys to production; other branches get their own preview
 
 ## 6. What to test on Vercel
 
-- [ ] Home page, `/work`, a case study page, 404 page, `/sitemap.xml`, `/robots.txt`
+- [ ] Home page, `/work`, a case study page, `/services`, a service page, `/about`, `/contact`, `/careers`, 404 page, `/sitemap.xml`, `/robots.txt`
 - [ ] Phone, tablet and desktop layouts
 - [ ] `/admin`: edit a section → Publish → the change is live on reload
 - [ ] Live preview of a page draft

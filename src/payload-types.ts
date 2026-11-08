@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     pages: Page;
+    services: Service;
     'case-studies': CaseStudy;
     testimonials: Testimonial;
     faqs: Faq;
@@ -84,6 +85,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
@@ -174,6 +176,14 @@ export interface Page {
         | ProjectInquiryBlock
         | WorkHeroBlock
         | WorkGridBlock
+        | ServicesHeroBlock
+        | ServicesListBlock
+        | PageIntroBlock
+        | StoryMediaBlock
+        | CardGridBlock
+        | ContactBandBlock
+        | CareersHeroBlock
+        | InterestCardsBlock
       )[]
     | null;
   meta?: {
@@ -544,7 +554,18 @@ export interface CaseStudy {
   color?: string | null;
   summary?: string | null;
   scope?: string | null;
+  /**
+   * e.g. 8 Weeks
+   */
   duration?: string | null;
+  /**
+   * e.g. Shipped ✓
+   */
+  status?: string | null;
+  /**
+   * Orange chips under the details, e.g. Product Strategy, UI/UX Design, QA
+   */
+  tags?: string[] | null;
   cover: number | Media;
   person?: {
     name?: string | null;
@@ -566,8 +587,15 @@ export interface CaseStudy {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Shown full width, one under another, after the story — e.g. problem, solution, design system, user flows, results.
+   */
   gallery?: (number | Media)[] | null;
   testimonial?: (number | null) | Testimonial;
+  /**
+   * After the related projects, e.g. the project inquiry form and client stories.
+   */
+  layout?: (ProjectInquiryBlock | ClientStoriesBlock | FaqBlock)[] | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -579,6 +607,144 @@ export interface CaseStudy {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectInquiryBlock".
+ */
+export interface ProjectInquiryBlock {
+  /**
+   * The card fills the page width and the title above it is hidden (Contact and Careers pages).
+   */
+  fullWidth?: boolean | null;
+  heading: {
+    /**
+     * Small label above the title
+     */
+    eyebrow?: string | null;
+    /**
+     * Main part of the title
+     */
+    title: string;
+    /**
+     * Orange italic part that follows the title
+     */
+    accent?: string | null;
+    accentOnNewLine?: boolean | null;
+    subtitle?: string | null;
+  };
+  prep?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    steps?:
+      | {
+          title: string;
+          text?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    person?: {
+      photo?: (number | null) | Media;
+      name?: string | null;
+      role?: string | null;
+    };
+  };
+  /**
+   * Budget choices, e.g. Less than $5k
+   */
+  budgets?: string[] | null;
+  submitLabel?: string | null;
+  successMessage?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'projectInquiry';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ClientStoriesBlock".
+ */
+export interface ClientStoriesBlock {
+  heading: {
+    /**
+     * Small label above the title
+     */
+    eyebrow?: string | null;
+    /**
+     * Main part of the title
+     */
+    title: string;
+    /**
+     * Orange italic part that follows the title
+     */
+    accent?: string | null;
+    accentOnNewLine?: boolean | null;
+  };
+  /**
+   * Short line next to the arrows
+   */
+  note?: string | null;
+  /**
+   * Choose and order the slides. Leave empty to show all published testimonials.
+   */
+  testimonials?: (number | Testimonial)[] | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'clientStories';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FaqBlock".
+ */
+export interface FaqBlock {
+  heading: {
+    /**
+     * Small label above the title
+     */
+    eyebrow?: string | null;
+    /**
+     * Main part of the title
+     */
+    title: string;
+    /**
+     * Orange italic part that follows the title
+     */
+    accent?: string | null;
+    accentOnNewLine?: boolean | null;
+    subtitle?: string | null;
+  };
+  helpCard?: {
+    background?: (number | null) | Media;
+    avatars?: (number | Media)[] | null;
+    title?: string | null;
+    accent?: string | null;
+    text?: string | null;
+    cta?: {
+      label?: string | null;
+      /**
+       * e.g. #contact, /work, https://…
+       */
+      href?: string | null;
+    };
+  };
+  /**
+   * Choose and order the questions. Leave empty to show all FAQs.
+   */
+  faqs?: (number | Faq)[] | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faq';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  _order?: string | null;
+  question: string;
+  answer: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -630,38 +796,6 @@ export interface WhyZeetechBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'whyZeetech';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ClientStoriesBlock".
- */
-export interface ClientStoriesBlock {
-  heading: {
-    /**
-     * Small label above the title
-     */
-    eyebrow?: string | null;
-    /**
-     * Main part of the title
-     */
-    title: string;
-    /**
-     * Orange italic part that follows the title
-     */
-    accent?: string | null;
-    accentOnNewLine?: boolean | null;
-  };
-  /**
-   * Short line next to the arrows
-   */
-  note?: string | null;
-  /**
-   * Choose and order the slides. Leave empty to show all published testimonials.
-   */
-  testimonials?: (number | Testimonial)[] | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'clientStories';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -904,108 +1038,6 @@ export interface ShowreelBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FaqBlock".
- */
-export interface FaqBlock {
-  heading: {
-    /**
-     * Small label above the title
-     */
-    eyebrow?: string | null;
-    /**
-     * Main part of the title
-     */
-    title: string;
-    /**
-     * Orange italic part that follows the title
-     */
-    accent?: string | null;
-    accentOnNewLine?: boolean | null;
-    subtitle?: string | null;
-  };
-  helpCard?: {
-    background?: (number | null) | Media;
-    avatars?: (number | Media)[] | null;
-    title?: string | null;
-    accent?: string | null;
-    text?: string | null;
-    cta?: {
-      label?: string | null;
-      /**
-       * e.g. #contact, /work, https://…
-       */
-      href?: string | null;
-    };
-  };
-  /**
-   * Choose and order the questions. Leave empty to show all FAQs.
-   */
-  faqs?: (number | Faq)[] | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'faq';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "faqs".
- */
-export interface Faq {
-  id: number;
-  _order?: string | null;
-  question: string;
-  answer: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ProjectInquiryBlock".
- */
-export interface ProjectInquiryBlock {
-  heading: {
-    /**
-     * Small label above the title
-     */
-    eyebrow?: string | null;
-    /**
-     * Main part of the title
-     */
-    title: string;
-    /**
-     * Orange italic part that follows the title
-     */
-    accent?: string | null;
-    accentOnNewLine?: boolean | null;
-    subtitle?: string | null;
-  };
-  prep?: {
-    eyebrow?: string | null;
-    title?: string | null;
-    steps?:
-      | {
-          title: string;
-          text?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-    person?: {
-      photo?: (number | null) | Media;
-      name?: string | null;
-      role?: string | null;
-    };
-  };
-  /**
-   * Budget choices, e.g. Less than $5k
-   */
-  budgets?: string[] | null;
-  submitLabel?: string | null;
-  successMessage?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'projectInquiry';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "WorkHeroBlock".
  */
 export interface WorkHeroBlock {
@@ -1038,6 +1070,419 @@ export interface WorkGridBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'workGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesHeroBlock".
+ */
+export interface ServicesHeroBlock {
+  /**
+   * Small orange label, e.g. Our services / Strategy · Design · Engineering
+   */
+  eyebrow?: string | null;
+  /**
+   * e.g. Everything your next product needs.
+   */
+  title: string;
+  /**
+   * White italic words in orange boxes after the title, e.g. One connected team.
+   */
+  highlight?: string | null;
+  text?: string | null;
+  primaryCta?: {
+    label?: string | null;
+    /**
+     * e.g. #contact, /work, https://…
+     */
+    href?: string | null;
+  };
+  secondaryCta?: {
+    label?: string | null;
+    /**
+     * e.g. #contact, /work, https://…
+     */
+    href?: string | null;
+  };
+  background: number | Media;
+  /**
+   * Optional picture on the right (transparent PNG / WebP), e.g. the 3D shape.
+   */
+  visual?: (number | null) | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'servicesHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesListBlock".
+ */
+export interface ServicesListBlock {
+  /**
+   * Small label on the left, e.g. Six disciplines. ↵ One delivery team.
+   */
+  eyebrow?: string | null;
+  /**
+   * Large sentence on the right
+   */
+  intro?: string | null;
+  /**
+   * Choose and order the services. Leave empty to show all of them in their usual order.
+   */
+  services?: (number | Service)[] | null;
+  buttonLabel?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'servicesList';
+}
+/**
+ * The six services. Drag to reorder — the order sets their numbers (01, 02…) and the “next service” links.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: number;
+  _order?: string | null;
+  /**
+   * e.g. System architecture & planning
+   */
+  name: string;
+  /**
+   * Words of the name shown in orange italic on the Services page, e.g. architecture
+   */
+  accent?: string | null;
+  /**
+   * Part of the web address. Filled in automatically from the title.
+   */
+  slug?: string | null;
+  /**
+   * Small label after the number, e.g. Architecture blueprint → “01 / ARCHITECTURE BLUEPRINT”. Also the short line under the name in the header’s Services menu.
+   */
+  kicker?: string | null;
+  /**
+   * Icon in the header’s Services menu.
+   */
+  icon?:
+    | (
+        | 'layers-3'
+        | 'pen-tool'
+        | 'file-code-2'
+        | 'monitor-smartphone'
+        | 'square-mouse-pointer'
+        | 'cloud-cog'
+        | 'settings'
+        | 'image'
+        | 'atom'
+        | 'waves'
+      )
+    | null;
+  /**
+   * One or two sentences about the service.
+   */
+  summary?: string | null;
+  /**
+   * Listed on the Services page and on this service’s page (four look best).
+   */
+  deliverables?:
+    | {
+        title: string;
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Picture beside the service.
+   */
+  image?: (number | null) | Media;
+  /**
+   * Orange italic line under the list, e.g. A clear foundation for what comes next.
+   */
+  tagline?: string | null;
+  hero?: {
+    /**
+     * Background picture (darkened).
+     */
+    image?: (number | null) | Media;
+    /**
+     * White italic words in an orange box, e.g. Clarity before code.
+     */
+    highlight?: string | null;
+    buttonLabel?: string | null;
+  };
+  deliverablesHeading?: {
+    title?: string | null;
+    accent?: string | null;
+  };
+  processHeading?: {
+    title?: string | null;
+    accent?: string | null;
+  };
+  process?:
+    | {
+        title: string;
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  questionsHeading?: {
+    title?: string | null;
+    accent?: string | null;
+  };
+  questions?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  layout?: (ProjectInquiryBlock | FaqBlock | ClientStoriesBlock)[] | null;
+  nextHeading?: {
+    title?: string | null;
+    accent?: string | null;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageIntroBlock".
+ */
+export interface PageIntroBlock {
+  /**
+   * The subtitle is shown beside the title — one paragraph per line.
+   */
+  heading: {
+    /**
+     * Small label above the title
+     */
+    eyebrow?: string | null;
+    /**
+     * Main part of the title
+     */
+    title: string;
+    /**
+     * Orange italic part that follows the title
+     */
+    accent?: string | null;
+    accentOnNewLine?: boolean | null;
+    subtitle?: string | null;
+  };
+  image: number | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pageIntro';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StoryMediaBlock".
+ */
+export interface StoryMediaBlock {
+  /**
+   * The subtitle is shown beside the title — one paragraph per line.
+   */
+  heading: {
+    /**
+     * Small label above the title
+     */
+    eyebrow?: string | null;
+    /**
+     * Main part of the title
+     */
+    title: string;
+    /**
+     * Orange italic part that follows the title
+     */
+    accent?: string | null;
+    accentOnNewLine?: boolean | null;
+    subtitle?: string | null;
+  };
+  layout?: ('pair' | 'stack' | 'person') | null;
+  background?: ('white' | 'warm') | null;
+  images?: (number | Media)[] | null;
+  /**
+   * Shown under the portrait.
+   */
+  person?: {
+    name?: string | null;
+    role?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'storyMedia';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardGridBlock".
+ */
+export interface CardGridBlock {
+  /**
+   * The subtitle is shown beside the title — one paragraph per line.
+   */
+  heading: {
+    /**
+     * Small label above the title
+     */
+    eyebrow?: string | null;
+    /**
+     * Main part of the title
+     */
+    title: string;
+    /**
+     * Orange italic part that follows the title
+     */
+    accent?: string | null;
+    accentOnNewLine?: boolean | null;
+    subtitle?: string | null;
+  };
+  style?: ('figures' | 'numbered' | 'outlined') | null;
+  background?: ('white' | 'warm') | null;
+  cards?:
+    | {
+        /**
+         * Orange text, e.g. 40+. Leave empty for 01, 02…
+         */
+        figure?: string | null;
+        title: string;
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactBandBlock".
+ */
+export interface ContactBandBlock {
+  heading: {
+    /**
+     * Small label above the title
+     */
+    eyebrow?: string | null;
+    /**
+     * Main part of the title
+     */
+    title: string;
+    /**
+     * Orange italic part that follows the title
+     */
+    accent?: string | null;
+    accentOnNewLine?: boolean | null;
+  };
+  /**
+   * Shown above the button. Leave empty to use the address from Site settings.
+   */
+  email?: string | null;
+  cta?: {
+    label?: string | null;
+    /**
+     * e.g. #contact, /work, https://…
+     */
+    href?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contactBand';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CareersHeroBlock".
+ */
+export interface CareersHeroBlock {
+  /**
+   * Small orange label, e.g. Careers at ZeeTech Studio
+   */
+  eyebrow?: string | null;
+  /**
+   * e.g. Bring your craft to
+   */
+  title: string;
+  /**
+   * White italic words in an orange box, e.g. useful digital products.
+   */
+  highlight?: string | null;
+  text?: string | null;
+  cta?: {
+    label?: string | null;
+    /**
+     * e.g. #contact, /work, https://…
+     */
+    href?: string | null;
+  };
+  /**
+   * The large photo first, then the two small ones on the right.
+   */
+  images?: (number | Media)[] | null;
+  label?: {
+    /**
+     * e.g. How we work
+     */
+    kicker?: string | null;
+    /**
+     * e.g. A shared product journey
+     */
+    title?: string | null;
+    /**
+     * e.g. Product · design · engineering
+     */
+    text?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'careersHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InterestCardsBlock".
+ */
+export interface InterestCardsBlock {
+  /**
+   * Small orange label on the left, e.g. Areas of interest
+   */
+  label?: string | null;
+  title: string;
+  /**
+   * Orange italic line under the title
+   */
+  accent?: string | null;
+  text?: string | null;
+  cards?:
+    | {
+        /**
+         * Leave empty for “Area 01”, “Area 02”…
+         */
+        kicker?: string | null;
+        icon?: ('buildings' | 'frame' | 'box' | 'profile-2user') | null;
+        title: string;
+        text?: string | null;
+        /**
+         * Short tags, e.g. Discovery
+         */
+        focus?: string[] | null;
+        link?: {
+          label?: string | null;
+          /**
+           * e.g. #contact, /work, https://…
+           */
+          href?: string | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'interestCards';
 }
 /**
  * Project inquiries sent through the website form, with where each visitor came from.
@@ -1216,6 +1661,10 @@ export interface PayloadLockedDocument {
         value: number | Page;
       } | null)
     | ({
+        relationTo: 'services';
+        value: number | Service;
+      } | null)
+    | ({
         relationTo: 'case-studies';
         value: number | CaseStudy;
       } | null)
@@ -1311,6 +1760,14 @@ export interface PagesSelect<T extends boolean = true> {
         projectInquiry?: T | ProjectInquiryBlockSelect<T>;
         workHero?: T | WorkHeroBlockSelect<T>;
         workGrid?: T | WorkGridBlockSelect<T>;
+        servicesHero?: T | ServicesHeroBlockSelect<T>;
+        servicesList?: T | ServicesListBlockSelect<T>;
+        pageIntro?: T | PageIntroBlockSelect<T>;
+        storyMedia?: T | StoryMediaBlockSelect<T>;
+        cardGrid?: T | CardGridBlockSelect<T>;
+        contactBand?: T | ContactBandBlockSelect<T>;
+        careersHero?: T | CareersHeroBlockSelect<T>;
+        interestCards?: T | InterestCardsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1681,6 +2138,7 @@ export interface FaqBlockSelect<T extends boolean = true> {
  * via the `definition` "ProjectInquiryBlock_select".
  */
 export interface ProjectInquiryBlockSelect<T extends boolean = true> {
+  fullWidth?: T;
   heading?:
     | T
     | {
@@ -1739,6 +2197,276 @@ export interface WorkGridBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesHeroBlock_select".
+ */
+export interface ServicesHeroBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  highlight?: T;
+  text?: T;
+  primaryCta?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  secondaryCta?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  background?: T;
+  visual?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesListBlock_select".
+ */
+export interface ServicesListBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  intro?: T;
+  services?: T;
+  buttonLabel?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageIntroBlock_select".
+ */
+export interface PageIntroBlockSelect<T extends boolean = true> {
+  heading?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        accent?: T;
+        accentOnNewLine?: T;
+        subtitle?: T;
+      };
+  image?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StoryMediaBlock_select".
+ */
+export interface StoryMediaBlockSelect<T extends boolean = true> {
+  heading?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        accent?: T;
+        accentOnNewLine?: T;
+        subtitle?: T;
+      };
+  layout?: T;
+  background?: T;
+  images?: T;
+  person?:
+    | T
+    | {
+        name?: T;
+        role?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardGridBlock_select".
+ */
+export interface CardGridBlockSelect<T extends boolean = true> {
+  heading?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        accent?: T;
+        accentOnNewLine?: T;
+        subtitle?: T;
+      };
+  style?: T;
+  background?: T;
+  cards?:
+    | T
+    | {
+        figure?: T;
+        title?: T;
+        text?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactBandBlock_select".
+ */
+export interface ContactBandBlockSelect<T extends boolean = true> {
+  heading?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        accent?: T;
+        accentOnNewLine?: T;
+      };
+  email?: T;
+  cta?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CareersHeroBlock_select".
+ */
+export interface CareersHeroBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  highlight?: T;
+  text?: T;
+  cta?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  images?: T;
+  label?:
+    | T
+    | {
+        kicker?: T;
+        title?: T;
+        text?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InterestCardsBlock_select".
+ */
+export interface InterestCardsBlockSelect<T extends boolean = true> {
+  label?: T;
+  title?: T;
+  accent?: T;
+  text?: T;
+  cards?:
+    | T
+    | {
+        kicker?: T;
+        icon?: T;
+        title?: T;
+        text?: T;
+        focus?: T;
+        link?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  _order?: T;
+  name?: T;
+  accent?: T;
+  slug?: T;
+  kicker?: T;
+  icon?: T;
+  summary?: T;
+  deliverables?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        id?: T;
+      };
+  image?: T;
+  tagline?: T;
+  hero?:
+    | T
+    | {
+        image?: T;
+        highlight?: T;
+        buttonLabel?: T;
+      };
+  deliverablesHeading?:
+    | T
+    | {
+        title?: T;
+        accent?: T;
+      };
+  processHeading?:
+    | T
+    | {
+        title?: T;
+        accent?: T;
+      };
+  process?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        id?: T;
+      };
+  questionsHeading?:
+    | T
+    | {
+        title?: T;
+        accent?: T;
+      };
+  questions?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  layout?:
+    | T
+    | {
+        projectInquiry?: T | ProjectInquiryBlockSelect<T>;
+        faq?: T | FaqBlockSelect<T>;
+        clientStories?: T | ClientStoriesBlockSelect<T>;
+      };
+  nextHeading?:
+    | T
+    | {
+        title?: T;
+        accent?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "case-studies_select".
  */
 export interface CaseStudiesSelect<T extends boolean = true> {
@@ -1754,6 +2482,8 @@ export interface CaseStudiesSelect<T extends boolean = true> {
   summary?: T;
   scope?: T;
   duration?: T;
+  status?: T;
+  tags?: T;
   cover?: T;
   person?:
     | T
@@ -1765,6 +2495,13 @@ export interface CaseStudiesSelect<T extends boolean = true> {
   body?: T;
   gallery?: T;
   testimonial?: T;
+  layout?:
+    | T
+    | {
+        projectInquiry?: T | ProjectInquiryBlockSelect<T>;
+        clientStories?: T | ClientStoriesBlockSelect<T>;
+        faq?: T | FaqBlockSelect<T>;
+      };
   meta?:
     | T
     | {

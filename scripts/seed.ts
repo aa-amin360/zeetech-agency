@@ -89,7 +89,7 @@ const img = {
   av1: await upload('faq-avatar-1.jpg', ''),
   av2: await upload('faq-avatar-2.jpg', ''),
   av3: await upload('faq-avatar-3.jpg', ''),
-  iqbal: await upload('cta-iqbal.png', 'MD Iqbal Hasan'),
+  iqbal: await upload('cta-iqbal.png', 'Amit Ghosh'),
 }
 const tools: number[] = []
 for (let i = 0; i < 10; i++) tools.push(await upload(`tool-${i}.png`, ''))
@@ -388,7 +388,7 @@ const layout = [
         { title: 'What is getting in the way?', text: 'User problems, technical debt, missing workflows, or delivery bottlenecks.' },
         { title: 'What should change?', text: 'The result you want for users, the team, or the business.' },
       ],
-      person: { photo: img.iqbal, name: 'MD Iqbal Hasan', role: 'COO & Co-founder' },
+      person: { photo: img.iqbal, name: 'Amit Ghosh', role: 'COO & Co-founder' },
     },
     budgets: ['Less than $5k', '$5k - $20k', '$10k - $20k', '$20k - $50k', 'More than $50k'],
     submitLabel: 'Send Inquiry',

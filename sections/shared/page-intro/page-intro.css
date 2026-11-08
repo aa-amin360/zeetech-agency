@@ -1,0 +1,31 @@
+/* ---------------------------------------------------------
+   Page intro (About, Figma 1088:3568): wider side margins than
+   other sections (48px), the header sits above it.
+   --------------------------------------------------------- */
+.intro { background: #f8f7f4; }
+.intro .sec__inner {
+  --pad: clamp(20px, calc(48 * var(--u)), 48px);
+  gap: clamp(32px, calc(64 * var(--u)), 64px);
+  padding-top: calc(var(--nav-h, 92px) + clamp(40px, calc(80 * var(--u)), 80px));
+}
+.intro .sec-head--split { gap: 16px; }
+.intro__text { width: min(100%, max(320px, calc(673 * var(--u)))); }
+.intro__text p { font-size: clamp(16px, calc(22 * var(--u)), 22px); }
+.intro__media {
+  position: relative;
+  margin: 0;
+  height: clamp(260px, calc(650 * var(--u)), 650px);
+  border-radius: clamp(14px, calc(22 * var(--u)), 22px);
+  overflow: hidden;
+  background: #e9e7e2;
+}
+.intro__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (max-width: 900px) {
+  .intro__media { height: auto; aspect-ratio: 4 / 3; }
+}

@@ -3,7 +3,7 @@ import config from '@payload-config'
 import { draftMode } from 'next/headers'
 import { cache } from 'react'
 import { getPayload } from 'payload'
-import type { CaseStudy, Page } from '@/payload-types'
+import type { CaseStudy, Page, Service } from '@/payload-types'
 
 export const getPayloadClient = () => getPayload({ config })
 
@@ -36,6 +36,21 @@ export const getCaseStudy = cache(async (slug: string): Promise<CaseStudy | null
     overrideAccess: draft,
   })
   return docs[0] ?? null
+})
+
+/** Every service in the order set in the admin (their numbers and "next" links follow it). */
+export const getServices = cache(async (): Promise<Service[]> => {
+  const payload = await getPayloadClient()
+  const draft = await isPreview()
+  const { docs } = await payload.find({
+    collection: 'services',
+    sort: '_order',
+    depth: 2,
+    limit: 50,
+    draft,
+    overrideAccess: draft,
+  })
+  return docs
 })
 
 export const getGlobals = cache(async () => {

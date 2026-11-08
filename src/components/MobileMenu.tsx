@@ -3,13 +3,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowUpRight } from './ui'
 
-export function MobileMenu({
-  links,
-  cta,
-}: {
-  links: { label: string; href?: string | null }[]
-  cta: { label: string; href: string } | null
-}) {
+type MenuLink = { label: string; href?: string | null; children?: MenuLink[] }
+
+export function MobileMenu({ links, cta }: { links: MenuLink[]; cta: { label: string; href: string } | null }) {
   const [open, setOpen] = useState(false)
   const burger = useRef<HTMLButtonElement>(null)
 
@@ -46,11 +42,24 @@ export function MobileMenu({
         <span />
       </button>
       <div className="mobile-menu" id="mobile-menu" hidden={!open} onClick={(e) => (e.target as HTMLElement).closest('a') && setOpen(false)}>
-        {links.map((l) => (
-          <a href={l.href || '#'} key={l.label}>
-            {l.label}
-          </a>
-        ))}
+        {links.map((l) =>
+          l.children?.length ? (
+            <div className="mobile-menu__group" key={l.label}>
+              <a href={l.href || '#'}>{l.label}</a>
+              <ul className="mobile-menu__sub">
+                {l.children.map((c) => (
+                  <li key={c.label}>
+                    <a href={c.href || '#'}>{c.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <a href={l.href || '#'} key={l.label}>
+              {l.label}
+            </a>
+          ),
+        )}
         {cta ? (
           <a className="btn btn--primary" href={cta.href}>
             <span>{cta.label}</span>

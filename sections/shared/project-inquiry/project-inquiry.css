@@ -35,6 +35,12 @@
   background: linear-gradient(90deg, rgba(0, 0, 0, 0) 47.97%, #ff2e09 99.4%);
   pointer-events: none;
 }
+/* edge to edge (Contact 1123:3556, Careers): no title, no rounded corners, 80px side padding */
+.inquiry--full .sec__inner { max-width: none; padding: 0; }
+.inquiry--full .inquiry__card {
+  border-radius: 0;
+  padding: clamp(32px, calc(48 * var(--u)), 48px) max(var(--pad), calc(80 * var(--u)), (100% - 1760px) / 2);
+}
 .inquiry__side { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 48px; }
 .inquiry__prep { display: flex; flex-direction: column; gap: 24px; }
 .inquiry__title {

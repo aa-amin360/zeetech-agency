@@ -1,5 +1,5 @@
 // Every section block the page builder offers, in the order the "Add section" list shows them.
-// Folders: home/ and work/ hold sections used by one page, shared/ the ones used on several.
+// Folders: home/, work/, services/, about/ and careers/ hold sections used by one page, shared/ the ones used on several.
 // The footer (layout/footer) is site-wide, so it is a global rather than a block.
 import { HeroBlock } from './home/01-hero/block'
 import { StatementBlock } from './home/02-statement/block'
@@ -17,6 +17,14 @@ import { FaqBlock } from './shared/faq/block'
 import { ProjectInquiryBlock } from './shared/project-inquiry/block'
 import { WorkHeroBlock } from './work/01-work-hero/block'
 import { WorkGridBlock } from './work/02-work-grid/block'
+import { ServicesHeroBlock } from './services/01-services-hero/block'
+import { ServicesListBlock } from './services/02-services-list/block'
+import { PageIntroBlock } from './shared/page-intro/block'
+import { CardGridBlock } from './shared/card-grid/block'
+import { StoryMediaBlock } from './about/01-story-media/block'
+import { ContactBandBlock } from './about/02-contact-band/block'
+import { CareersHeroBlock } from './careers/01-careers-hero/block'
+import { InterestCardsBlock } from './careers/02-interest-cards/block'
 
 export const pageBlocks = [
   HeroBlock,
@@ -35,4 +43,12 @@ export const pageBlocks = [
   ProjectInquiryBlock,
   WorkHeroBlock,
   WorkGridBlock,
+  ServicesHeroBlock,
+  ServicesListBlock,
+  PageIntroBlock,
+  StoryMediaBlock,
+  CardGridBlock,
+  ContactBandBlock,
+  CareersHeroBlock,
+  InterestCardsBlock,
 ]
