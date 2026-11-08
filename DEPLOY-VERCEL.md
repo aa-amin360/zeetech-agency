@@ -71,18 +71,18 @@ $env:SEED_ADMIN_EMAIL="you@example.com"; $env:SEED_ADMIN_PASSWORD="a-strong-pass
 
 Otherwise open `/admin` after deploying — it asks you to create the first user.
 
-**Already set up before a page existed?** Deploy first (the build adds the new database tables), then
-load that page's content once: `npm run vercel:work` for Our Work, `npm run vercel:services` for Services,
-`npm run vercel:about` for About, `npm run vercel:contact-careers` for Contact and Careers, `npm run vercel:update-content` for small
-content fixes from design updates. Run
-`npm run vercel:work` again to give existing case studies their new end sections.
+**Already set up before a page existed?** Nothing to run: just push. Every deploy adds the new
+database tables and then runs each new page's content script once (Our Work, Services, About,
+Contact + Careers, and the small fixes in `update-content`); see `scripts/deploy-steps.mjs`. Scripts that have run
+are remembered, so a later deploy never repeats one or brings back something you removed in the admin.
+The build log shows `[deploy] … running` / `already ran`.
 
-> Always pull with `--environment=production`: without it Vercel hands over the *Development* settings,
-> which may point at a different database, and the scripts then fill the wrong one.
+> If Vercel marks the database settings as *Sensitive*, `vercel env pull` writes `[SENSITIVE]`
+> placeholders and the `npm run vercel:*` scripts can't run from your computer ("Invalid token format
+> for Vercel Blob adapter"). That's fine: the deploy does the work on Vercel.
 >
-> If a script asks "It looks like you've run Payload in dev mode … proceed?", answer **y**: a dev server
-> once changed that database directly. The migrations skip whatever already exists and then remove that
-> marker, so it is asked only once.
+> Always pull with `--environment=production`; without it Vercel hands over the *Development* settings,
+> which may point at a different database.
 >
 > While `.env.production.local` exists, `npm run build` / `npm run start` on your computer also use the
 > Vercel database. Delete the file when you're done (`npm run dev` is not affected).
@@ -90,7 +90,7 @@ content fixes from design updates. Run
 ## 5. Deploy
 
 Vercel → **Deployments → Redeploy** (or push a commit). The build runs
-`npm run vercel-build`, which applies any new database migrations and then builds the site.
+`npm run vercel-build`, which applies any new database migrations, loads any new starting content once, and then builds the site.
 
 Every push to `main` deploys to production; other branches get their own preview URL.
 
