@@ -4,10 +4,14 @@ import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 
 /**
- * One-line sticky bar for every section, like Selected work's: once a section's header has
- * scrolled away, a slim bar slides in just below the site header with the section's label on
- * the left and its title in the middle (same fonts and colours, on one line), and leaves when
- * the section ends.
+ * One-line sticky bar for every section, like Selected work's: a slim bar just below the site
+ * header with the section's label on the left and its title in the middle (same fonts and
+ * colours, on one line).
+ *
+ * It takes over from the title: it slides in as the section's title passes under the spot where
+ * the bar sits (so the content after the header is never under it when it appears), leaves at the
+ * same point when scrolling back up, and at the end of the section the section's bottom edge
+ * pushes it up and away.
  *
  * Works on any page built in the admin: in each `main .sec`, the first section header
  * (SectionHead's `.sec-head`, the service pages' title, …) that has content after it gets a
@@ -19,7 +23,18 @@ import { useEffect } from 'react'
 const SKIP = '.work, [data-stick-off]'
 const HEADS = 'header.sec-head, .areas__head, .svc-list__head, :scope > .sec__inner > .display'
 
-type Entry = { section: HTMLElement; head: HTMLElement; box: HTMLElement; bar: HTMLElement; on: boolean }
+type Entry = {
+  section: HTMLElement
+  head: HTMLElement
+  /** the section title (or the header itself): the bar takes over when it goes under the bar */
+  title: HTMLElement
+  box: HTMLElement
+  bar: HTMLElement
+  /** the bar's visible height */
+  h: number
+  on: boolean
+  shown: boolean
+}
 
 function opaqueBg(el: HTMLElement | null): string {
   for (let n = el; n; n = n.parentElement) {
@@ -88,7 +103,10 @@ export function StickySections() {
         (el) => el.closest('.sec') === section && !el.classList.contains('visually-hidden') && el.nextElementSibling,
       )
       const bar = head && makeBar(head)
-      if (head && bar) entries.push({ section, head, box: head.parentElement!, bar, on: false })
+      if (head && bar) {
+        const title = head.querySelector<HTMLElement>('.display, h2, h3') ?? head
+        entries.push({ section, head, title, box: head.parentElement!, bar, h: 52, on: false, shown: false })
+      }
     }
     if (!entries.length) return
 
@@ -103,6 +121,7 @@ export function StickySections() {
         const off = box.offsetHeight - head.offsetHeight <= room * 0.3 || (section.matches('.deliver') && window.innerWidth <= 900)
         bar.hidden = off
         e.on = !off
+        e.h = bar.firstElementChild instanceof HTMLElement ? bar.firstElementChild.offsetHeight || 52 : 52
         bar.style.setProperty('--stick-bg', opaqueBg(box))
         const eyebrow = head.querySelector<HTMLElement>('.eyebrow')
         bar.style.setProperty('--stick-fg', getComputedStyle(eyebrow ?? head).color)
@@ -116,9 +135,19 @@ export function StickySections() {
     const update = () => {
       const top = navH()
       for (const e of entries) {
-        // shown once the header has scrolled under the site header, until the section ends
-        const show = e.on && e.head.getBoundingClientRect().bottom < top && e.box.getBoundingClientRect().bottom > top + 60
-        e.bar.classList.toggle('is-stuck', show)
+        const titleBottom = e.title.getBoundingClientRect().bottom
+        const boxBottom = e.box.getBoundingClientRect().bottom
+        // in once the title's bottom edge reaches the bar's (a few px of slack on the way back so it
+        // doesn't flicker right at that point), until the section has scrolled away
+        const line = top + e.h + (e.shown ? 6 : 0)
+        const show = e.on && titleBottom < line && boxBottom > top
+        if (show !== e.shown) {
+          e.shown = show
+          e.bar.classList.toggle('is-stuck', show)
+        }
+        // the end of the section pushes the bar up with it instead of running into the next section
+        const push = show ? Math.min(0, boxBottom - top - e.h) : 0
+        e.bar.style.transform = push ? `translateY(${push}px)` : ''
       }
     }
     const onScroll = () => {

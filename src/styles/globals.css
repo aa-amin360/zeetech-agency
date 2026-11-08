@@ -376,8 +376,11 @@ html[data-perf="low"] .work__bar-in { background: rgba(246, 246, 246, 0.98); }
   height: 52px;
   opacity: 0;
   transform: translateY(-100%);
-  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
   pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .stick-bar__in { transform: none; transition: opacity 0.2s ease; }
 }
 .stick-bar__in::before {
   content: "";
