@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b1733; --ink2:#47506a; --mute:#9aa1b2; --line:#e6e3dc; --bg:#f2efe7;
+  --orange:#fd5600; --orange-s:#ffe3d3; --cyan:#27d4f2; --cyan-s:#d9f7fd; --green:#1fb26b; --green-s:#d8f4e6;
+  --card:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+.board{position:relative;width:100%;height:100%;overflow:hidden}
+.bar{height:8px;border-radius:4px;background:#e9e7e1}
+.bar.d{background:#d9d6cf}
+.card{background:var(--card);border-radius:14px;box-shadow:0 1px 0 rgba(11,23,51,.04),0 18px 40px -18px rgba(11,23,51,.28)}
+.win{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:0 30px 70px -30px rgba(11,23,51,.45),0 0 0 1px rgba(11,23,51,.05)}
+.chrome{height:26px;background:#f7f5f0;display:flex;align-items:center;gap:6px;padding:0 12px;border-bottom:1px solid var(--line)}
+.chrome i{width:8px;height:8px;border-radius:50%;background:#dedad2}
+.chrome .url{margin-left:14px;height:12px;width:180px;border-radius:6px;background:#ebe8e1}
+.side{background:var(--ink);color:#fff;padding:14px 12px;display:flex;flex-direction:column;gap:10px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13px;margin-bottom:8px}
+.logo b{width:22px;height:22px;border-radius:6px;background:var(--orange);display:grid;place-items:center;font-size:12px}
+.nav{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px}
+.nav i{width:12px;height:12px;border-radius:3px;background:rgba(255,255,255,.28)}
+.nav s{display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.22);flex:1}
+.nav.on{background:rgba(255,255,255,.1)}
+.nav.on i{background:var(--orange)}
+.nav.on s{background:rgba(255,255,255,.6)}
+.kpi{padding:12px 14px}
+.kpi small{display:block;font-size:9px;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
+.kpi strong{display:block;font-size:22px;font-weight:800;margin-top:4px;letter-spacing:-.02em}
+.kpi em{font-style:normal;font-size:9px;font-weight:700;color:var(--green)}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px}
+.pill.g{background:var(--green-s);color:#11804b}.pill.o{background:var(--orange-s);color:#c94300}.pill.c{background:var(--cyan-s);color:#0a8aa3}.pill.n{background:#eceae4;color:var(--ink2)}
+.h{font-weight:700;font-size:12px}
+.sub{font-size:9px;color:var(--mute);font-weight:600}
+.row{display:flex;align-items:center;gap:10px}
+.av{width:20px;height:20px;border-radius:50%;flex:none}
+svg{display:block}
+.tag{position:absolute;font-family:"Playfair Display",serif;font-style:italic}
+</style>
+</head>
+<body>
+<div class="board" id="b"></div>
+<script>
+const [art, W, H] = (location.hash.slice(1) || 'cover|1200|750').split('|').map((v, i) => i ? +v : v)
+document.documentElement.style.cssText = 'width:'+W+'px;height:'+H+'px'
+const b = document.getElementById('b')
+
+/* deterministic pseudo random */
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647
+
+/* ---------- reusable pieces ---------- */
+function qr(size, cells = 21) {
+  const c = size / cells; let r = ''
+  const finder = (x, y) => `<rect x="${x*c}" y="${y*c}" width="${7*c}" height="${7*c}" fill="#0b1733"/><rect x="${(x+1)*c}" y="${(y+1)*c}" width="${5*c}" height="${5*c}" fill="#fff"/><rect x="${(x+2)*c}" y="${(y+2)*c}" width="${3*c}" height="${3*c}" fill="#0b1733"/>`
+  for (let y = 0; y < cells; y++) for (let x = 0; x < cells; x++) {
+    const inF = (x < 8 && y < 8) || (x > cells - 9 && y < 8) || (x < 8 && y > cells - 9)
+    if (!inF && rnd() > .52) r += `<rect x="${x*c}" y="${y*c}" width="${c}" height="${c}" fill="#0b1733"/>`
+  }
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><rect width="${size}" height="${size}" fill="#fff"/>${r}${finder(0,0)}${finder(cells-7,0)}${finder(0,cells-7)}</svg>`
+}
+
+function sidebar(active = 1) {
+  const items = Array.from({ length: 8 }, (_, i) => `<div class="nav ${i === active ? 'on' : ''}"><i></i><s style="max-width:${50 + (i * 23) % 40}px"></s></div>`).join('')
+  return `<div class="side"><div class="logo"><b>N</b>Nexus</div>${items}</div>`
+}
+
+function mapSvg(w, h, opts = {}) {
+  seed = opts.seed || 11
+  let streets = ''
+  for (let i = 0; i < 14; i++) { const x = rnd() * w; streets += `<path d="M${x} -10 Q ${x + (rnd()-.5)*120} ${h/2} ${x + (rnd()-.5)*80} ${h+10}" stroke="#fff" stroke-width="${rnd() > .7 ? 5 : 2.5}" fill="none"/>` }
+  for (let i = 0; i < 10; i++) { const y = rnd() * h; streets += `<path d="M-10 ${y} Q ${w/2} ${y + (rnd()-.5)*90} ${w+10} ${y + (rnd()-.5)*60}" stroke="#fff" stroke-width="${rnd() > .7 ? 5 : 2.5}" fill="none"/>` }
+  const zone = (pts, col) => `<path d="M${pts.map(p => `${p[0]*w} ${p[1]*h}`).join(' L')} Z" fill="${col}" fill-opacity=".16" stroke="${col}" stroke-width="2" stroke-dasharray="6 5"/>`
+  const route = opts.route ?? [[.12,.78],[.3,.62],[.46,.52],[.62,.38],[.8,.24]]
+  const rp = route.map((p, i) => `${i ? 'L' : 'M'}${p[0]*w} ${p[1]*h}`).join(' ')
+  const hub = (x, y, label) => `<g transform="translate(${x*w} ${y*h})"><circle r="13" fill="#0b1733"/><rect x="-5" y="-5" width="10" height="10" rx="2" fill="#fff"/>${label ? `<rect x="16" y="-10" width="${label.length*6.2+14}" height="20" rx="10" fill="#0b1733"/><text x="23" y="4" font-size="10" font-weight="700" fill="#fff" font-family="Plus Jakarta Sans">${label}</text>` : ''}</g>`
+  const pin = (x, y, c) => `<g transform="translate(${x*w} ${y*h})"><path d="M0 0 C -10 -14 -12 -20 -12 -24 A 12 12 0 1 1 12 -24 C 12 -20 10 -14 0 0 Z" fill="${c}"/><circle cy="-24" r="4.5" fill="#fff"/></g>`
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+    <rect width="${w}" height="${h}" fill="#e9eef0"/>
+    <path d="M${w*.68} 0 Q ${w*.6} ${h*.4} ${w} ${h*.62} L ${w} 0 Z" fill="#d7ecf1"/>
+    ${streets}
+    ${zone([[.04,.42],[.38,.3],[.5,.66],[.2,.95],[.02,.86]], '#fd5600')}
+    ${zone([[.42,.12],[.86,.06],[.96,.44],[.58,.56]], '#27d4f2')}
+    <path d="${rp}" stroke="#0b1733" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 8"/>
+    ${hub(.46, .52, opts.hubLabel ?? 'Hub A')}
+    ${pin(route[0][0], route[0][1], '#fd5600')}
+    ${pin(route.at(-1)[0], route.at(-1)[1], '#1fb26b')}
+    ${opts.truck ? `<g transform="translate(${.62*w} ${.38*h})"><circle r="15" fill="#fd5600" fill-opacity=".2"/><circle r="8" fill="#fd5600" stroke="#fff" stroke-width="3"/></g>` : ''}
+  </svg>`
+}
+
+function timeline(steps) {
+  return steps.map((s, i) => `
+    <div style="display:flex;gap:12px;position:relative;padding-bottom:${i < steps.length - 1 ? 16 : 0}px">
+      ${i < steps.length - 1 ? `<div style="position:absolute;left:10px;top:22px;bottom:0;width:2px;background:${s.done ? '#1fb26b' : '#e6e3dc'}"></div>` : ''}
+      <div style="width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;background:${s.done ? '#1fb26b' : s.now ? '#fd5600' : '#eceae4'};box-shadow:${s.now ? '0 0 0 5px #ffe3d3' : 'none'}">
+        ${s.done ? '<svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 5.2 4.2 7.4 8 3" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>' : s.now ? '<i style="width:7px;height:7px;border-radius:50%;background:#fff"></i>' : ''}
+      </div>
+      <div style="flex:1;padding-top:2px">
+        <div class="row" style="justify-content:space-between"><span class="h" style="font-size:11px">${s.t}</span><span class="sub">${s.time || ''}</span></div>
+        <div class="sub" style="margin-top:3px;font-weight:500">${s.d}</div>
+      </div>
+    </div>`).join('')
+}
+
+const STEPS = [
+  { t: 'Order placed', d: 'Rush · requested by client', time: '09:02', done: 1 },
+  { t: 'Picked up', d: 'QR scan · GPS confirmed', time: '09:41', done: 1 },
+  { t: 'Hub drop', d: 'Hub A · bucket 07', time: '10:15', done: 1 },
+  { t: 'Out for delivery', d: 'Run 14 · manifest checked', time: '10:52', now: 1 },
+  { t: 'Delivered', d: 'Signature + recipient name', time: '' },
+]
+
+function signature(w, h) {
+  return `<svg width="${w}" height="${h}" viewBox="0 0 160 50"><path d="M6 36 C 18 8, 26 8, 24 30 S 40 44, 48 22 S 60 10, 62 30 S 76 38, 84 24 C 90 14, 96 16, 98 28 S 112 36, 122 20 C 128 12, 138 14, 154 18" stroke="#0b1733" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>`
+}
+
+function ordersTable(n = 6) {
+  const st = [['Delivered','g'],['In transit','c'],['At hub','n'],['Rush','o'],['Delivered','g'],['In transit','c'],['Delivered','g'],['At hub','n']]
+  const avc = ['#ffd2b8','#bfeef8','#d9d3ff','#c9f0da','#ffe7a8','#f8c6d8','#cfe0ff','#ffd2b8']
+  return `<div style="display:grid;grid-template-columns:1.25fr 1.4fr 1.1fr 1fr;gap:0;font-size:9px">
+    ${['Tracking #','Client','Driver','Status'].map(x => `<div class="sub" style="padding:8px 10px;border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">${x}</div>`).join('')}
+    ${Array.from({ length: n }, (_, i) => `
+      <div style="padding:9px 10px;border-bottom:1px solid #f1efea;font-weight:700;font-size:10px;white-space:nowrap">NX-${(48210 + i * 37)}</div>
+      <div style="padding:9px 10px;border-bottom:1px solid #f1efea;display:flex;align-items:center"><div class="bar d" style="width:${60 + (i*17)%40}%"></div></div>
+      <div style="padding:9px 10px;border-bottom:1px solid #f1efea" class="row"><span class="av" style="width:16px;height:16px;background:${avc[i]}"></span><div class="bar" style="width:${40 + (i*13)%30}%"></div></div>
+      <div style="padding:7px 10px;border-bottom:1px solid #f1efea"><span class="pill ${st[i][1]}">${st[i][0]}</span></div>`).join('')}
+  </div>`
+}
+
+function chart(w, h) {
+  const pts = [22, 30, 26, 38, 34, 46, 42, 55, 50, 62, 58, 70]
+  const step = w / (pts.length - 1)
+  const line = pts.map((p, i) => `${i ? 'L' : 'M'}${i * step} ${h - p / 80 * h}`).join(' ')
+  const bars = pts.map((p, i) => `<rect x="${i * step - 5}" y="${h - p * .55 / 80 * h}" width="10" height="${p * .55 / 80 * h}" rx="3" fill="#eceae4"/>`).join('')
+  return `<svg width="${w}" height="${h}" viewBox="-6 0 ${w + 12} ${h}">${bars}<path d="${line} L ${w} ${h} L 0 ${h} Z" fill="#fd5600" fill-opacity=".08"/><path d="${line}" stroke="#fd5600" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${w}" cy="${h - 70/80*h}" r="4.5" fill="#fff" stroke="#fd5600" stroke-width="2.5"/></svg>`
+}
+
+function adminWindow(w, h) {
+  const kpis = [['Orders today', '1,284', '+12%'], ['In transit', '326', '+4%'], ['On-time rate', '97.8%', '+0.6%'], ['Active drivers', '58', '']]
+  return `<div class="win" style="width:${w}px;height:${h}px;display:flex;flex-direction:column">
+    <div class="chrome"><i></i><i></i><i></i><span class="url"></span></div>
+    <div style="flex:1;display:grid;grid-template-columns:150px 1fr;min-height:0">
+      ${sidebar(1)}
+      <div style="padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-height:0;background:#fbfaf7">
+        <div class="row" style="justify-content:space-between">
+          <div><div class="h" style="font-size:15px">Operations overview</div><div class="sub" style="margin-top:3px">All service areas · today</div></div>
+          <div class="row" style="gap:8px"><div class="bar" style="width:110px;height:24px;border-radius:7px;background:#fff;box-shadow:0 0 0 1px var(--line)"></div><span style="background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:7px 12px;border-radius:7px">+ New order</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+          ${kpis.map(([l, v, e]) => `<div class="card kpi"><small>${l}</small><strong>${v}</strong><em>${e}</em></div>`).join('')}
+        </div>
+        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:10px;flex:1;min-height:0">
+          <div class="card" style="overflow:hidden;display:flex;flex-direction:column"><div class="row" style="justify-content:space-between;padding:10px 12px 4px"><span class="h">Recent orders</span><span class="sub">View all</span></div>${ordersTable(h > 500 ? 8 : 6)}</div>
+          <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
+            <div class="card" style="padding:10px 12px"><div class="row" style="justify-content:space-between"><span class="h">Deliveries</span><span class="pill g">+18%</span></div><div style="margin-top:8px">${chart(w * .26, 74)}</div></div>
+            <div class="card" style="flex:1;overflow:hidden;position:relative">${mapSvg(w * .36, h > 500 ? h * .5 : 170, { seed: 5, truck: 1 })}<span class="pill n" style="position:absolute;left:10px;top:10px;background:#fff">Live map</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`
+}
+
+function labelCard(w) {
+  seed = 99
+  return `<div class="card" style="width:${w}px;padding:14px;">
+    <div class="row" style="justify-content:space-between"><div class="logo" style="color:var(--ink);margin:0;font-size:12px"><b style="color:#fff">N</b>Nexus</div><span class="pill o">RUSH</span></div>
+    <div style="display:flex;gap:12px;margin-top:12px;align-items:center">
+      <div style="padding:6px;border:1px solid var(--line);border-radius:8px">${qr(w * .38)}</div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:7px">
+        <div class="sub">TRACKING</div><div class="h" style="font-size:13px;letter-spacing:.02em">NX-48321</div>
+        <div class="sub" style="margin-top:4px">DELIVER TO</div><div class="bar d" style="width:90%"></div><div class="bar" style="width:70%"></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;border-top:1px dashed var(--line);padding-top:10px" class="row"><span class="pill n">Route</span><span class="pill n">2 pcs</span><span class="pill g" style="margin-left:auto">Scanned ✓</span></div>
+  </div>`
+}
+
+function trackingCard(w) {
+  return `<div class="card" style="width:${w}px;padding:16px 16px 18px">
+    <div class="row" style="justify-content:space-between;margin-bottom:14px"><div><div class="sub">SHIPMENT</div><div class="h" style="font-size:14px;margin-top:2px">NX-48321</div></div><span class="pill o">Out for delivery</span></div>
+    ${timeline(STEPS)}
+  </div>`
+}
+
+/* ---------- artboards ---------- */
+const boards = {
+  cover() {
+    b.style.background = 'radial-gradient(120% 90% at 50% 40%, #fbfaf6 0%, #f2efe7 55%, #e9e4d8 100%)'
+    // faint route lines behind
+    let paths = ''
+    seed = 3
+    for (let i = 0; i < 6; i++) paths += `<path d="M ${-50} ${100 + i * 110} C ${W*.3} ${60 + i*120 + rnd()*80}, ${W*.6} ${140 + i*90 - rnd()*80}, ${W + 50} ${80 + i * 115}" stroke="#0b1733" stroke-opacity=".07" stroke-width="2" stroke-dasharray="2 10" fill="none" stroke-linecap="round"/>`
+    b.innerHTML = `<svg style="position:absolute;inset:0" width="${W}" height="${H}">${paths}</svg>
+      <div style="position:absolute;left:${W*.22}px;top:${H*.18}px">${adminWindow(W*.6, H*.64)}</div>
+      <div style="position:absolute;left:${W*.085}px;top:${H*.27}px;transform:rotate(-2deg)">${trackingCard(W*.215)}</div>
+      <div style="position:absolute;left:${W*.71}px;top:${H*.44}px;transform:rotate(2.5deg)">${labelCard(W*.2)}</div>`
+  },
+  admin() {
+    b.style.background = '#f2efe7'
+    b.innerHTML = `<div style="position:absolute;left:${W*.06}px;top:${H*.08}px">${adminWindow(W*.88, H*.84)}</div>`
+  },
+  tracking() {
+    b.style.background = 'linear-gradient(135deg,#0b1733 0%,#14254d 100%)'
+    b.innerHTML = `
+      <div class="card" style="position:absolute;left:${W*.06}px;top:${H*.1}px;width:${W*.56}px;height:${H*.8}px;overflow:hidden">${mapSvg(W*.56, H*.8, { seed: 21, truck: 1, hubLabel: 'Hub A · sorting' })}
+        <div class="card" style="position:absolute;left:16px;bottom:16px;padding:10px 14px" ><div class="row"><span class="av" style="background:#ffd2b8"></span><div><div class="h" style="font-size:11px">Driver on run 14</div><div class="sub">3 stops left · ETA 11:20</div></div></div></div>
+      </div>
+      <div style="position:absolute;left:${W*.655}px;top:${H*.1}px">${trackingCard(W*.29)}</div>
+      <div class="card" style="position:absolute;left:${W*.655}px;top:${H*.66}px;width:${W*.29}px;padding:14px 16px">
+        <div class="row" style="justify-content:space-between"><span class="h">Proof of delivery</span><span class="pill g">Verified</span></div>
+        <div style="margin-top:8px;border:1px dashed var(--line);border-radius:10px;padding:6px 10px">${signature(W*.24, 52)}</div>
+        <div class="row" style="margin-top:8px;justify-content:space-between"><div class="bar d" style="width:45%"></div><span class="sub">GPS · timestamped</span></div>
+      </div>`
+  },
+  client() {
+    b.style.background = '#fbe9dc'
+    const svc = [['Route', 'Scheduled run', 0], ['Rush', 'Same-day, priority', 1], ['Round Trip', 'Deliver & return', 0]]
+    b.innerHTML = `
+      <div class="win" style="position:absolute;left:${W*.06}px;top:${H*.08}px;width:${W*.6}px;height:${H*.84}px;display:flex;flex-direction:column">
+        <div class="chrome"><i></i><i></i><i></i><span class="url"></span></div>
+        <div style="flex:1;display:grid;grid-template-columns:140px 1fr">
+          ${sidebar(2)}
+          <div style="padding:18px 22px;background:#fbfaf7;display:flex;flex-direction:column;gap:14px">
+            <div><div class="h" style="font-size:16px">New delivery request</div><div class="sub" style="margin-top:3px">Pickup → drop-off · step 2 of 3</div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              ${['Pickup from', 'Deliver to'].map((l, i) => `<div class="card" style="padding:12px"><div class="row" style="gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:${i ? '#1fb26b' : '#fd5600'}"></span><span class="sub">${l.toUpperCase()}</span></div><div class="bar d" style="width:80%;margin-top:10px"></div><div class="bar" style="width:60%;margin-top:7px"></div><div class="row" style="margin-top:10px"><span class="pill n">Saved contact</span></div></div>`).join('')}
+            </div>
+            <div><div class="sub" style="margin-bottom:8px">SERVICE</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+                ${svc.map(([t, d, on]) => `<div class="card" style="padding:12px;${on ? 'box-shadow:0 0 0 2px #fd5600,0 18px 40px -18px rgba(253,86,0,.45)' : ''}"><div class="row" style="justify-content:space-between"><span class="h">${t}</span><span style="width:14px;height:14px;border-radius:50%;border:2px solid ${on ? '#fd5600' : '#d9d6cf'};display:grid;place-items:center">${on ? '<i style="width:6px;height:6px;border-radius:50%;background:#fd5600"></i>' : ''}</span></div><div class="sub" style="margin-top:5px;font-weight:500">${d}</div></div>`).join('')}
+              </div>
+            </div>
+            <div class="card" style="padding:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+              ${['Package', 'Pieces', 'Notify', 'Pickup time', 'Reference', 'Signature'].map(l => `<div><div class="sub">${l.toUpperCase()}</div><div class="bar d" style="margin-top:9px;width:70%"></div></div>`).join('')}
+            </div>
+            <div class="row" style="justify-content:flex-end;gap:10px;margin-top:auto"><span class="pill n" style="padding:8px 14px;font-size:10px">Back</span><span style="background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:8px 16px;border-radius:7px">Create &amp; print label</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;left:${W*.69}px;top:${H*.12}px;transform:rotate(2deg)">${labelCard(W*.26)}</div>
+      <div class="card" style="position:absolute;left:${W*.69}px;top:${H*.6}px;width:${W*.26}px;padding:14px 16px">
+        <div class="h">Public tracking</div><div class="sub" style="margin-top:3px">No account needed</div>
+        <div class="row" style="margin-top:10px"><div style="flex:1;height:28px;border-radius:7px;box-shadow:0 0 0 1px var(--line);display:flex;align-items:center;padding:0 10px;font-size:10px;font-weight:700">NX-48321</div><span style="background:var(--ink);color:#fff;font-size:10px;font-weight:700;padding:8px 12px;border-radius:7px">Track</span></div>
+        <div style="margin-top:12px;height:6px;border-radius:3px;background:#eceae4;overflow:hidden"><div style="width:72%;height:100%;background:linear-gradient(90deg,#1fb26b,#fd5600)"></div></div>
+        <div class="row" style="justify-content:space-between;margin-top:6px"><span class="sub">Picked up</span><span class="sub">Hub</span><span class="sub" style="color:#c94300">Out for delivery</span><span class="sub">Delivered</span></div>
+      </div>`
+  },
+  hubs() {
+    b.style.background = '#eef6f8'
+    const hubs = [[.5, .5, 'Central hub']]
+    const spokes = [[.16, .22, 'Area North'], [.84, .2, 'Area East'], [.86, .8, 'Area South'], [.14, .78, 'Area West']]
+    const lines = spokes.map(([x, y]) => `<path d="M${.5*W} ${.5*H} L ${x*W} ${y*H}" stroke="#0b1733" stroke-opacity=".25" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>`).join('')
+    const node = ([x, y, l], big) => `<div class="card" style="position:absolute;left:${x*W}px;top:${y*H}px;transform:translate(-50%,-50%);padding:${big ? '16px 18px' : '12px 14px'};min-width:${big ? 260 : 170}px">
+      <div class="row"><span style="width:${big ? 30 : 22}px;height:${big ? 30 : 22}px;border-radius:8px;background:${big ? '#0b1733' : '#27d4f2'};display:grid;place-items:center"><i style="width:${big ? 10 : 8}px;height:${big ? 10 : 8}px;border-radius:2px;background:#fff"></i></span><div><div class="h" style="font-size:${big ? 14 : 11}px">${l}</div><div class="sub">${big ? 'Sorting by destination' : 'Delivery runs'}</div></div></div>
+      ${big ? `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px">${['N', 'E', 'S', 'W'].map((d, i) => `<div style="border-radius:8px;background:#f4f2ec;padding:8px 6px;text-align:center"><div class="sub">BUCKET</div><div class="h" style="font-size:13px">${d}</div><div style="height:4px;border-radius:2px;background:#e6e3dc;margin-top:6px"><div style="height:100%;width:${[70, 45, 85, 30][i]}%;background:#fd5600;border-radius:2px"></div></div></div>`).join('')}</div>` : `<div class="row" style="margin-top:9px"><span class="pill c">Run ${[12, 14, 9, 21][spokes.findIndex(s => s[2] === l)]}</span><span class="pill n">Manifest ✓</span></div>`}
+    </div>`
+    b.innerHTML = `<svg style="position:absolute;inset:0" width="${W}" height="${H}">${lines}</svg>${spokes.map(s => node(s)).join('')}${node(hubs[0], 1)}
+      <div class="card" style="position:absolute;left:${.5*W}px;top:${.84*H}px;transform:translate(-50%,-50%);padding:10px 14px" ><div class="row"><span class="pill o">Transfer</span><span class="sub">Driver → driver handoff · scan required</span></div></div>`
+  },
+}
+boards[art]()
+document.title = 'ready'
+</script>
+</body>
+</html>
