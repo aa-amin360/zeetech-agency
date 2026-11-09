@@ -26,6 +26,7 @@ const SCRIPTS = [
   'scripts/update-content.ts', // after the pages above: they copy the inquiry section from Home
   'scripts/add-cybersecurity-blockchain.ts',
   'scripts/add-nexus-courier.ts', // first real project: published as Project 01
+  'scripts/update-project-covers.ts', // starter projects get covers that match them
 ]
 
 const step = process.argv[2]

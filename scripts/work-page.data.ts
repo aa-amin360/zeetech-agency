@@ -10,7 +10,7 @@ export const WORK_PROJECTS = [
     service: 'Branding & Product design',
     industry: 'Real Estate',
     color: '#7fd8b0',
-    cover: 'landify.jpg',
+    cover: 'landify-cover.webp',
   },
   {
     slug: 'unifyiq-sales-management-saas',
@@ -22,7 +22,7 @@ export const WORK_PROJECTS = [
     service: 'Webflow template',
     industry: 'SaaS',
     color: '#8fb8ff',
-    cover: 'unifyiq.jpg',
+    cover: 'unifyiq-cover.webp',
   },
   {
     slug: 'klyro-studio-agency-template',
@@ -34,7 +34,7 @@ export const WORK_PROJECTS = [
     service: 'Webflow template',
     industry: 'Agency',
     color: '#c9e86b',
-    cover: 'klyro.jpg',
+    cover: 'klyro-cover.webp',
   },
   {
     slug: 'crimino-crm-dashboard',
@@ -46,7 +46,7 @@ export const WORK_PROJECTS = [
     service: 'Product design',
     industry: 'SaaS',
     color: '#b9a5ff',
-    cover: 'crimino.jpg',
+    cover: 'crimino-cover.webp',
   },
   {
     slug: 'zapmail-ai-cold-email-platform',
@@ -58,7 +58,7 @@ export const WORK_PROJECTS = [
     service: 'Product Design',
     industry: 'SaaS',
     color: '#ff8648',
-    cover: 'zapmail.jpg',
+    cover: 'zapmail-cover.webp',
   },
   {
     slug: 'astrix-builders-brand-identity',
@@ -70,7 +70,7 @@ export const WORK_PROJECTS = [
     service: 'Branding',
     industry: 'Construction',
     color: '#ffc56b',
-    cover: 'astrix.jpg',
+    cover: 'astrix-cover.webp',
   },
 ]
 

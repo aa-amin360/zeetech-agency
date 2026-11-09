@@ -89,7 +89,7 @@ Grouped by page. "Admin" = where it is edited in `/admin`.
 ### Our Work (`/work`) + case studies (`/work/<slug>`)
 | # | Item | Status |
 |---|---|---|
-| D-13 | 6 template projects: Landify, UnifyIQ, Klyro Studio, Crimino, ZapMail, Astrix Builders. Covers are Figma template images (e.g. Landify "real estate" shows iPhone mockups) | ⬜ replace with the 2–3 real projects (I-1, I-2), delete the rest |
+| D-13 | 6 template projects: Landify, UnifyIQ, Klyro Studio, Crimino, ZapMail, Astrix Builders. ~~Covers were unrelated Figma template images~~ → each now has an illustrated cover matching its description (2026-11-09, `scripts/update-project-covers.ts`). The projects themselves are still not real work | 🟡 covers done; still replace with real projects (I-1, I-2) and delete the rest |
 | D-14 | Every case study page is just cover + title + summary: **no story, no gallery, no duration, no testimonial** (checked in the database) | ⬜ |
 | D-15 | Industry filter buttons are generated from projects. With 2–3 projects the filter row may look thin; consider hiding it when there are < 4 projects | ⬜ |
 | D-16 | Work page meta description mentions "Webflow sites and brand identities" (template wording) | ⬜ |
@@ -174,3 +174,4 @@ When the real projects are live: delete the 6 template case studies (D-13) and r
 | 2026-11-09 | P-1 Nexus Courier details received (no images); site-ready copy written to `content/projects/nexus-courier.md` | Claude |
 | 2026-11-09 | P-1: owner decisions (name OK, 6 months, no live status, no fake quote). Made 5 illustrations; added `scripts/add-nexus-courier.ts` (+ `npm run nexus-courier`, + Vercel deploy step) which creates the case study as a **draft**. Ran locally and checked the rendered page | Claude |
 | 2026-11-09 | P-1 made live as **Project 01**: script now publishes it, puts it first in the project order and renumbers the template projects 02–07. Deployed via push to main | Claude |
+| 2026-11-09 | D-13: new covers for the 6 template projects that match each project (real-estate dashboard, sales SaaS site, dark agency site, CRM, cold-email platform, construction brand board). Files `legacy/assets/work/*-cover.webp`, source `content/projects/template-covers.html`, script `npm run project-covers` (+ Vercel deploy step); starter data points at the new files. Deployed via push to main | Claude |

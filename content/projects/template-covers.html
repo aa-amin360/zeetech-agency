@@ -1,0 +1,284 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@500;700&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow:hidden;height:100%}
+body{font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0b1733}
+.board{position:relative;width:100%;height:100%;overflow:hidden}
+.abs{position:absolute}
+.card{background:#fff;border-radius:14px;box-shadow:0 1px 0 rgba(0,0,0,.04),0 22px 44px -20px rgba(11,23,51,.35)}
+.win{border-radius:16px;overflow:hidden;box-shadow:0 34px 80px -30px rgba(0,0,0,.5),0 0 0 1px rgba(0,0,0,.06)}
+.chrome{height:26px;display:flex;align-items:center;gap:6px;padding:0 12px}
+.chrome i{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.25}
+.chrome .url{margin-left:14px;height:12px;width:180px;border-radius:6px;background:currentColor;opacity:.1}
+.bar{height:7px;border-radius:4px;background:currentColor;opacity:.14}
+.row{display:flex;align-items:center;gap:10px}
+.sub{font-size:9px;font-weight:600;opacity:.55}
+.h{font-weight:700;font-size:12px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px}
+.kpi small{display:block;font-size:8.5px;font-weight:600;opacity:.55;text-transform:uppercase;letter-spacing:.06em}
+.kpi strong{display:block;font-size:20px;font-weight:800;margin-top:4px;letter-spacing:-.02em}
+.kpi em{font-style:normal;font-size:9px;font-weight:700}
+svg{display:block}
+</style>
+</head>
+<body>
+<div class="board" id="b"></div>
+<script>
+const [art, W, H] = (location.hash.slice(1) || 'landify|1200|750').split('|').map((v, i) => i ? +v : v)
+document.documentElement.style.cssText = `width:${W}px;height:${H}px`
+const b = document.getElementById('b')
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647
+const bars = (n, color, w0 = 40, w1 = 90) => Array.from({ length: n }, (_, i) => `<div class="bar" style="color:${color};width:${w0 + ((i * 37) % (w1 - w0))}%;margin-top:${i ? 6 : 0}px"></div>`).join('')
+const win = (w, h, bg, chromeBg, fg, inner) => `<div class="win" style="width:${w}px;height:${h}px;background:${bg};display:flex;flex-direction:column;color:${fg}"><div class="chrome" style="background:${chromeBg}"><i></i><i></i><i></i><span class="url"></span></div><div style="flex:1;min-height:0;position:relative">${inner}</div></div>`
+function area(w, h, pts, stroke, fill) {
+  const step = w / (pts.length - 1), mx = Math.max(...pts) * 1.1
+  const line = pts.map((p, i) => `${i ? 'L' : 'M'}${(i * step).toFixed(1)} ${(h - p / mx * h).toFixed(1)}`).join(' ')
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="overflow:visible"><path d="${line} L ${w} ${h} L 0 ${h} Z" fill="${fill}"/><path d="${line}" stroke="${stroke}" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+}
+function phone(w, h, bg, inner, frame = '#0f1115') {
+  return `<div style="width:${w}px;height:${h}px;border-radius:${w * .16}px;background:${frame};padding:${w * .035}px;box-shadow:0 30px 60px -25px rgba(0,0,0,.55)"><div style="width:100%;height:100%;border-radius:${w * .13}px;background:${bg};overflow:hidden;position:relative">
+    <div style="position:absolute;left:50%;top:${w * .04}px;transform:translateX(-50%);width:${w * .3}px;height:${w * .085}px;border-radius:20px;background:${frame};z-index:2"></div>${inner}</div></div>`
+}
+
+/* ---------- Landify: real estate management ---------- */
+function house(w, h, p) {
+  return `<svg width="${w}" height="${h}" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice">
+    <defs><linearGradient id="sky${p.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${p.sky1}"/><stop offset="1" stop-color="${p.sky2}"/></linearGradient></defs>
+    <rect width="160" height="100" fill="url(#sky${p.id})"/>
+    <circle cx="128" cy="24" r="10" fill="#fff6d8" opacity=".9"/>
+    <rect y="78" width="160" height="22" fill="${p.grass}"/>
+    <circle cx="22" cy="66" r="14" fill="${p.tree}"/><circle cx="34" cy="70" r="10" fill="${p.tree}" opacity=".85"/>
+    <rect x="50" y="44" width="70" height="38" fill="${p.wall}"/>
+    <path d="M44 46 L85 18 L126 46 Z" fill="${p.roof}"/>
+    <rect x="58" y="54" width="14" height="12" rx="1.5" fill="#cfe9ff"/><rect x="98" y="54" width="14" height="12" rx="1.5" fill="#cfe9ff"/>
+    <rect x="79" y="58" width="12" height="24" rx="1.5" fill="${p.door}"/>
+    <rect x="132" y="56" width="10" height="26" fill="${p.wall}" opacity=".7"/>
+  </svg>`
+}
+const HOUSES = [
+  { id: 1, sky1: '#bfe9ff', sky2: '#e8f7ff', grass: '#9fd9a8', tree: '#5fb07a', wall: '#fff7ec', roof: '#2f6e5a', door: '#c9824f' },
+  { id: 2, sky1: '#ffd9c2', sky2: '#fff1e6', grass: '#b7e0a6', tree: '#6aa86e', wall: '#f3efe8', roof: '#c4553a', door: '#5a4636' },
+  { id: 3, sky1: '#d6d8ff', sky2: '#f1f0ff', grass: '#a6dcc0', tree: '#4f9c80', wall: '#ffffff', roof: '#40486e', door: '#7fd8b0' },
+  { id: 4, sky1: '#c6f0e0', sky2: '#effaf5', grass: '#9ed3a0', tree: '#3f8f66', wall: '#fff3dc', roof: '#8a5a3c', door: '#2f6e5a' },
+]
+function landifyLogo(size, dark = '#0f3d2e', accent = '#7fd8b0') {
+  return `<div class="row" style="gap:${size * .3}px"><svg width="${size}" height="${size}" viewBox="0 0 40 40"><rect width="40" height="40" rx="10" fill="${dark}"/><path d="M11 29 V17 L20 10 L29 17" stroke="${accent}" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 29 H24" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg><span style="font-weight:800;font-size:${size * .55}px;letter-spacing:-.02em;color:${dark}">Landify</span></div>`
+}
+function landify() {
+  b.style.background = 'radial-gradient(110% 90% at 50% 45%, #f2fbf6 0%, #dff4ea 55%, #c7ead9 100%)'
+  const props = [['Maple Court', '12 units', '96%', 0], ['Harbor View', '24 units', '91%', 1], ['Cedar Lofts', '8 units', '100%', 2]]
+  const dash = `<div style="display:grid;grid-template-columns:132px 1fr;height:100%">
+    <div style="background:#0f3d2e;padding:14px 12px;display:flex;flex-direction:column;gap:10px;color:#fff">${landifyLogo(20, '#fff', '#7fd8b0').replace('color:#fff', 'color:#fff')}
+      ${Array.from({ length: 7 }, (_, i) => `<div class="row" style="gap:8px;padding:6px 8px;border-radius:7px;${i === 1 ? 'background:rgba(127,216,176,.18)' : ''}"><i style="width:11px;height:11px;border-radius:3px;background:${i === 1 ? '#7fd8b0' : 'rgba(255,255,255,.28)'}"></i><s style="display:block;height:6px;border-radius:3px;flex:1;max-width:${48 + (i * 19) % 36}px;background:rgba(255,255,255,${i === 1 ? .6 : .22})"></s></div>`).join('')}
+    </div>
+    <div style="background:#fbfdfc;padding:16px 18px;display:flex;flex-direction:column;gap:12px;color:#0f3d2e">
+      <div class="row" style="justify-content:space-between"><div><div class="h" style="font-size:15px">Portfolio overview</div><div class="sub" style="margin-top:3px">All properties · this month</div></div><span style="background:#0f3d2e;color:#fff;font-size:10px;font-weight:700;padding:7px 12px;border-radius:7px">+ Add property</span></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+        ${[['Properties', '48', '+3'], ['Occupancy', '94%', '+2.1%'], ['Rent collected', '$212k', '+8%'], ['Open requests', '17', '']].map(([l, v, e]) => `<div class="card kpi" style="padding:11px 13px"><small>${l}</small><strong>${v}</strong><em style="color:#1f9d6b">${e}</em></div>`).join('')}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        ${props.map(([n, u, o, i]) => `<div class="card" style="overflow:hidden">${house(200, 92, HOUSES[i])}<div style="padding:9px 11px"><div class="row" style="justify-content:space-between"><span class="h" style="font-size:11px">${n}</span><span class="pill" style="background:#e3f6ed;color:#1f7a55">${o}</span></div><div class="sub" style="margin-top:3px">${u} · occupied</div></div></div>`).join('')}
+      </div>
+      <div class="card" style="flex:1;padding:10px 12px;display:flex;gap:16px;align-items:flex-start;min-height:0">
+        <div style="flex:1"><div class="row" style="justify-content:space-between"><span class="h">Rent collection</span><span class="sub">Jan – Dec</span></div><div style="margin-top:8px">${area(W * .42, 70, [30, 34, 33, 40, 42, 41, 48, 52, 50, 57, 60, 66], '#2f9e74', 'rgba(127,216,176,.25)')}</div></div>
+      </div>
+    </div></div>`
+  const listing = `<div style="padding-top:34px">${house(220, 150, HOUSES[3])}<div style="padding:12px 14px;color:#0f3d2e"><div class="row" style="justify-content:space-between"><span class="h" style="font-size:13px">Cedar Lofts 4B</span><span style="width:24px;height:24px;border-radius:50%;background:#e3f6ed;display:grid;place-items:center;color:#2f9e74;font-size:12px">♥</span></div><div class="sub" style="margin-top:3px">2 bed · 1 bath · 84 m²</div><div style="font-size:18px;font-weight:800;margin-top:10px">$1,850<span style="font-size:10px;opacity:.5">/mo</span></div><div style="margin-top:12px;background:#0f3d2e;color:#fff;font-size:10px;font-weight:700;padding:9px;border-radius:9px;text-align:center">Book a viewing</div><div class="row" style="margin-top:12px;gap:6px">${['Parking', 'Balcony', 'Pets'].map(t => `<span class="pill" style="background:#eef6f2;color:#2f6e5a">${t}</span>`).join('')}</div></div></div>`
+  b.innerHTML = `
+    <div class="abs" style="left:${W * .2}px;top:${H * .17}px">${win(W * .6, H * .66, '#fbfdfc', '#eef5f1', '#0f3d2e', dash)}</div>
+    <div class="abs card" style="left:${W * .07}px;top:${H * .26}px;width:${W * .2}px;padding:18px;transform:rotate(-3deg)">
+      ${landifyLogo(30)}
+      <div class="sub" style="margin-top:14px;color:#0f3d2e">BRAND COLOURS</div>
+      <div class="row" style="gap:6px;margin-top:6px">${['#0f3d2e', '#2f9e74', '#7fd8b0', '#f2fbf6', '#c9824f'].map(c => `<span style="flex:1;height:30px;border-radius:7px;background:${c};box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)"></span>`).join('')}</div>
+      <div class="sub" style="margin-top:12px;color:#0f3d2e">TYPE</div>
+      <div style="font-weight:800;font-size:28px;color:#0f3d2e;letter-spacing:-.03em;margin-top:2px">Aa <span style="font-weight:400;font-size:20px;opacity:.6">Plus Jakarta</span></div>
+    </div>
+    <div class="abs" style="left:${W * .795}px;top:${H * .22}px;transform:rotate(3deg)">${phone(W * .17, H * .6, '#fff', listing)}</div>`
+}
+
+/* ---------- UnifyIQ: sales management SaaS website ---------- */
+function unifyLogo(size, c = '#0b1b3f') {
+  return `<div class="row" style="gap:${size * .3}px"><svg width="${size}" height="${size}" viewBox="0 0 40 40"><rect width="40" height="40" rx="11" fill="#3d6bff"/><path d="M12 13 V22 A8 8 0 0 0 28 22 V13" stroke="#fff" stroke-width="3.6" fill="none" stroke-linecap="round"/><circle cx="28" cy="29" r="3" fill="#8fb8ff"/></svg><span style="font-weight:800;font-size:${size * .55}px;letter-spacing:-.02em;color:${c}">Unify<span style="color:#3d6bff">IQ</span></span></div>`
+}
+function unifyiq() {
+  b.style.background = 'radial-gradient(120% 100% at 50% 30%, #f3f6ff 0%, #dbe6ff 55%, #b9cdfa 100%)'
+  const cols = [['Lead', 4, '#8fb8ff'], ['Qualified', 3, '#3d6bff'], ['Proposal', 2, '#f6a04d'], ['Won', 2, '#1fb26b']]
+  const kanban = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px">${cols.map(([t, n, c], ci) => `<div style="background:#f3f6fd;border-radius:10px;padding:8px"><div class="row" style="justify-content:space-between;margin-bottom:7px"><span class="row" style="gap:5px"><i style="width:7px;height:7px;border-radius:50%;background:${c}"></i><span class="h" style="font-size:9.5px">${t}</span></span><span class="sub">${n}</span></div>${Array.from({ length: n }, (_, i) => `<div class="card" style="padding:7px 8px;margin-top:${i ? 6 : 0}px;box-shadow:0 6px 14px -10px rgba(11,27,63,.4)"><div class="bar" style="color:#0b1b3f;width:${60 + (ci * 13 + i * 17) % 35}%;opacity:.3"></div><div class="row" style="justify-content:space-between;margin-top:6px"><span style="font-size:9px;font-weight:800">$${[12, 8, 24, 5, 18, 31, 9, 14, 40, 22, 16][(ci * 3 + i) % 11]}k</span><span style="width:12px;height:12px;border-radius:50%;background:${['#ffd2b8', '#c9f0da', '#d9d3ff', '#ffe7a8'][(ci + i) % 4]}"></span></div></div>`).join('')}</div>`).join('')}</div>`
+  const site = `<div style="height:100%;background:#fff;color:#0b1b3f;display:flex;flex-direction:column">
+    <div class="row" style="justify-content:space-between;padding:12px 26px;border-bottom:1px solid #eef1f8">${unifyLogo(20)}<div class="row" style="gap:18px">${['Product', 'Solutions', 'Pricing', 'Customers'].map(t => `<span style="font-size:10px;font-weight:600;opacity:.7">${t}</span>`).join('')}</div><div class="row" style="gap:8px"><span style="font-size:10px;font-weight:600;opacity:.7">Log in</span><span style="background:#0b1b3f;color:#fff;font-size:10px;font-weight:700;padding:7px 12px;border-radius:8px">Start free trial</span></div></div>
+    <div style="text-align:center;padding:22px 40px 0;background:radial-gradient(60% 80% at 50% 0%, #e6edff 0%, #fff 70%)">
+      <span class="pill" style="background:#e6edff;color:#3d6bff">✦ New: AI deal insights</span>
+      <div style="font-size:31px;font-weight:800;letter-spacing:-.035em;line-height:1.08;margin-top:10px">Every deal, in one<br><span style="color:#3d6bff">clear pipeline.</span></div>
+      <div style="width:330px;margin:10px auto 0">${bars(2, '#0b1b3f', 70, 100).replace(/opacity:\.14/g, 'opacity:.12')}</div>
+      <div class="row" style="justify-content:center;gap:10px;margin-top:14px"><span style="background:#3d6bff;color:#fff;font-size:10px;font-weight:700;padding:9px 16px;border-radius:9px">Get started free</span><span style="background:#fff;box-shadow:0 0 0 1px #dde3f0;font-size:10px;font-weight:700;padding:9px 16px;border-radius:9px">Book a demo</span></div>
+    </div>
+    <div style="margin:18px 34px 0;flex:1;border-radius:14px 14px 0 0;background:#fff;box-shadow:0 -1px 0 #eef1f8,0 0 0 1px #e8ecf5,0 20px 40px -20px rgba(61,107,255,.45);padding:12px 14px;overflow:hidden">
+      <div class="row" style="justify-content:space-between;margin-bottom:10px"><span class="h">Sales pipeline</span><span class="row" style="gap:6px"><span class="pill" style="background:#e3f6ec;color:#11804b">Win rate 32%</span><span class="pill" style="background:#eef1f8;color:#47506a">Q3</span></span></div>
+      ${kanban}
+    </div></div>`
+  const mobile = `<div style="padding:40px 14px 0;color:#0b1b3f;text-align:center">${unifyLogo(16).replace('class="row"', 'class="row" style="justify-content:center;gap:5px"')}<div style="font-size:19px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-top:16px">Every deal, in one <span style="color:#3d6bff">clear pipeline.</span></div><div style="margin:10px 10px 0">${bars(3, '#0b1b3f', 60, 100)}</div><div style="margin-top:14px;background:#3d6bff;color:#fff;font-size:10px;font-weight:700;padding:9px;border-radius:9px">Get started free</div><div class="card" style="margin-top:16px;padding:10px;text-align:left"><span class="sub">REVENUE</span><div style="font-size:17px;font-weight:800;margin-top:2px">$1.8M</div><div style="margin-top:6px">${area(150, 40, [10, 14, 12, 18, 22, 21, 28, 34], '#3d6bff', 'rgba(61,107,255,.12)')}</div></div></div>`
+  b.innerHTML = `
+    <div class="abs" style="left:${W * .14}px;top:${H * .14}px">${win(W * .6, H * .72, '#fff', '#f2f4fa', '#0b1b3f', site)}</div>
+    <div class="abs" style="left:${W * .755}px;top:${H * .22}px;transform:rotate(3deg)">${phone(W * .17, H * .6, '#fff', mobile)}</div>
+    <div class="abs card" style="left:${W * .07}px;top:${H * .62}px;padding:11px 14px"><div class="row"><span style="width:28px;height:28px;border-radius:9px;background:#e3f6ec;display:grid;place-items:center;color:#1fb26b;font-weight:800">↑</span><div><div class="sub">CONVERSION</div><div class="h" style="font-size:14px">+18% demo sign-ups</div></div></div></div>`
+}
+
+/* ---------- Klyro Studio: dark creative agency template ---------- */
+function klyro() {
+  const G = '#c9e86b'
+  b.style.background = `radial-gradient(70% 70% at 50% 45%, #22261a 0%, #121310 60%, #0a0a09 100%)`
+  const tile = (i, h) => {
+    const arts = [
+      `<div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 40%, ${G} 0 22%, transparent 23%),radial-gradient(circle at 70% 65%, #f2f2ea 0 16%, transparent 17%),#1c1d18"></div>`,
+      `<div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,#f2f2ea 0 6px,transparent 6px 16px),#1c1d18;opacity:.9"></div><div style="position:absolute;left:18%;top:20%;width:64%;height:60%;border-radius:50%;background:${G};mix-blend-mode:difference"></div>`,
+      `<div style="position:absolute;inset:0;background:linear-gradient(135deg,${G} 0 50%,#f2f2ea 50% 100%)"></div><div style="position:absolute;inset:22%;background:#121310;border-radius:6px"></div>`,
+    ]
+    return `<div style="position:relative;height:${h}px;border-radius:10px;overflow:hidden">${arts[i]}<span style="position:absolute;left:10px;bottom:8px;font-family:'Space Grotesk';font-size:9px;font-weight:700;color:${i === 2 ? '#121310' : '#f2f2ea'};letter-spacing:.08em">${['VOLT — BRAND', 'ORBIT — WEB', 'NORTH — ID'][i]}</span></div>`
+  }
+  const site = `<div style="height:100%;background:#121310;color:#f2f2ea;padding:16px 26px;display:flex;flex-direction:column">
+    <div class="row" style="justify-content:space-between"><span style="font-family:'Space Grotesk';font-weight:700;font-size:15px;letter-spacing:.02em">KLYRO<sup style="color:${G};font-size:8px">®</sup></span><div class="row" style="gap:18px;font-family:'Space Grotesk';font-size:9.5px;letter-spacing:.1em;opacity:.75"><span>WORK</span><span>STUDIO</span><span>SERVICES</span><span>JOURNAL</span></div><span style="border:1px solid ${G};color:${G};font-family:'Space Grotesk';font-size:9px;font-weight:700;letter-spacing:.1em;padding:7px 12px;border-radius:30px">LET'S TALK ↗</span></div>
+    <div style="margin-top:22px;display:flex;justify-content:space-between;align-items:flex-end">
+      <div style="font-family:'Space Grotesk';font-weight:700;font-size:50px;line-height:.95;letter-spacing:-.045em">WE MAKE BRANDS<br><span style="font-family:'Instrument Serif';font-style:italic;font-weight:400;color:${G};letter-spacing:-.02em;font-size:58px">impossible</span> TO<br>IGNORE.</div>
+      <div style="width:180px;padding-bottom:6px"><div style="font-size:9.5px;line-height:1.55;opacity:.7">Independent creative studio for brands that refuse to blend in. Strategy, identity and digital.</div><div class="row" style="margin-top:10px;gap:6px"><span style="width:26px;height:26px;border-radius:50%;background:${G};color:#121310;display:grid;place-items:center;font-size:12px;font-weight:800">↓</span><span style="font-family:'Space Grotesk';font-size:9px;letter-spacing:.1em;opacity:.7">SCROLL</span></div></div>
+    </div>
+    <div style="height:1px;background:rgba(242,242,234,.15);margin:16px 0 12px"></div>
+    <div class="row" style="justify-content:space-between;font-family:'Space Grotesk';font-size:9px;letter-spacing:.12em;opacity:.7;margin-bottom:10px"><span>SELECTED WORK (24)</span><span>2021 — 2025</span></div>
+    <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px;flex:1">${tile(0, 150)}${tile(1, 150)}${tile(2, 150)}</div>
+  </div>`
+  const mob = `<div style="padding:40px 14px 0;background:#121310;height:100%;color:#f2f2ea"><div class="row" style="justify-content:space-between"><span style="font-family:'Space Grotesk';font-weight:700;font-size:12px">KLYRO<sup style="color:${G};font-size:6px">®</sup></span><span style="width:22px;height:22px;border-radius:50%;background:${G}"></span></div><div style="font-family:'Space Grotesk';font-weight:700;font-size:25px;line-height:.98;letter-spacing:-.04em;margin-top:22px">WE MAKE BRANDS <span style="font-family:'Instrument Serif';font-style:italic;font-weight:400;color:${G}">impossible</span> TO IGNORE.</div><div style="margin-top:16px">${tile(0, 120)}</div><div style="margin-top:8px">${tile(2, 80)}</div></div>`
+  b.innerHTML = `
+    <div class="abs" style="left:${W * .235}px;top:${H * .15}px">${win(W * .58, H * .7, '#121310', '#1b1c18', '#f2f2ea', site)}</div>
+    <div class="abs" style="left:${W * .045}px;top:${H * .28}px;transform:rotate(-4deg)">${phone(W * .16, H * .56, '#121310', mob, '#2a2b26')}</div>
+    <div class="abs" style="left:${W * .78}px;top:${H * .47}px;width:${W * .17}px;background:#1b1c18;border:1px solid rgba(242,242,234,.12);border-radius:14px;padding:16px;color:#f2f2ea;transform:rotate(3deg);box-shadow:0 30px 60px -25px rgba(0,0,0,.7)">
+      <div style="font-family:'Space Grotesk';font-size:9px;letter-spacing:.12em;opacity:.6">PALETTE</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">${[[G, 'ACID'], ['#f2f2ea', 'BONE'], ['#121310', 'INK'], ['#5a5d50', 'ASH']].map(([c, n]) => `<div style="height:44px;border-radius:8px;background:${c};border:1px solid rgba(242,242,234,.15);padding:6px;font-family:'Space Grotesk';font-size:8px;font-weight:700;color:${c === '#121310' || c === '#5a5d50' ? '#f2f2ea' : '#121310'}">${n}</div>`).join('')}</div>
+      <div style="font-family:'Space Grotesk';font-size:9px;letter-spacing:.12em;opacity:.6;margin-top:14px">TYPE</div>
+      <div style="font-family:'Space Grotesk';font-weight:700;font-size:30px;letter-spacing:-.04em;line-height:1;margin-top:4px">Aa<span style="font-family:'Instrument Serif';font-style:italic;font-weight:400;color:${G}">Aa</span></div>
+    </div>`
+}
+
+/* ---------- Crimino: dark CRM dashboard ---------- */
+function crimino() {
+  const P = '#b9a5ff'
+  b.style.background = 'radial-gradient(80% 80% at 50% 40%, #2a2147 0%, #16131f 60%, #0d0b13 100%)'
+  const fg = '#ecebf5'
+  const funnel = [['Leads', 100, '#b9a5ff'], ['Qualified', 72, '#9d86ff'], ['Proposal', 46, '#7d63f5'], ['Negotiation', 30, '#6447e8'], ['Won', 19, '#4fd1a1']]
+  const dash = `<div style="display:grid;grid-template-columns:52px 1fr;height:100%;background:#16141f;color:${fg}">
+    <div style="background:#110f18;display:flex;flex-direction:column;align-items:center;gap:12px;padding:14px 0"><span style="width:26px;height:26px;border-radius:8px;background:${P};color:#16141f;display:grid;place-items:center;font-weight:800;font-size:13px">C</span>${Array.from({ length: 6 }, (_, i) => `<i style="width:16px;height:16px;border-radius:5px;background:${i === 0 ? P : 'rgba(236,235,245,.18)'}"></i>`).join('')}</div>
+    <div style="padding:16px 18px;display:flex;flex-direction:column;gap:11px;min-height:0">
+      <div class="row" style="justify-content:space-between"><div><div class="h" style="font-size:15px">Sales dashboard</div><div class="sub" style="margin-top:3px">Last 30 days</div></div><div class="row" style="gap:8px"><span style="width:110px;height:24px;border-radius:7px;background:#211e2c"></span><span style="background:${P};color:#16141f;font-size:10px;font-weight:800;padding:7px 12px;border-radius:7px">+ New deal</span></div></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px">${[['Revenue', '$1.24M', '+14%'], ['Open deals', '312', '+22'], ['Conversion', '24.6%', '+1.8%'], ['Avg. deal', '$8.9k', '+5%']].map(([l, v, e]) => `<div class="kpi" style="background:#1e1b29;border:1px solid rgba(236,235,245,.07);border-radius:12px;padding:11px 13px"><small>${l}</small><strong>${v}</strong><em style="color:#4fd1a1">${e}</em></div>`).join('')}</div>
+      <div style="display:grid;grid-template-columns:1.45fr 1fr;gap:9px">
+        <div style="background:#1e1b29;border:1px solid rgba(236,235,245,.07);border-radius:12px;padding:11px 13px"><div class="row" style="justify-content:space-between"><span class="h">Revenue</span><span class="row" style="gap:5px"><span class="pill" style="background:rgba(185,165,255,.16);color:${P}">Monthly</span></span></div><div style="margin-top:12px">${area(W * .26, 108, [20, 26, 24, 33, 30, 41, 38, 47, 52, 49, 60, 68], P, 'rgba(185,165,255,.16)')}</div></div>
+        <div style="background:#1e1b29;border:1px solid rgba(236,235,245,.07);border-radius:12px;padding:11px 13px"><span class="h">Pipeline</span><div style="margin-top:9px;display:flex;flex-direction:column;gap:7px">${funnel.map(([n, v, c]) => `<div><div class="row" style="justify-content:space-between"><span style="font-size:9px;font-weight:600;opacity:.75">${n}</span><span style="font-size:9px;font-weight:800">${v}%</span></div><div style="height:6px;border-radius:3px;background:#2a2638;margin-top:3px"><div style="height:100%;width:${v}%;background:${c};border-radius:3px"></div></div></div>`).join('')}</div></div>
+      </div>
+      <div style="background:#1e1b29;border:1px solid rgba(236,235,245,.07);border-radius:12px;padding:10px 13px;flex:1;min-height:0;overflow:hidden">
+        <div class="row" style="justify-content:space-between;margin-bottom:6px"><span class="h">Top customers</span><span class="sub">View all</span></div>
+        ${[['#ffb48a', 'Won', '#4fd1a1'], ['#8fd3ff', 'Negotiation', P], ['#f7a8d0', 'Proposal', '#f6c36b']].map(([a, s, c], i) => `<div class="row" style="padding:6px 0;border-top:1px solid rgba(236,235,245,.06)"><span style="width:18px;height:18px;border-radius:50%;background:${a}"></span><div class="bar" style="color:${fg};width:${28 + i * 9}%;opacity:.25"></div><span style="margin-left:auto;font-size:9px;font-weight:800">$${[42, 28, 17][i]}k</span><span class="pill" style="background:rgba(255,255,255,.06);color:${c};width:74px;justify-content:center">${s}</span></div>`).join('')}
+      </div>
+    </div></div>`
+  const glass = 'background:rgba(30,27,41,.92);border:1px solid rgba(236,235,245,.1);border-radius:14px;box-shadow:0 30px 60px -25px rgba(0,0,0,.8);color:' + fg
+  b.innerHTML = `
+    <div class="abs" style="left:${W * .2}px;top:${H * .15}px">${win(W * .6, H * .7, '#16141f', '#1c1a26', fg, dash)}</div>
+    <div class="abs" style="left:${W * .07}px;top:${H * .3}px;width:${W * .2}px;padding:14px;${glass};transform:rotate(-3deg)">
+      <div class="row" style="justify-content:space-between"><span class="h">Activity</span><span class="pill" style="background:rgba(79,209,161,.15);color:#4fd1a1">Live</span></div>
+      ${[['Call scheduled', '10:24', P], ['Proposal sent', '09:58', '#f6c36b'], ['Deal won · $42k', '09:31', '#4fd1a1'], ['New lead added', '09:12', '#8fd3ff']].map(([t, time, c]) => `<div class="row" style="margin-top:10px"><span style="width:8px;height:8px;border-radius:50%;background:${c};box-shadow:0 0 0 4px ${c}22"></span><span style="font-size:10px;font-weight:600">${t}</span><span class="sub" style="margin-left:auto">${time}</span></div>`).join('')}
+    </div>
+    <div class="abs" style="left:${W * .76}px;top:${H * .7}px;width:${W * .19}px;padding:13px 14px;${glass};transform:rotate(3deg)">
+      <div class="row"><span style="width:30px;height:30px;border-radius:10px;background:rgba(79,209,161,.18);display:grid;place-items:center;color:#4fd1a1;font-weight:800">✓</span><div><div class="h" style="font-size:12px">Deal won</div><div class="sub">Northwind · $42,000</div></div></div>
+      <div style="height:6px;border-radius:3px;background:#2a2638;margin-top:11px"><div style="height:100%;width:100%;background:linear-gradient(90deg,${P},#4fd1a1);border-radius:3px"></div></div>
+    </div>`
+}
+
+/* ---------- ZapMail: AI cold email outreach ---------- */
+function zapmail() {
+  const O = '#ff8648', D = '#1d1a2b'
+  b.style.background = 'radial-gradient(110% 90% at 50% 40%, #fff8f2 0%, #ffe9dc 55%, #ffd5bd 100%)'
+  const zapLogo = (s, c = D) => `<div class="row" style="gap:${s * .3}px"><svg width="${s}" height="${s}" viewBox="0 0 40 40"><rect width="40" height="40" rx="11" fill="${O}"/><path d="M22 8 L12 23 H20 L17 32 L28 16 H20 Z" fill="#fff"/></svg><span style="font-weight:800;font-size:${s * .55}px;letter-spacing:-.02em;color:${c}">ZapMail</span></div>`
+  const step = (t, d, icon, on) => `<div class="card" style="padding:10px 12px;${on ? `box-shadow:0 0 0 2px ${O},0 18px 36px -18px rgba(255,134,72,.6)` : ''}"><div class="row"><span style="width:24px;height:24px;border-radius:8px;background:${on ? O : '#fff0e7'};color:${on ? '#fff' : O};display:grid;place-items:center;font-size:12px;font-weight:800">${icon}</span><div style="flex:1"><div class="h" style="font-size:11px">${t}</div><div class="sub" style="margin-top:2px">${d}</div></div></div></div>`
+  const arrow = `<div style="display:flex;justify-content:center;padding:3px 0"><div style="width:2px;height:12px;background:repeating-linear-gradient(${O} 0 3px,transparent 3px 6px)"></div></div>`
+  const dash = `<div style="display:grid;grid-template-columns:136px 1fr;height:100%">
+    <div style="background:${D};padding:14px 12px;display:flex;flex-direction:column;gap:10px">${zapLogo(20, '#fff')}${['Campaigns', 'Leads', 'Warm-up', 'Inbox', 'Analytics', 'Settings'].map((t, i) => `<div class="row" style="gap:8px;padding:6px 8px;border-radius:7px;${i === 0 ? 'background:rgba(255,134,72,.18)' : ''}"><i style="width:11px;height:11px;border-radius:3px;background:${i === 0 ? O : 'rgba(255,255,255,.28)'}"></i><span style="font-size:9.5px;font-weight:600;color:rgba(255,255,255,${i === 0 ? .95 : .55})">${t}</span></div>`).join('')}</div>
+    <div style="background:#fffcfa;padding:16px 18px;display:flex;flex-direction:column;gap:12px;color:${D}">
+      <div class="row" style="justify-content:space-between"><div><div class="h" style="font-size:15px">Q3 SaaS founders outreach</div><div class="sub" style="margin-top:3px">Active · 1,240 leads · 4 steps</div></div><span class="pill" style="background:#e3f6ec;color:#11804b">● Sending</span></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">${[['Sent', '3,962'], ['Open rate', '64%'], ['Reply rate', '11.4%'], ['Meetings', '38']].map(([l, v]) => `<div class="card kpi" style="padding:11px 13px"><small>${l}</small><strong>${v}</strong></div>`).join('')}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0">
+        <div>${step('Email 1 · Intro', 'Personalised by AI', '✉', 0)}${arrow}${step('Wait 2 days', 'If no reply', '⏱', 0)}${arrow}${step('Email 2 · Follow-up', 'A/B test: 2 subjects', '✉', 1)}${arrow}${step('LinkedIn touch', 'Manual task', 'in', 0)}</div>
+        <div class="card" style="padding:12px 14px;display:flex;flex-direction:column"><div class="row" style="justify-content:space-between"><span class="h">Replies this week</span><span class="pill" style="background:#fff0e7;color:#d2581d">+23%</span></div>
+          <div style="display:flex;align-items:flex-end;gap:8px;flex:1;margin-top:12px">${[34, 52, 41, 66, 58, 79, 72].map((v, i) => `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end"><div style="width:100%;height:${v}%;border-radius:6px 6px 3px 3px;background:${i === 5 ? O : '#ffd9c4'}"></div><span class="sub">${'MTWTFSS'[i]}</span></div>`).join('')}</div>
+        </div>
+      </div>
+    </div></div>`
+  const r = 34, c = 2 * Math.PI * r
+  b.innerHTML = `
+    <div class="abs" style="left:${W * .245}px;top:${H * .15}px">${win(W * .52, H * .7, '#fffcfa', '#f7efe9', D, dash)}</div>
+    <div class="abs card" style="left:${W * .04}px;top:${H * .3}px;width:${W * .2}px;padding:15px;transform:rotate(-3deg);color:${D}">
+      <div class="row" style="justify-content:space-between"><span class="h">AI writer</span><span class="pill" style="background:#fff0e7;color:#d2581d">✨ Personalised</span></div>
+      <div style="margin-top:10px;border-radius:10px;background:#fbf7f4;padding:10px;font-size:9.5px;line-height:1.55"><b>Subject:</b> Quick idea for {{company}}<div style="margin-top:6px">Hi {{first_name}}, saw your team just launched <span style="background:#ffe1cf;border-radius:3px;padding:0 3px">the new pricing page</span>…</div><div style="margin-top:7px">${bars(2, D, 60, 95)}</div></div>
+      <div style="margin-top:10px;background:${O};color:#fff;font-size:10px;font-weight:700;padding:8px;border-radius:9px;text-align:center">✨ Rewrite with AI</div>
+    </div>
+    <div class="abs card" style="left:${W * .765}px;top:${H * .2}px;width:${W * .2}px;padding:15px;transform:rotate(3deg);color:${D}">
+      <div class="h">Inbox warm-up</div><div class="sub" style="margin-top:2px">Deliverability health</div>
+      <div class="row" style="margin-top:10px;gap:14px"><svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="${r}" fill="none" stroke="#ffe6d8" stroke-width="10"/><circle cx="43" cy="43" r="${r}" fill="none" stroke="${O}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${c * .96} ${c}" transform="rotate(-90 43 43)"/><text x="43" y="49" text-anchor="middle" font-size="18" font-weight="800" fill="${D}" font-family="Plus Jakarta Sans">96</text></svg>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px">${[['Inbox', '96%', O], ['Promotions', '3%', '#ffc2a1'], ['Spam', '1%', '#e5ded9']].map(([n, v, col]) => `<div class="row" style="gap:6px"><i style="width:8px;height:8px;border-radius:2px;background:${col}"></i><span style="font-size:9.5px;font-weight:600">${n}</span><span style="margin-left:auto;font-size:9.5px;font-weight:800">${v}</span></div>`).join('')}</div></div>
+    </div>
+    <div class="abs card" style="left:${W * .74}px;top:${H * .66}px;padding:11px 14px;transform:rotate(2deg);color:${D}"><div class="row"><span style="width:28px;height:28px;border-radius:50%;background:#c9f0da;display:grid;place-items:center;font-size:12px">↩</span><div><div class="h" style="font-size:11px">New reply · Interested</div><div class="sub">“Sounds good, Tuesday works.”</div></div></div></div>`
+}
+
+/* ---------- Astrix Builders: construction brand identity ---------- */
+function astrixMark(s, c = '#1d1d1f', a = '#ffc56b') {
+  // geometric mark: an "A" made of two beams with a star-cut apex
+  return `<svg width="${s}" height="${s}" viewBox="0 0 100 100"><path d="M50 8 L90 92 H72 L50 44 L28 92 H10 Z" fill="${c}"/><path d="M36 70 H64 L58 58 H42 Z" fill="${a}"/><path d="M50 8 L56 21 L50 18 L44 21 Z" fill="${a}"/></svg>`
+}
+function astrix() {
+  const Y = '#ffc56b', K = '#1d1d1f', Cr = '#f4efe6'
+  b.style.background = `linear-gradient(135deg, #ffd88f 0%, ${Y} 50%, #f6b04a 100%)`
+  const grid = `<svg class="abs" style="inset:0" width="${W}" height="${H}">${Array.from({ length: 30 }, (_, i) => `<path d="M${i * 48} 0 V${H}" stroke="#000" stroke-opacity=".05"/><path d="M0 ${i * 48} H${W}" stroke="#000" stroke-opacity=".05"/>`).join('')}</svg>`
+  const word = (size, c = K) => `<div style="font-family:'Space Grotesk';font-weight:700;color:${c};line-height:.92;letter-spacing:.02em;font-size:${size}px">ASTRIX<br><span style="font-weight:500;letter-spacing:.32em;font-size:${size * .42}px">BUILDERS</span></div>`
+  b.innerHTML = `${grid}
+    <div class="abs" style="left:${W * .27}px;top:${H * .16}px;width:${W * .46}px;height:${H * .42}px;background:${K};border-radius:16px;box-shadow:0 34px 70px -30px rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;gap:26px">${astrixMark(130, Cr, Y)}${word(54, Cr)}</div>
+    <div class="abs card" style="left:${W * .27}px;top:${H * .61}px;width:${W * .22}px;height:${H * .24}px;padding:14px;background:${Cr}">
+      <div style="font-family:'Space Grotesk';font-size:9px;font-weight:700;letter-spacing:.14em;color:${K};opacity:.6">COLOUR</div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;margin-top:8px;height:calc(100% - 22px)">${[[K, 'GRAPHITE', Cr], [Y, 'SIGNAL', K], ['#8a8a84', 'CONCRETE', '#fff']].map(([c, n, t]) => `<div style="border-radius:8px;background:${c};padding:7px;font-family:'Space Grotesk';font-size:8px;font-weight:700;color:${t};display:flex;align-items:flex-end">${n}</div>`).join('')}</div>
+    </div>
+    <div class="abs card" style="left:${W * .51}px;top:${H * .61}px;width:${W * .22}px;height:${H * .24}px;padding:14px;background:#fff">
+      <div style="font-family:'Space Grotesk';font-size:9px;font-weight:700;letter-spacing:.14em;color:${K};opacity:.6">TYPOGRAPHY</div>
+      <div class="row" style="align-items:flex-end;gap:14px;margin-top:6px"><span style="font-family:'Space Grotesk';font-weight:700;font-size:62px;line-height:.9;color:${K}">Aa</span><div style="padding-bottom:6px"><div style="font-family:'Space Grotesk';font-weight:700;font-size:12px;color:${K}">Space Grotesk</div><div style="font-size:9px;opacity:.6;margin-top:2px">Bold · Medium</div></div></div>
+      <div style="font-family:'Space Grotesk';font-weight:500;font-size:10px;letter-spacing:.2em;color:${K};margin-top:8px;opacity:.8">ABCDEFGHIJ 0123456789</div><div style="font-family:'Space Grotesk';font-weight:700;font-size:17px;color:${K};margin-top:10px;letter-spacing:-.01em">Building what <span style="background:${Y};padding:0 4px">lasts.</span></div>
+    </div>
+    <div class="abs" style="left:${W * .045}px;top:${H * .2}px;width:${W * .2}px;transform:rotate(-4deg)">
+      <div style="background:${K};border-radius:10px 10px 4px 4px;padding:16px 16px 14px;box-shadow:0 26px 50px -24px rgba(0,0,0,.6)">
+        <div class="row" style="gap:10px">${astrixMark(34, Cr, Y)}${word(17, Cr)}</div>
+        <div style="font-family:'Space Grotesk';font-weight:700;font-size:20px;line-height:1.05;color:${Cr};margin-top:16px;letter-spacing:-.01em">Building what<br><span style="color:${Y}">lasts.</span></div>
+        <div style="font-family:'Space Grotesk';font-size:8.5px;letter-spacing:.14em;color:${Cr};opacity:.6;margin-top:10px">SITE HOARDING · 6 × 2.4 M</div>
+      </div>
+      <div style="height:16px;border-radius:0 0 6px 6px;background:repeating-linear-gradient(-45deg,${K} 0 12px,${Y} 12px 24px)"></div>
+    </div>
+    <div class="abs" style="left:${W * .07}px;top:${H * .62}px;width:${W * .17}px;height:${W * .1}px;background:${Cr};border-radius:8px;box-shadow:0 22px 40px -20px rgba(0,0,0,.5);padding:12px;transform:rotate(3deg);display:flex;flex-direction:column;justify-content:space-between">
+      <div class="row" style="gap:7px">${astrixMark(20, K, Y)}<span style="font-family:'Space Grotesk';font-weight:700;font-size:10px;letter-spacing:.06em">ASTRIX</span></div>
+      <div><div style="font-family:'Space Grotesk';font-weight:700;font-size:10px">Project Manager</div><div style="margin-top:5px">${bars(2, K, 50, 80)}</div></div>
+    </div>
+    <div class="abs" style="left:${W * .76}px;top:${H * .2}px;width:${W * .19}px;transform:rotate(4deg)">
+      <svg width="${W * .19}" height="${W * .14}" viewBox="0 0 200 150">
+        <ellipse cx="100" cy="128" rx="96" ry="14" fill="#000" opacity=".18"/>
+        <path d="M18 112 C 18 50, 60 22, 100 22 C 140 22, 182 50, 182 112 Z" fill="${Cr}"/>
+        <path d="M86 24 H114 V112 H86 Z" fill="#e7e0d3"/>
+        <rect x="6" y="108" width="188" height="16" rx="8" fill="#e0d8c8"/>
+        <g transform="translate(118 58) scale(.42)">${astrixMark(100, K, Y).replace(/<\/?svg[^>]*>/g, '')}</g>
+      </svg>
+      <div style="text-align:center;font-family:'Space Grotesk';font-size:9px;font-weight:700;letter-spacing:.14em;color:${K};opacity:.6;margin-top:6px">SAFETY HELMET</div>
+    </div>
+    <div class="abs" style="left:${W * .76}px;top:${H * .5}px;width:${W * .19}px;height:${H * .36};background:${K};border-radius:12px;padding:14px;box-shadow:0 26px 50px -24px rgba(0,0,0,.6);transform:rotate(-2deg)">
+      <div style="font-family:'Space Grotesk';font-size:8.5px;letter-spacing:.14em;color:${Cr};opacity:.6">VAN LIVERY</div>
+      <svg width="100%" viewBox="0 0 220 110" style="margin-top:8px"><path d="M10 80 V36 Q10 26 20 26 H140 L170 46 H200 Q210 46 210 56 V80 Z" fill="${Cr}"/><path d="M140 26 L170 46 H140 Z" fill="#cfe3f0"/><rect x="10" y="62" width="200" height="10" fill="${Y}"/><circle cx="52" cy="84" r="13" fill="#333"/><circle cx="52" cy="84" r="5" fill="#999"/><circle cx="170" cy="84" r="13" fill="#333"/><circle cx="170" cy="84" r="5" fill="#999"/><g transform="translate(22 32) scale(.24)">${astrixMark(100, K, Y).replace(/<\/?svg[^>]*>/g, '')}</g><text x="52" y="52" font-family="Space Grotesk" font-weight="700" font-size="15" fill="${K}">ASTRIX</text></svg>
+    </div>`
+}
+
+({ landify, unifyiq, klyro, crimino, zapmail, astrix })[art]()
+</script>
+</body>
+</html>
