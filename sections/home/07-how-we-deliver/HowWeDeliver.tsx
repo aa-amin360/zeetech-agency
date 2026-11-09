@@ -11,6 +11,7 @@ export function HowWeDeliver({ block }: { block: HowWeDeliverBlock }) {
   const services = (block.services ?? []).map((s) => ({
     title: s.title,
     description: s.description,
+    highlights: s.highlights,
     tag: s.tag,
     link: s.link,
     image: img(s.image),

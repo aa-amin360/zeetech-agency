@@ -27,6 +27,7 @@ const SCRIPTS = [
   'scripts/add-cybersecurity-blockchain.ts',
   'scripts/add-nexus-courier.ts', // first real project: published as Project 01
   'scripts/update-project-covers.ts', // starter projects get covers that match them
+  'scripts/add-home-cyber-service.ts', // home: 7th discipline + key-feature chips
 ]
 
 const step = process.argv[2]

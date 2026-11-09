@@ -45,6 +45,25 @@
   line-height: 1.2;
   color: #fff;
 }
+/* key features: small outlined chips; they turn orange with the active discipline */
+.svc__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.svc__chips li {
+  padding: 6px 12px;
+  border: 1px solid #383d4a;
+  border-radius: 999px;
+  font-size: clamp(12px, calc(14 * var(--u)), 14px);
+  line-height: 1.2;
+  color: #c9cfd9;
+  transition: border-color 0.4s ease, color 0.4s ease;
+}
+.svc.is-active .svc__chips li { border-color: rgba(253, 86, 0, 0.55); color: #f8f8f6; }
 .svc.is-active .svc__title { color: #f8f8f6; }
 .svc.is-active .svc__desc { color: #c9cfd9; }
 .svc__meta { display: flex; align-items: center; justify-content: space-between; gap: 16px; }

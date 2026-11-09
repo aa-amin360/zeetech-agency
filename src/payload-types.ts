@@ -831,6 +831,10 @@ export interface HowWeDeliverBlock {
         title: string;
         description?: string | null;
         /**
+         * Short chips under the description, e.g. Smart contracts, Threat modelling. Type one and press Enter.
+         */
+        highlights?: string[] | null;
+        /**
          * e.g. 01 / ARCHITECTURE
          */
         tag?: string | null;
@@ -1965,6 +1969,7 @@ export interface HowWeDeliverBlockSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+        highlights?: T;
         tag?: T;
         image?: T;
         link?:

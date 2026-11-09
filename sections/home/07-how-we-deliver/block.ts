@@ -22,6 +22,13 @@ export const HowWeDeliverBlock: Block = {
         { name: 'title', type: 'text', required: true },
         { name: 'description', type: 'textarea' },
         {
+          name: 'highlights',
+          type: 'text',
+          hasMany: true,
+          label: 'Key features',
+          admin: { description: 'Short chips under the description, e.g. Smart contracts, Threat modelling. Type one and press Enter.' },
+        },
+        {
           type: 'row',
           fields: [
             { name: 'tag', type: 'text', admin: { width: '50%', description: 'e.g. 01 / ARCHITECTURE' } },

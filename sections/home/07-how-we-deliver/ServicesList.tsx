@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 export type ServiceItem = {
   title: string
   description?: string | null
+  highlights?: string[] | null
   tag?: string | null
   link?: { label?: string | null; href?: string | null } | null
   image?: { src: string; srcSet?: string } | null
@@ -106,6 +107,13 @@ export function ServicesList({
             >
               <h3 className="svc__title">{s.title}</h3>
               {s.description ? <p className="svc__desc">{s.description}</p> : null}
+              {s.highlights?.length ? (
+                <ul className="svc__chips" aria-label="Key features">
+                  {s.highlights.map((h) => (
+                    <li key={h}>{h}</li>
+                  ))}
+                </ul>
+              ) : null}
               <div className="svc__meta">
                 {s.tag ? <span className="svc__tag">{s.tag}</span> : <span />}
                 {s.link?.label ? (

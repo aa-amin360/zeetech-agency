@@ -99,7 +99,7 @@ Grouped by page. "Admin" = where it is edited in `/admin`.
 |---|---|---|
 | D-17 | Copy is solid generic agency copy; confirm the owner actually offers all 7 services (esp. **Cybersecurity & Blockchain**, which has no Figma design) | ⬜ |
 | D-18 | UI/UX design service hero reuses its row image (the Figma hero image couldn't be exported) | ⬜ |
-| D-19 | Home "How we deliver" and Figma footer list 6 services; the site now has 7. The home section still lists 6 (no Cybersecurity & Blockchain) | ⬜ decide |
+| D-19 | Home "How we deliver" listed only 6 services (no Cybersecurity & Blockchain) | ✅ 2026-11-09: added as 07 / SECURITY + WEB3, linking to its service page; every discipline now shows key-feature chips (new *Key features* field per row, editable in admin) |
 
 ### About (`/about`)
 | # | Item | Status |
@@ -175,3 +175,4 @@ When the real projects are live: delete the 6 template case studies (D-13) and r
 | 2026-11-09 | P-1: owner decisions (name OK, 6 months, no live status, no fake quote). Made 5 illustrations; added `scripts/add-nexus-courier.ts` (+ `npm run nexus-courier`, + Vercel deploy step) which creates the case study as a **draft**. Ran locally and checked the rendered page | Claude |
 | 2026-11-09 | P-1 made live as **Project 01**: script now publishes it, puts it first in the project order and renumbers the template projects 02–07. Deployed via push to main | Claude |
 | 2026-11-09 | D-13: new covers for the 6 template projects that match each project (real-estate dashboard, sales SaaS site, dark agency site, CRM, cold-email platform, construction brand board). Files `legacy/assets/work/*-cover.webp`, source `content/projects/template-covers.html`, script `npm run project-covers` (+ Vercel deploy step); starter data points at the new files. Deployed via push to main | Claude |
+| 2026-11-09 | D-19: home "How we deliver" gets Cybersecurity & Blockchain (7th row) + new *Key features* chips on every row (field in `sections/home/07-how-we-deliver`; no migration needed: pages already store hasMany text in `pages_texts`). Content via `scripts/add-home-cyber-service.ts` (`npm run home-services` + Vercel deploy step). Subtitle now says "test rigorously, secure and deploy". Deployed via push to main | Claude |
