@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow:hidden;height:100%}
+body{font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0b1733}
+.board{position:relative;width:100%;height:100%;overflow:hidden}
+.abs{position:absolute}
+.card{background:#fff;border-radius:14px;box-shadow:0 1px 0 rgba(0,0,0,.04),0 22px 44px -20px rgba(11,23,51,.35)}
+.win{border-radius:16px;overflow:hidden;box-shadow:0 34px 80px -30px rgba(0,0,0,.5),0 0 0 1px rgba(0,0,0,.06)}
+.chrome{height:26px;display:flex;align-items:center;gap:6px;padding:0 12px}
+.chrome i{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.25}
+.chrome .url{margin-left:14px;height:12px;width:180px;border-radius:6px;background:currentColor;opacity:.1}
+.bar{height:7px;border-radius:4px;background:currentColor;opacity:.14}
+.row{display:flex;align-items:center;gap:10px}
+.sub{font-size:9px;font-weight:600;opacity:.55}
+.h{font-weight:700;font-size:12px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.kpi small{display:block;font-size:8.5px;font-weight:600;opacity:.55;text-transform:uppercase;letter-spacing:.06em}
+.kpi strong{display:block;font-size:20px;font-weight:800;margin-top:4px;letter-spacing:-.02em}
+svg{display:block}
+</style>
+</head>
+<body>
+<div class="board" id="b"></div>
+<script>
+const [art, W, H] = (location.hash.slice(1) || 'sp-cover|1200|750').split('|').map((v, i) => i ? +v : v)
+document.documentElement.style.cssText = `width:${W}px;height:${H}px`
+const b = document.getElementById('b')
+const bars = (n, color, w0 = 40, w1 = 90) => Array.from({ length: n }, (_, i) => `<div class="bar" style="color:${color};width:${w0 + ((i * 37) % (w1 - w0))}%;margin-top:${i ? 6 : 0}px"></div>`).join('')
+const win = (w, h, bg, chromeBg, fg, inner) => `<div class="win" style="width:${w}px;height:${h}px;background:${bg};display:flex;flex-direction:column;color:${fg}"><div class="chrome" style="background:${chromeBg}"><i></i><i></i><i></i><span class="url"></span></div><div style="flex:1;min-height:0;position:relative">${inner}</div></div>`
+const phone = (w, h, bg, inner, frame = '#0f1115') => `<div style="width:${w}px;height:${h}px;border-radius:${w * .16}px;background:${frame};padding:${w * .035}px;box-shadow:0 30px 60px -25px rgba(0,0,0,.55)"><div style="width:100%;height:100%;border-radius:${w * .13}px;background:${bg};overflow:hidden;position:relative"><div style="position:absolute;left:50%;top:${w * .04}px;transform:translateX(-50%);width:${w * .3}px;height:${w * .085}px;border-radius:20px;background:${frame};z-index:2"></div>${inner}</div></div>`
+const ring = (size, v, col, track, label, fg = '#0b1733') => { const r = size / 2 - 7, c = 2 * Math.PI * r; return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${track}" stroke-width="9"/><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${col}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${c * v} ${c}" transform="rotate(-90 ${size / 2} ${size / 2})"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-size="${size * .22}" font-weight="800" fill="${fg}" font-family="Plus Jakarta Sans">${label}</text></svg>` }
+const side = (bg, accent, logo, items, active) => `<div style="background:${bg};padding:14px 12px;display:flex;flex-direction:column;gap:9px;color:#fff">${logo}${items.map((t, i) => `<div class="row" style="gap:8px;padding:6px 8px;border-radius:7px;${i === active ? `background:${accent}26` : ''}"><i style="width:11px;height:11px;border-radius:3px;background:${i === active ? accent : 'rgba(255,255,255,.28)'}"></i><span style="font-size:9.5px;font-weight:600;color:rgba(255,255,255,${i === active ? .95 : .55})">${t}</span></div>`).join('')}</div>`
+const av = (c, s = 20) => `<span style="width:${s}px;height:${s}px;border-radius:50%;background:${c};flex:none;display:inline-block"></span>`
+
+/* =====================  SUPREME PROSPECTS  ===================== */
+const G = '#22c55e', N = '#0d1b2a', GS = '#dcfce7'
+const spLogo = (s = 20, c = '#fff') => `<div class="row" style="gap:${s * .35}px;margin-bottom:6px"><svg width="${s}" height="${s}" viewBox="0 0 40 40"><rect width="40" height="40" rx="10" fill="${G}"/><path d="M13 26 C 13 30, 27 30, 27 25 C 27 19, 13 21, 13 15 C 13 10, 27 10, 27 14" stroke="${N}" stroke-width="3.6" fill="none" stroke-linecap="round"/></svg><span style="font-weight:800;font-size:${s * .55}px;letter-spacing:-.01em;color:${c}">Supreme<span style="color:${G}">Prospects</span></span></div>`
+const tier = (t) => ({ A: [GS, '#15803d'], B: ['#dbeafe', '#1d4ed8'], C: ['#fef3c7', '#b45309'] })[t]
+const prospects = [['J. Carter', 'QB · Class of 2027', .91, 'A', '#fcd7b6'], ['M. Okafor', 'WR · 2027', .87, 'A', '#c7e8ff'], ['D. Alvarez', 'LB · 2028', .82, 'B', '#e3d4ff'], ['T. Nguyen', 'CB · 2027', .78, 'B', '#ffe2a8'], ['R. Brooks', 'RB · 2028', .71, 'C', '#ffcfe0'], ['K. Patel', 'OL · 2027', .69, 'C', '#cdeed9']]
+const prospectRows = (n) => prospects.slice(0, n).map(([nm, pos, sc, t, c]) => { const [bg, fg] = tier(t); return `<div class="row" style="padding:7px 4px;border-top:1px solid #eef1f4">${av(c, 22)}<div style="flex:1"><div class="h" style="font-size:10.5px">${nm}</div><div class="sub">${pos}</div></div><div style="width:70px;height:6px;border-radius:3px;background:#eef1f4"><div style="height:100%;width:${sc * 100}%;background:${G};border-radius:3px"></div></div><span style="font-size:10px;font-weight:800;width:30px;text-align:right">${sc.toFixed(2)}</span><span class="pill" style="background:${bg};color:${fg}">Tier ${t}</span></div>` }).join('')
+const lockCard = (w) => `<div class="card" style="width:${w}px;padding:14px">
+  <div class="row" style="justify-content:space-between"><span class="h">Messages · J. Carter</span><span class="pill" style="background:#f1f5f9;color:#475569">🔒 Dead period</span></div>
+  <div style="margin-top:10px;display:flex;flex-direction:column;gap:7px;opacity:.45">
+    <div style="align-self:flex-start;background:#f1f5f9;border-radius:10px 10px 10px 3px;padding:7px 10px;width:70%">${bars(1, N, 80, 90)}</div>
+    <div style="align-self:flex-end;background:${GS};border-radius:10px 10px 3px 10px;padding:7px 10px;width:60%">${bars(1, N, 70, 85)}</div>
+  </div>
+  <div style="margin-top:10px;border-radius:10px;background:#f8fafc;border:1px dashed #cbd5e1;padding:9px 10px;font-size:9.5px;line-height:1.45;color:#334155"><b>Messaging paused</b> until Aug 1 under the recruiting calendar. Parent/guardian is copied on all messages.</div>
+</div>`
+const sliderRow = (label, v, w = 1) => `<div style="margin-top:9px"><div class="row" style="justify-content:space-between"><span style="font-size:9.5px;font-weight:700">${label}</span><span style="font-size:9.5px;font-weight:800">${v}/10</span></div><div style="position:relative;height:6px;border-radius:3px;background:#e2e8f0;margin-top:5px"><div style="height:100%;width:${v * 10}%;background:${G};border-radius:3px"></div><span style="position:absolute;left:calc(${v * 10}% - 7px);top:-4px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px ${G}"></span><span style="position:absolute;left:${70}%;top:-3px;width:2px;height:12px;background:${N};opacity:.35"></span></div></div>`
+const gradingPhone = (w, h) => phone(w, h, '#fff', `<div style="padding:38px 14px 0;color:${N}">
+  <div class="row" style="justify-content:space-between"><span class="h" style="font-size:12px">Field grading</span><span class="pill" style="background:${GS};color:#15803d">● Offline · syncs later</span></div>
+  <div class="sub" style="margin-top:4px">Combine · Wide receiver rubric</div>
+  <div class="row" style="margin-top:10px">${av('#c7e8ff', 30)}<div><div class="h">M. Okafor</div><div class="sub">WR · Class of 2027</div></div></div>
+  ${sliderRow('Route running', 8)}${sliderRow('Hands', 9)}${sliderRow('Speed', 7)}${sliderRow('Football IQ', 8)}
+  <div class="row" style="margin-top:12px;justify-content:space-between"><span class="sub">40-yard dash</span><div class="row" style="gap:6px"><span style="width:22px;height:22px;border-radius:7px;background:#f1f5f9;display:grid;place-items:center;font-weight:800">−</span><b style="font-size:12px">4.48s</b><span style="width:22px;height:22px;border-radius:7px;background:#f1f5f9;display:grid;place-items:center;font-weight:800">+</span></div></div>
+  <div style="margin-top:14px;background:${N};color:#fff;font-size:10px;font-weight:700;padding:9px;border-radius:9px;text-align:center">Save evaluation</div>
+</div>`)
+function heatmap(cols, rows, w, h) {
+  const cw = w / cols.length, rh = h / rows.length
+  const vals = [[.9, .7, .85, .6], [.8, .95, .7, .75], [.65, .6, .9, .8], [.75, .8, .55, .9]]
+  return `<svg width="${w}" height="${h + 16}" viewBox="0 0 ${w} ${h + 16}">${rows.map((r, ri) => cols.map((c, ci) => { const v = vals[ri][ci]; return `<rect x="${ci * cw + 1}" y="${ri * rh + 1}" width="${cw - 2}" height="${rh - 2}" rx="5" fill="${G}" fill-opacity="${(v - .45) * 1.6}"/><text x="${ci * cw + cw / 2}" y="${ri * rh + rh / 2 + 3}" text-anchor="middle" font-size="9" font-weight="700" fill="${v > .78 ? '#fff' : N}" font-family="Plus Jakarta Sans">${v.toFixed(2)}</text>` }).join('')).join('')}${cols.map((c, ci) => `<text x="${ci * cw + cw / 2}" y="${h + 12}" text-anchor="middle" font-size="8" font-weight="600" fill="${N}" fill-opacity=".55" font-family="Plus Jakarta Sans">${c}</text>`).join('')}</svg>`
+}
+const spDash = (w, h) => `<div style="display:grid;grid-template-columns:140px 1fr;height:100%">
+  ${side(N, G, spLogo(18), ['Discover', 'Shortlists', 'Evaluations', 'Messages', 'Visits', 'Compliance', 'Settings'], 0)}
+  <div style="background:#f8fafc;padding:15px 17px;display:flex;flex-direction:column;gap:11px;color:${N};min-height:0">
+    <div class="row" style="justify-content:space-between"><div><div class="h" style="font-size:15px">Discover prospects</div><div class="sub" style="margin-top:3px">Football · Class of 2027–28 · 1,284 athletes</div></div><span style="background:${G};color:${N};font-size:10px;font-weight:800;padding:7px 12px;border-radius:7px">+ Add to shortlist</span></div>
+    <div class="row" style="gap:6px;flex-wrap:wrap">${['Position: Any', 'Region: Southeast', 'Score ≥ 0.70', 'GPA ≥ 3.0', 'Has film'].map((t, i) => `<span class="pill" style="background:${i === 2 ? N : '#fff'};color:${i === 2 ? '#fff' : N};box-shadow:0 0 0 1px #e2e8f0">${t}</span>`).join('')}</div>
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:11px;flex:1;min-height:0">
+      <div class="card" style="padding:10px 12px;overflow:hidden"><div class="row" style="justify-content:space-between;margin-bottom:4px"><span class="h">Top prospects</span><span class="sub">Composite score</span></div>${prospectRows(h > 440 ? 6 : 5)}</div>
+      <div class="card" style="padding:10px 12px;overflow:hidden"><div class="row" style="justify-content:space-between"><span class="h">Compare</span><span class="pill" style="background:${GS};color:#15803d">4 selected</span></div><div class="sub" style="margin:6px 0 8px">Speed · Agility · Strength · Film grade</div>${heatmap(['SPD', 'AGI', 'STR', 'FILM'], [1, 2, 3, 4], w * .26, h > 440 ? 170 : 140)}</div>
+    </div>
+  </div></div>`
+const profileCard = (w) => `<div class="card" style="width:${w}px;padding:15px;color:${N}">
+  <div class="row">${av('#fcd7b6', 38)}<div><div class="h" style="font-size:13px">J. Carter</div><div class="sub">Quarterback · Class of 2027</div></div></div>
+  <div class="row" style="margin-top:12px;gap:14px">${ring(84, .91, G, '#e2e8f0', '0.91', N)}<div style="flex:1;display:flex;flex-direction:column;gap:7px">${[['Rankings', .88], ['Combine', .93], ['Game film', .9]].map(([l, v]) => `<div><div class="row" style="justify-content:space-between"><span style="font-size:9px;font-weight:600;opacity:.7">${l}</span><span style="font-size:9px;font-weight:800">${v}</span></div><div style="height:5px;border-radius:3px;background:#e2e8f0;margin-top:3px"><div style="height:100%;width:${v * 100}%;background:${G};border-radius:3px"></div></div></div>`).join('')}</div></div>
+  <div class="row" style="margin-top:12px;justify-content:space-between"><span class="pill" style="background:${GS};color:#15803d">Tier A</span><span class="sub">Talent index · 0–1.0</span></div>
+</div>`
+
+const SP = {
+  cover() {
+    b.style.background = `radial-gradient(110% 90% at 50% 40%, #f3fbf6 0%, #e2f5e9 55%, #c9ebd6 100%)`
+    b.innerHTML = `<div class="abs" style="left:${W * .2}px;top:${H * .16}px">${win(W * .6, H * .68, '#f8fafc', '#eef2f5', N, spDash(W * .6, H * .68))}</div>
+      <div class="abs" style="left:${W * .055}px;top:${H * .24}px;transform:rotate(-3deg)">${profileCard(W * .2)}</div>
+      <div class="abs" style="left:${W * .06}px;top:${H * .63}px;transform:rotate(2deg)">${lockCard(W * .2).replace('<div style="margin-top:10px;display:flex;flex-direction:column;gap:7px;opacity:.45">', '<div style="display:none">')}</div>
+      <div class="abs" style="left:${W * .79}px;top:${H * .2}px;transform:rotate(3deg)">${gradingPhone(W * .165, H * .64)}</div>`
+  },
+  search() {
+    b.style.background = '#eef8f2'
+    b.innerHTML = `<div class="abs" style="left:${W * .06}px;top:${H * .14}px">${win(W * .88, H * .72, '#f8fafc', '#eef2f5', N, spDash(W * .88, H * .72))}</div>`
+  },
+  compliance() {
+    b.style.background = `linear-gradient(135deg, ${N} 0%, #13283d 100%)`
+    const days = Array.from({ length: 35 }, (_, i) => i - 2)
+    const cal = `<div class="card" style="width:${W * .5}px;padding:16px;color:${N}">
+      <div class="row" style="justify-content:space-between"><div><div class="h" style="font-size:14px">Recruiting calendar</div><div class="sub" style="margin-top:2px">July · rules applied automatically</div></div><div class="row" style="gap:6px"><span class="pill" style="background:#f1f5f9;color:#475569">■ Dead period</span><span class="pill" style="background:${GS};color:#15803d">■ Contact period</span><span class="pill" style="background:#dbeafe;color:#1d4ed8">■ Evaluation</span></div></div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px">${['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(d => `<div class="sub" style="text-align:center">${d}</div>`).join('')}${days.map(d => { const dead = d >= 8 && d <= 21, contact = d >= 22, ev = d >= 1 && d < 8; const bg = d < 1 || d > 31 ? 'transparent' : dead ? 'repeating-linear-gradient(135deg,#e2e8f0 0 4px,#f1f5f9 4px 8px)' : contact ? GS : ev ? '#dbeafe' : '#f8fafc'; return `<div style="height:${H * .075}px;border-radius:7px;background:${bg};padding:5px;font-size:9px;font-weight:700;color:${dead ? '#94a3b8' : N}">${d >= 1 && d <= 31 ? d : ''}${d === 8 ? '<div style="font-size:7.5px;margin-top:4px">🔒 Dead period</div>' : ''}${d === 22 ? '<div style="font-size:7.5px;margin-top:4px;color:#15803d">Contact opens</div>' : ''}</div>` }).join('')}</div>
+    </div>`
+    const audit = `<div class="card" style="width:${W * .36}px;padding:14px;color:${N}"><div class="row" style="justify-content:space-between"><span class="h">Audit trail</span><span class="pill" style="background:#f1f5f9;color:#475569">Export CSV</span></div>
+      ${[['Coach enquiry logged', 'Coach R. · J. Carter', '09:14'], ['Message blocked: dead period', 'System rule', '10:02'], ['Campus visit recorded', 'Official visit · Jul 24', '11:30'], ['Recruiting status: Offer', 'Compliance approved', '14:05']].map(([t, d, tm], i) => `<div class="row" style="padding:8px 0;border-top:1px solid #eef1f4"><span style="width:8px;height:8px;border-radius:50%;background:${i === 1 ? '#94a3b8' : G}"></span><div style="flex:1"><div style="font-size:10px;font-weight:700">${t}</div><div class="sub">${d}</div></div><span class="sub">${tm}</span></div>`).join('')}</div>`
+    const thread = `<div class="card" style="width:${W * .36}px;padding:14px;color:${N}"><div class="row" style="justify-content:space-between"><span class="h">Three-way conversation</span><span class="pill" style="background:${GS};color:#15803d">Parent copied</span></div>
+      <div class="row" style="gap:-4px;margin-top:8px">${av('#fcd7b6', 22)}${av('#c7e8ff', 22)}${av('#e3d4ff', 22)}<span class="sub" style="margin-left:6px">Athlete · Parent · Coach</span></div>
+      <div style="margin-top:9px;display:flex;flex-direction:column;gap:6px"><div style="align-self:flex-start;background:#f1f5f9;border-radius:10px 10px 10px 3px;padding:7px 10px;font-size:9.5px">Coach: Can we schedule a call next week?</div><div style="align-self:flex-end;background:${GS};border-radius:10px 10px 3px 10px;padding:7px 10px;font-size:9.5px">Parent: Tuesday after 6 works for us.</div></div></div>`
+    b.innerHTML = `<div class="abs" style="left:${W * .06}px;top:${H * .1}px">${cal}</div><div class="abs" style="left:${W * .59}px;top:${H * .1}px">${audit}</div><div class="abs" style="left:${W * .59}px;top:${H * .6}px">${thread}</div>`
+  },
+  grading() {
+    b.style.background = `radial-gradient(90% 90% at 50% 40%, #f3fbf6 0%, #d7f0e0 100%)`
+    const rubric = `<div class="card" style="width:${W * .34}px;padding:16px;color:${N}"><div class="h" style="font-size:14px">Rubric builder</div><div class="sub" style="margin-top:3px">Forms are data: one template per sport and position</div>
+      ${[['Football', 'QB · WR · RB · LB · CB · OL', 1], ['Basketball', 'PG · SG · SF · PF · C', 0], ['Soccer', 'GK · DF · MF · FW', 0], ['Baseball', 'P · C · IF · OF', 0], ['Track & field', 'Sprints · Jumps · Throws', 0]].map(([s, p, on]) => `<div class="row" style="margin-top:9px;padding:9px 10px;border-radius:10px;${on ? `box-shadow:0 0 0 2px ${G};background:#f6fdf8` : 'background:#f8fafc'}"><span style="width:26px;height:26px;border-radius:8px;background:${on ? G : '#e2e8f0'};flex:none"></span><div style="flex:1"><div class="h" style="font-size:11px">${s}</div><div class="sub">${p}</div></div><span class="sub">${on ? '12 criteria' : ''}</span></div>`).join('')}
+      <div class="sub" style="margin-top:10px;text-align:center">+ 10 more sports</div></div>`
+    b.innerHTML = `<div class="abs" style="left:${W * .07}px;top:${H * .1}px">${rubric}</div>
+      <div class="abs" style="left:${W * .47}px;top:${H * .12}px">${gradingPhone(W * .2, H * .76)}</div>
+      <div class="abs" style="left:${W * .71}px;top:${H * .18}px;transform:rotate(2deg)">${profileCard(W * .22)}</div>
+      <div class="abs card" style="left:${W * .71}px;top:${H * .66}px;width:${W * .22}px;padding:12px 14px;color:${N}"><div class="row"><span style="width:28px;height:28px;border-radius:9px;background:${GS};display:grid;place-items:center;color:#15803d;font-weight:800">↻</span><div><div class="h" style="font-size:11px">3 evaluations synced</div><div class="sub">Saved offline at the combine</div></div></div></div>`
+  },
+  portals() {
+    b.style.background = '#f1f5f4'
+    const roles = [['Athlete', 'Profile, film, offers', G], ['Parent / Guardian', 'Sees every message', '#38bdf8'], ['College Coach', 'Search, shortlists, visits', '#f59e0b'], ['Compliance', 'Calendar rules, audit export', '#a78bfa'], ['Field Scout', 'Mobile grading, offline', '#fb7185'], ['System Admin', 'Tenants, plans, roles', '#64748b']]
+    b.innerHTML = `<div class="abs" style="left:${W * .07}px;top:${H * .08}px;width:${W * .86}px;display:grid;grid-template-columns:repeat(3,1fr);gap:${W * .02}px">${roles.map(([r, d, c], i) => `<div class="win" style="background:#fff;color:${N}"><div style="background:${N};padding:10px 12px" class="row">${spLogo(15)}<span class="pill" style="margin-left:auto;background:${c};color:${N}">${r}</span></div><div style="padding:12px;height:${H * .28}px;display:flex;flex-direction:column;gap:8px"><div class="h" style="font-size:13px">${r} portal</div><div class="sub">${d}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px">${[0, 1].map(k => `<div style="border-radius:8px;background:#f8fafc;padding:8px"><div class="bar" style="color:${N};width:60%"></div><div style="font-size:15px;font-weight:800;margin-top:6px;color:${k ? N : c}">${[[12, 3], [4, 9], [38, 6], [2, 41], [17, 5], [8, 120]][i][k]}</div></div>`).join('')}</div><div style="margin-top:auto">${bars(2, N, 50, 90)}</div></div></div>`).join('')}</div>
+      <div class="abs card" style="left:50%;top:${H * .86}px;transform:translateX(-50%);padding:9px 16px;color:${N}"><span class="h">One design system · permissions per role · single source of truth</span></div>`
+  },
+}
+
+/* =====================  CALLIANA  ===================== */
+const P = '#ff6f9f', PD = '#2b1630', PS = '#ffe4ee'
+const caLogo = (s = 20, c = '#fff') => `<div class="row" style="gap:${s * .35}px;margin-bottom:6px"><svg width="${s}" height="${s}" viewBox="0 0 40 40"><rect width="40" height="40" rx="11" fill="${P}"/><path d="M14 12 C 12 12, 11 14, 12 17 C 14 23, 18 27, 24 29 C 27 30, 29 28, 28 26 L 26 23 L 22 24 C 19 22, 18 21, 16 18 L 17 14 Z" fill="#fff"/></svg><span style="font-weight:800;font-size:${s * .55}px;letter-spacing:-.01em;color:${c}">Calliana</span></div>`
+const cats = ['Appointment', 'Callback', 'Urgent', 'Quote', 'Lead', 'Transfer']
+const callPanel = (w) => `<div style="color:${PD}">
+  <div style="border-radius:14px;background:linear-gradient(135deg,${PD},#4a2450);color:#fff;padding:14px 16px">
+    <div class="row" style="justify-content:space-between"><span class="pill" style="background:rgba(255,111,159,.25);color:#ffc2d6">● Incoming call</span><span style="font-size:15px;font-weight:800;font-variant-numeric:tabular-nums">02:14</span></div>
+    <div style="font-size:20px;font-weight:800;margin-top:8px;letter-spacing:.01em">+1 (305) 555-0148</div>
+    <div class="row" style="margin-top:4px;gap:8px"><span style="font-size:10px;opacity:.75">Known caller · Maria L. · 4 earlier calls</span></div>
+    <div class="row" style="margin-top:12px;gap:8px">${['Answer', 'Hold', 'Transfer', 'Hang up'].map((t, i) => `<span style="flex:1;text-align:center;font-size:9.5px;font-weight:700;padding:7px 0;border-radius:8px;background:${i === 0 ? P : i === 3 ? 'rgba(255,255,255,.08)' : 'rgba(255,255,255,.14)'};color:#fff">${t}</span>`).join('')}</div>
+  </div>
+</div>`
+const contextCard = `<div class="card" style="padding:12px 14px;color:${PD}">
+  <div class="row" style="justify-content:space-between"><div><div class="sub">PRACTICE</div><div class="h" style="font-size:13px;margin-top:2px">Bright Smile Dental</div></div><div style="text-align:right"><div class="sub">LOCAL TIME</div><div class="h" style="font-size:13px;margin-top:2px">10:42 AM</div></div></div>
+  <div class="row" style="margin-top:10px;gap:8px"><div style="flex:1;border-radius:8px;box-shadow:0 0 0 1px #f0e4ea;padding:7px 9px;font-size:10px;font-weight:700" class="row">${av('#ffd6e4', 16)} Dr. Rivera <span style="margin-left:auto;opacity:.5">▾</span></div><span class="pill" style="background:#fff4d6;color:#a16207">In surgery until 11:30</span></div>
+</div>`
+const notesCard = `<div class="card" style="padding:12px 14px;color:${PD}">
+  <div class="row" style="justify-content:space-between"><span class="h">Call notes</span><span class="sub">Alt+1–9 · saved responses</span></div>
+  <div style="margin-top:8px;border-radius:9px;background:#fbf7f9;padding:9px 10px;font-size:10px;line-height:1.55">Wants to move Thursday cleaning to next week, mornings only.<span style="display:inline-block;width:1px;height:11px;background:${P};vertical-align:middle;margin-left:2px"></span></div>
+  <div class="row" style="margin-top:9px;gap:5px;flex-wrap:wrap">${cats.map((c, i) => `<span class="pill" style="background:${i < 2 ? P : '#f6eef2'};color:${i < 2 ? '#fff' : PD}">${i < 2 ? '✓ ' : ''}${c}</span>`).join('')}</div>
+</div>`
+const scriptCard = (w) => `<div class="card" style="width:${w}px;padding:13px 14px;color:${PD}">
+  <div class="row" style="justify-content:space-between"><span class="h">Script · Appointment change</span><span class="pill" style="background:${PS};color:#be185d">Step 2 of 3</span></div>
+  <div style="margin-top:9px;font-size:10px;font-weight:600;line-height:1.5;background:#fbf7f9;border-radius:9px;padding:8px 10px">“I can help with that. Is this for a cleaning or a treatment visit?”</div>
+  <div style="display:flex;flex-direction:column;gap:6px;margin-top:9px">${[['Cleaning', 1], ['Treatment', 0], ['Emergency → transfer', 0]].map(([t, on]) => `<div class="row" style="padding:7px 9px;border-radius:8px;${on ? `box-shadow:0 0 0 2px ${P};background:#fff5f9` : 'box-shadow:0 0 0 1px #f0e4ea'}"><span style="font-size:10px;font-weight:700">${t}</span><span style="margin-left:auto;font-size:11px;color:${P}">→</span></div>`).join('')}</div>
+</div>`
+const historyCard = `<div class="card" style="padding:12px 14px;color:${PD}"><div class="row" style="justify-content:space-between"><span class="h">Earlier calls</span><span class="sub">Maria L.</span></div>
+  ${[['Oct 28', 'Appointment', 'Booked cleaning, Thu 9:00'], ['Sep 12', 'Callback', 'Insurance question, returned'], ['Aug 03', 'Quote', 'Asked about whitening']].map(([d, c, t]) => `<div class="row" style="padding:7px 0;border-top:1px solid #f4ecf0"><span class="sub" style="width:36px">${d}</span><span class="pill" style="background:#f6eef2;color:${PD}">${c}</span><span style="font-size:9.5px;font-weight:600;opacity:.75">${t}</span></div>`).join('')}</div>`
+const caWorkspace = (w, h, big) => `<div style="display:grid;grid-template-columns:132px 1fr;height:100%">
+  ${side(PD, P, caLogo(18), ['Live calls', 'Missed', 'Voicemail', 'Calendar', 'Tasks', 'Messages', 'History'], 0)}
+  <div style="background:#fcf8fa;padding:14px 16px;display:grid;grid-template-columns:1.15fr 1fr;gap:12px;min-height:0">
+    <div style="display:flex;flex-direction:column;gap:11px">${callPanel()}${contextCard}${notesCard}</div>
+    <div style="display:flex;flex-direction:column;gap:11px">${scriptCard('auto').replace('width:autopx;', '')}${big ? historyCard : ''}<div class="card" style="padding:11px 14px;color:${PD}"><div class="row" style="justify-content:space-between"><span class="h">Next free slots</span><span class="sub">Bright Smile · Dr. Rivera</span></div><div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap">${['Mon 9:00', 'Mon 9:30', 'Tue 8:30', 'Wed 10:00'].map((s, i) => `<span class="pill" style="background:${i === 0 ? PD : '#f6eef2'};color:${i === 0 ? '#fff' : PD}">${s}</span>`).join('')}</div></div></div>
+  </div></div>`
+const calendar = (w) => { const hours = ['8', '9', '10', '11', '12', '1', '2']; const ev = [[0, 1, 2, 'Cleaning · J. Diaz', '#ffe4ee', 1], [1, 2, 1, 'Check-up · A. Kim', '#e0f2fe', 1], [2, 0, 2, 'Surgery block', '#fff4d6', 0], [3, 3, 2, 'Cleaning · Maria L.', P, 1], [4, 1, 1, 'Consult · R. Shah', '#ede9fe', 0]]
+  return `<div class="card" style="width:${w}px;padding:14px;color:${PD}"><div class="row" style="justify-content:space-between"><div><div class="h" style="font-size:13px">Bright Smile Dental · Week</div><div class="sub" style="margin-top:2px">Day · <b>Week</b> · Month</div></div><span class="pill" style="background:${P};color:#fff">+ New appointment</span></div>
+  <div style="display:grid;grid-template-columns:28px repeat(5,1fr);gap:4px;margin-top:10px">${['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map(d => `<div class="sub" style="text-align:center">${d}</div>`).join('')}${hours.map((hh, r) => `<div class="sub" style="height:30px">${hh}</div>${[0, 1, 2, 3, 4].map(c => { const e = ev.find(x => x[0] === c && x[1] === r); return `<div style="height:30px;border-radius:6px;background:#fbf7f9;position:relative">${e ? `<div style="position:absolute;inset:0;bottom:${-(e[2] - 1) * 34}px;border-radius:6px;background:${e[4]};padding:4px 5px;font-size:8px;font-weight:700;color:${e[4] === P ? '#fff' : PD};z-index:1">${e[3]}${e[5] ? '<div style="margin-top:2px;opacity:.75">✓ Confirmed</div>' : ''}</div>` : ''}</div>` }).join('')}`).join('')}</div></div>` }
+const wave = (w, h, n = 60) => { let s = ''; for (let i = 0; i < n; i++) { const v = Math.abs(Math.sin(i * .55) * Math.cos(i * .21)) * .85 + .15; s += `<rect x="${i * w / n}" y="${(h - v * h) / 2}" width="${w / n * .55}" height="${v * h}" rx="1.5" fill="${i < n * .38 ? P : '#e9dde3'}"/>` } return `<svg width="${w}" height="${h}">${s}</svg>` }
+
+const CA = {
+  cover() {
+    b.style.background = `radial-gradient(110% 90% at 50% 40%, #fff7fa 0%, #ffe8f0 55%, #ffd2e1 100%)`
+    b.innerHTML = `<div class="abs" style="left:${W * .17}px;top:${H * .19}px">${win(W * .6, H * .62, '#fcf8fa', '#f6eef2', PD, caWorkspace(W * .6, H * .62, false))}</div>
+      <div class="abs" style="left:${W * .03}px;top:${H * .34}px;transform:rotate(-3deg);width:${W * .19}px">${historyCard}</div>
+      <div class="abs card" style="left:${W * .79}px;top:${H * .22}px;width:${W * .18}px;padding:13px 14px;transform:rotate(3deg);color:${PD}">
+        <div class="row" style="justify-content:space-between"><span class="h">Voicemail</span><span class="pill" style="background:${PS};color:#be185d">Transcribed</span></div>
+        <div class="row" style="margin-top:10px"><span style="width:26px;height:26px;border-radius:50%;background:${P};color:#fff;display:grid;place-items:center;font-size:10px">▶</span>${wave(W * .12, 26, 40)}</div>
+        <div style="margin-top:9px;font-size:9.5px;line-height:1.5;opacity:.8">“Hi, it's Maria, I need to move my Thursday cleaning…”</div>
+        <div style="margin-top:9px;background:${PD};color:#fff;font-size:9.5px;font-weight:700;padding:7px;border-radius:8px;text-align:center">Call back</div>
+      </div>
+      <div class="abs card" style="left:${W * .7}px;top:${H * .7}px;padding:10px 13px;transform:rotate(2deg);color:${PD}"><div class="row"><span style="width:26px;height:26px;border-radius:8px;background:#fff4d6;display:grid;place-items:center;font-size:12px">↺</span><div><div class="h" style="font-size:10.5px">Missed call → callback task</div><div class="sub">Shown to the practice once returned</div></div></div></div>`
+  },
+  workspace() {
+    b.style.background = '#fbeef3'
+    b.innerHTML = `<div class="abs" style="left:${W * .06}px;top:${H * .12}px">${win(W * .88, H * .76, '#fcf8fa', '#f6eef2', PD, caWorkspace(W * .88, H * .76, true))}</div>`
+  },
+  scripts() {
+    b.style.background = `linear-gradient(135deg, ${PD} 0%, #3b1d40 100%)`
+    const node = (x, y, t, on, end) => `<div class="abs" style="left:${x}px;top:${y}px;transform:translate(-50%,-50%);background:${on ? P : '#fff'};color:${on ? '#fff' : PD};border-radius:10px;padding:8px 12px;font-size:10px;font-weight:700;box-shadow:0 14px 28px -14px rgba(0,0,0,.6);white-space:nowrap">${end ? '✓ ' : ''}${t}</div>`
+    const X = W * .27, Y = H * .5
+    const pts = [[X - W * .17, Y, 'Caller wants to…', 1, 0], [X - W * .02, Y - H * .2, 'Book', 0, 0], [X - W * .02, Y, 'Change appointment', 1, 0], [X - W * .02, Y + H * .2, 'Emergency', 0, 0], [X + W * .14, Y - H * .08, 'Cleaning', 1, 0], [X + W * .14, Y + H * .08, 'Treatment', 0, 0], [X + W * .14, Y + H * .28, 'Transfer to Dr. on call', 0, 1], [X + W * .14 , Y - H * .3, 'Offer next free slot', 0, 1]]
+    const lines = [[0, 1], [0, 2], [0, 3], [2, 4], [2, 5], [3, 6], [4, 7]].map(([a, c]) => `<path d="M${pts[a][0]} ${pts[a][1]} C ${(pts[a][0] + pts[c][0]) / 2} ${pts[a][1]}, ${(pts[a][0] + pts[c][0]) / 2} ${pts[c][1]}, ${pts[c][0]} ${pts[c][1]}" stroke="${[0, 2, 4, 7].includes(c) || (a === 2 && c === 4) || (a === 0 && c === 2) || (a === 4) ? P : 'rgba(255,255,255,.25)'}" stroke-width="2.5" fill="none" stroke-dasharray="${a === 4 ? '5 5' : ''}"/>`).join('')
+    b.innerHTML = `<div class="abs" style="left:${W * .04}px;top:${H * .08}px;color:#fff"><div class="h" style="font-size:15px">Decision-tree script</div><div style="font-size:10px;opacity:.6;margin-top:3px">Each practice's protocol, step by step</div></div>
+      <svg class="abs" style="inset:0" width="${W}" height="${H}">${lines}</svg>${pts.map(p => node(...p)).join('')}
+      <div class="abs" style="left:${W * .57}px;top:${H * .1}px">${calendar(W * .38)}</div>`
+  },
+  voicemail() {
+    b.style.background = `radial-gradient(90% 90% at 50% 40%, #fff7fa 0%, #ffe1ec 100%)`
+    const vm = `<div class="card" style="width:${W * .5}px;padding:16px;color:${PD}"><div class="row" style="justify-content:space-between"><div class="h" style="font-size:14px">Voicemail</div><span class="sub">Bright Smile Dental · 3 new</span></div>
+      ${[['+1 (305) 555-0148', 'Maria L.', '0:42', 1], ['+1 (786) 555-0192', 'Unknown caller', '0:18', 0], ['+1 (954) 555-0117', 'J. Diaz', '1:05', 0]].map(([n, who, d, open]) => `<div style="margin-top:10px;border-radius:12px;padding:11px 12px;${open ? `box-shadow:0 0 0 2px ${P};background:#fff9fb` : 'background:#fbf7f9'}"><div class="row"><span style="width:28px;height:28px;border-radius:50%;background:${open ? P : '#efe3e9'};color:${open ? '#fff' : PD};display:grid;place-items:center;font-size:10px">▶</span><div style="flex:1"><div class="h" style="font-size:11px">${who}</div><div class="sub">${n} · ${d}</div></div><div class="row" style="gap:5px"><span class="pill" style="background:#fff;box-shadow:0 0 0 1px #efe3e9;color:${PD}">⤓ Download</span><span class="pill" style="background:${PD};color:#fff">Call back</span></div></div>${open ? `<div style="margin-top:10px">${wave(W * .44, 30, 70)}</div><div style="margin-top:9px;font-size:10px;line-height:1.55;background:#fff;border-radius:9px;padding:8px 10px;box-shadow:0 0 0 1px #f4e8ee"><span class="pill" style="background:${PS};color:#be185d;margin-right:6px">Transcript</span>Hi, it's Maria. I need to move my Thursday cleaning to next week, mornings are best. Thanks!</div>` : ''}</div>`).join('')}</div>`
+    const sms = phone(W * .19, H * .66, '#fff', `<div style="padding:38px 12px 0;color:${PD}"><div class="row" style="justify-content:space-between"><span class="h">SMS · Maria L.</span><span class="pill" style="background:${PS};color:#be185d">SMS</span></div>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-top:12px;font-size:9.5px;line-height:1.45">
+        <div style="align-self:flex-end;background:${P};color:#fff;border-radius:11px 11px 3px 11px;padding:7px 9px;max-width:85%">Hi Maria, we can move you to Mon 9:00 with Dr. Rivera. Does that work?</div>
+        <div style="align-self:flex-start;background:#f6eef2;border-radius:11px 11px 11px 3px;padding:7px 9px;max-width:85%">Perfect, thank you!</div>
+        <div style="align-self:flex-end;background:${P};color:#fff;border-radius:11px 11px 3px 11px;padding:7px 9px;max-width:85%">Booked ✓ See you Monday.</div>
+      </div>
+      <div class="row" style="position:absolute;left:12px;right:12px;bottom:18px;border-radius:20px;box-shadow:0 0 0 1px #efe3e9;padding:7px 10px"><span class="sub">Type a message…</span><span style="margin-left:auto;width:20px;height:20px;border-radius:50%;background:${P}"></span></div></div>`)
+    b.innerHTML = `<div class="abs" style="left:${W * .1}px;top:${H * .2}px">${vm}</div><div class="abs" style="left:${W * .66}px;top:${H * .16}px;transform:rotate(2deg)">${sms}</div>`
+  },
+  portals() {
+    b.style.background = '#f7eff3'
+    const clientLog = `<div class="card" style="width:${W * .44}px;padding:15px;color:${PD}"><div class="row" style="justify-content:space-between"><div><div class="sub">CLIENT PORTAL</div><div class="h" style="font-size:14px;margin-top:2px">Call log · Bright Smile Dental</div></div><span class="pill" style="background:${PS};color:#be185d">Today · 18 calls</span></div>
+      ${[['10:42', 'Maria L.', ['Appointment', 'Callback'], 'Moved cleaning to Mon 9:00'], ['10:15', 'A. Kim', ['Appointment'], 'Booked check-up'], ['09:58', 'R. Shah', ['Quote'], 'Asked about implants'], ['09:31', 'J. Diaz', ['Urgent'], 'Tooth pain: transferred to Dr. on call'], ['09:02', 'T. Moore', ['Lead'], 'New patient enquiry']].map(([t, n, c, d]) => `<div class="row" style="padding:8px 0;border-top:1px solid #f4ecf0"><span class="sub" style="width:30px">${t}</span><div style="flex:1"><div class="row" style="gap:5px"><span style="font-size:10.5px;font-weight:700">${n}</span>${c.map(x => `<span class="pill" style="background:#f6eef2;color:${PD}">${x}</span>`).join('')}</div><div class="sub" style="margin-top:2px">${d}</div></div><span class="pill" style="background:#fff;box-shadow:0 0 0 1px #efe3e9;color:${PD}">+ Note</span></div>`).join('')}</div>`
+    const bh = [22, 35, 58, 72, 64, 48, 40, 55, 61, 44, 30, 18]
+    const admin = `<div class="card" style="width:${W * .4}px;padding:15px;background:${PD};color:#fff"><div class="sub" style="color:#ffc2d6;opacity:1">ADMIN</div><div class="h" style="font-size:14px;margin-top:2px">Call analytics · all practices</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px">${[['Calls today', '412'], ['Answered', '96%'], ['Callbacks open', '7']].map(([l, v]) => `<div class="kpi" style="background:rgba(255,255,255,.06);border-radius:10px;padding:9px 11px"><small>${l}</small><strong>${v}</strong></div>`).join('')}</div>
+      <div class="row" style="justify-content:space-between;margin-top:12px"><span style="font-size:10px;font-weight:700">Peak hours</span><span class="sub" style="color:#fff">8 AM – 7 PM</span></div>
+      <div style="display:flex;align-items:flex-end;gap:5px;height:90px;margin-top:8px">${bh.map((v, i) => `<div style="flex:1;height:${v}%;border-radius:4px 4px 2px 2px;background:${i === 3 ? P : 'rgba(255,111,159,.35)'}"></div>`).join('')}</div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">${[['Agent A.', 94], ['Agent B.', 88], ['Agent C.', 81]].map(([n, v]) => `<div class="row"><span style="font-size:9.5px;width:54px;opacity:.8">${n}</span><div style="flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.1)"><div style="height:100%;width:${v}%;background:${P};border-radius:3px"></div></div><span style="font-size:9.5px;font-weight:800">${v}%</span></div>`).join('')}</div></div>`
+    b.innerHTML = `<div class="abs" style="left:${W * .07}px;top:${H * .16}px">${clientLog}</div><div class="abs" style="left:${W * .54}px;top:${H * .14}px">${admin}</div>`
+  },
+}
+
+const [proj, board] = art.split('-')
+;({ sp: SP, ca: CA })[proj][board]()
+</script>
+</body>
+</html>

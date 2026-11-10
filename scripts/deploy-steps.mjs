@@ -28,6 +28,7 @@ const SCRIPTS = [
   'scripts/add-nexus-courier.ts', // first real project: published as Project 01
   'scripts/update-project-covers.ts', // starter projects get covers that match them
   'scripts/add-home-cyber-service.ts', // home: 7th discipline + key-feature chips
+  'scripts/add-supreme-calliana.ts', // real projects 02 and 03
 ]
 
 const step = process.argv[2]
