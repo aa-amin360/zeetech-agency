@@ -15,8 +15,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(40px, calc(80 * var(--u)), 80px);
-  padding: clamp(56px, calc(80 * var(--u)), 80px) 0;
+  gap: clamp(28px, calc(44 * var(--u)), 44px);
+  padding: clamp(36px, calc(52 * var(--u)), 52px) 0;
 }
 .clients__head {
   display: flex;
@@ -48,7 +48,7 @@
 .clients__rows {
   display: flex;
   flex-direction: column;
-  gap: clamp(40px, calc(80 * var(--u)), 80px);
+  gap: clamp(24px, calc(40 * var(--u)), 40px);
   width: 100%;
 }
 
@@ -113,4 +113,20 @@
 
 @media (prefers-reduced-motion: reduce) {
   .loop__track { animation: none; }
+}
+
+/* Icon + name (technology logos): the icon is square, so the name sits beside it */
+.logo-slot .logo-slot__icon {
+  width: auto;
+  height: 100%;
+  max-width: none;
+  flex-shrink: 0;
+}
+.logo-slot__label {
+  margin-left: calc(14 * var(--lu));
+  font-weight: 600;
+  font-size: calc(26 * var(--lu));
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: var(--zt-ink-strong);
 }

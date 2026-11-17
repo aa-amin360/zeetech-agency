@@ -31,6 +31,7 @@ const SCRIPTS = [
   'scripts/add-supreme-calliana.ts', // real projects 02 and 03
   'scripts/update-project-screens.ts', // Nexus Courier + Supreme Prospects: real screens
   'scripts/update-project-banners.ts', // their brand banners as covers
+  'scripts/archive-templates-tech-logos.ts', // Marlin review step 1: template projects archived, tech logos
 ]
 
 const step = process.argv[2]

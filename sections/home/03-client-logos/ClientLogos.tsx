@@ -1,5 +1,6 @@
 import type { ClientLogosBlock } from '@/payload-types'
 import { Img } from '@/components/Img'
+import { asMedia } from '@/lib/media'
 import { Marquee } from '@/components/Marquee'
 import './client-logos.css'
 
@@ -11,10 +12,25 @@ const PLACEHOLDER_WIDTHS = [
 
 type Logo = NonNullable<ClientLogosBlock['logos']>[number]
 
+/** A square mark (an icon such as a technology logo) needs its name beside it; a wordmark doesn't. */
+function isIcon(media: Logo['logo']) {
+  const m = asMedia(media)
+  if (!m) return false
+  if (m.width && m.height) return m.width / m.height < 1.6
+  return m.mimeType === 'image/svg+xml'
+}
+
 const LogoItem = ({ logo }: { logo: Logo }) => {
+  // eager: the scrolling copies slide in from off-screen, and lazy loading would leave gaps
   const inner = logo.logo ? (
-    // eager: the scrolling copies slide in from off-screen, and lazy loading would leave gaps
-    <Img media={logo.logo} alt={logo.name} sizes="280px" loading="eager" />
+    isIcon(logo.logo) ? (
+      <>
+        <Img media={logo.logo} alt="" sizes="48px" loading="eager" className="logo-slot__icon" />
+        <span className="logo-slot__label">{logo.name}</span>
+      </>
+    ) : (
+      <Img media={logo.logo} alt={logo.name} sizes="280px" loading="eager" />
+    )
   ) : (
     <span className="logo-slot__name">{logo.name}</span>
   )

@@ -22,12 +22,12 @@ Nothing in sections 3–4 can be finished without these.
 | I-2 | Project images (the messy ones) | 🟡 | Will need cropping/cleanup into a cover (≈1664×640 hero, 16:10 card) and gallery images |
 | I-3 | The owner's list of corrections | 🟡 | Not received yet. Add each one to section 5 when it arrives |
 | I-4 | Real numbers for the stats (countries, projects, retention, years) or a decision to remove them | ⬜ | Currently fake, see D-4 |
-| I-5 | Real client logos, with permission to show them | ⬜ | Current 13 logos are from the template, see D-3 |
+| I-5 | Real client logos, with permission to show them | ➖ | Owner decision (2026-11-17): the strip shows technology logos instead (D-3). Real client logos can be added later in the admin |
 | I-6 | Real testimonials (name, role, company, quote, photo, platform) | ⬜ | Current ones are invented, see D-5 |
 | I-7 | Real Fiverr/Upwork rating and badges, if the agency has them | ⬜ | See D-4 |
 | I-8 | Business email and domain (is `hello@zeetech.studio` real?) | ⬜ | Used in footer, contact strip, SEO data |
 | I-9 | Social profile links (Facebook, X, Instagram, LinkedIn) | ⬜ | All empty, so the icons do nothing |
-| I-10 | Owner's photo / name / title confirmation ("Amit Ghosh, COO & Co-founder") | ⬜ | The photo is a stock/template image, and "COO & Co-founder" may not fit a one-person agency |
+| I-10 | Owner's photo / name / title confirmation ("Amit Ghosh, COO & Co-founder") | 🟡 | Confirmed 2026-11-17: **Amit Ghosh is the owner's real name and the photo is really him.** Title "COO & Co-founder" still to confirm |
 | I-11 | Team / studio photos, or a decision to keep stock photos | ⬜ | About, Contact and Careers all use stock team photos |
 | I-12 | Showreel video for "Why ZeeTech" (optional) | ⬜ | The reel is set to *none* |
 | I-13 | Terms of Use and Privacy Policy text | ⬜ | See M-1 |
@@ -74,13 +74,13 @@ Grouped by page. "Admin" = where it is edited in `/admin`.
 ### Home (`/`)
 | # | Item | Status |
 |---|---|---|
-| D-3 | **Client logos:** 13 template brands (Al Rajhi Takaful, Pentair, Telr, RAK Properties…) and title "Trusted by 40+ of the world's top brands". These are **not** real clients, and showing them is a credibility and legal risk | ⬜ replace with real logos (I-5) or remove the section |
+| D-3 | **Client logos:** 13 template brands (Al Rajhi Takaful, Pentair, Telr, RAK Properties…) and title "Trusted by 40+ of the world's top brands". These are **not** real clients, and showing them is a credibility and legal risk | ✅ 2026-11-17: replaced by 16 technology logos (React, Node.js, Next.js, NestJS, TypeScript, PostgreSQL, Tailwind CSS, Redis, Flutter, GraphQL, Figma, Socket.IO, Docker, Drizzle ORM, Ethereum, Solidity), title "The technology behind what we build" |
 | D-3b | Hero trust line "Trusted by **40+** product teams worldwide" + 3 stock avatars | ⬜ |
 | D-4 | **Proof stats:** 150+ countries, 14+ projects, 98% retention, 5+ years, each with a visible note **"Metric pending verification"** on the live page. Also rating 4.9 Fiverr, "Top product design agency 2025" (Fiverr), "Top design agency" (Upwork) badges | ⬜ real numbers or remove (I-4, I-7) |
 | D-5 | **Testimonials:** "Andrew Baker, ARHQ" (featured) and "Marcus Vance, FleetPulse Logistics" (×2, the same quote twice) are invented | ⬜ (I-6) |
-| D-6 | **Selected work:** shows the 6 template case studies, with the visible note **"Sample cases — client names pending approval"** | ⬜ real projects, remove the note |
+| D-6 | **Selected work:** shows the 6 template case studies, with the visible note **"Sample cases — client names pending approval"** | ✅ 2026-11-17: only the 3 real projects show; note replaced with "Real platforms we have designed and built, for logistics, sports recruitment and customer service." |
 | D-7 | Collage + showreel images: template mockups (reel-1…4, principle images) | ⬜ swap for real project shots when available |
-| D-8 | Inquiry card person: "Amit Ghosh, COO & Co-founder" with a stock photo | ⬜ (I-10) |
+| D-8 | Inquiry card person: "Amit Ghosh, COO & Co-founder" ~~with a stock photo~~ | ✅ name and photo are real (owner, 2026-11-17); title to confirm (I-10) |
 | D-9 | Inquiry budget options include an **overlap**: "$5k - $20k" *and* "$10k - $20k" | ⬜ fix to e.g. <$5k / $5k–$10k / $10k–$20k / $20k–$50k / $50k+ |
 | D-10 | Copy typos in Delivery Principles card 03: "we build UI implementation, **aPIs**…" (lowercase start, "aPIs") | ⬜ |
 | D-11 | How We Build: stage "Frontend Development" lists the same deliverables as Backend ("API layer, Database, AI workflows"); stages 4–6 use identical tool icons | ⬜ |
@@ -89,7 +89,7 @@ Grouped by page. "Admin" = where it is edited in `/admin`.
 ### Our Work (`/work`) + case studies (`/work/<slug>`)
 | # | Item | Status |
 |---|---|---|
-| D-13 | 6 template projects: Landify, UnifyIQ, Klyro Studio, Crimino, ZapMail, Astrix Builders. ~~Covers were unrelated Figma template images~~ → each now has an illustrated cover matching its description (2026-11-09, `scripts/update-project-covers.ts`). The projects themselves are still not real work | 🟡 covers done; still replace with real projects (I-1, I-2) and delete the rest |
+| D-13 | 6 template projects: Landify, UnifyIQ, Klyro Studio, Crimino, ZapMail, Astrix Builders. ~~Covers were unrelated Figma template images~~ → each now has an illustrated cover matching its description (2026-11-09, `scripts/update-project-covers.ts`). The projects themselves are still not real work | ✅ **archived** 2026-11-17 (owner: archive, don't delete). They are drafts: hidden from visitors, kept in the admin, and each can be brought back with "Publish" |
 | D-14 | Every case study page is just cover + title + summary: **no story, no gallery, no duration, no testimonial** (checked in the database) | ⬜ |
 | D-15 | Industry filter buttons are generated from projects. With 2–3 projects the filter row may look thin; consider hiding it when there are < 4 projects | ⬜ |
 | D-16 | Work page meta description mentions "Webflow sites and brand identities" (template wording) | ⬜ |
@@ -139,7 +139,27 @@ Add each correction from the owner here as it arrives.
 
 | # | Correction (owner's words) | Page / section | Status | Done in commit |
 |---|---|---|---|---|
-| C-1 | *(waiting for list, I-3)* | | 🟡 | |
+| C-1 | *(owner's own list still to come, I-3)* | | 🟡 | |
+
+### Client review: Marlin (2026-11-17)
+
+A client of the owner reviewed the live site. **Strengths he named:** sharp positioning ("senior people from week one, no handover"), editorial restraint on the AI/security pages ("Does every product need AI? No"), case studies that together suggest a specialism in operations-heavy software. **His bottom line:** right story, wrong order; missing proof and coherence; the fix is cheap compared with a rebuild.
+
+| # | Finding | Where | Needs | Status |
+|---|---|---|---|---|
+| M-R1 | Service pages end in a **handoff** ("Prepare the build", "Validate & hand over", "Test & document"), contradicting the homepage's "no handover" promise | Each `/services/<slug>` process + questions | Copy only: can do now | ⬜ |
+| M-R2 | **"40+ product teams" has no proof**: no logos, named clients, geography or founding year | Home hero, client logos, About | Owner: real numbers or remove (= I-4, I-5, D-3, D-3b) | 🟡 logo strip now shows technologies (D-3). **Owner keeps the stats** (2026-11-17) |
+| M-R3 | **Is this a real company?** Only person shown is Amit, and only in About's 2nd section. No named engineers, testimonials, timeline | About, home | Owner: real name/photo/role (I-10), 2–3 named senior people, founding year, testimonials (I-6) | 🟡 Amit Ghosh's name and photo confirmed real. Fiverr testimonials to be replaced with real ones later (owner, 2026-11-17) |
+| M-R4 | **Portfolio inconsistent**: UnifyIQ is a Webflow template beside custom builds (it's one of the template projects, D-13) | Work, home Selected work | Owner OK to remove template projects | ✅ template projects archived 2026-11-17 |
+| M-R5 | An unfinished project reads as unfinished. He named Supreme Prospects, but the in-progress one is **Calliana** (its page says so); confirm which | Work / home | Owner: hide Calliana from home until it launches? | ➖ Owner decision (2026-11-17): **keep Calliana** everywhere; with only 3 projects, hiding it would make the portfolio look empty |
+| M-R6 | **Blockchain** is a top-level service while its own copy says it often isn't needed: "candour for sale" | Services nav, service page | Owner: keep, reframe (security-led, blockchain as an option) or drop | ⬜ |
+| M-R7 | **No direction/vision statement**: what ZeeTech wants to be known for, who it's built for (he suggests: operations-heavy software for companies outgrowing spreadsheets) | Home / About | Owner: agree the positioning | ⬜ |
+| M-R8 | **No price or engagement-shape signal** | Services / Contact | Owner: engagement models + "from" ranges | ⬜ |
+| M-R9 | **No geography / hours / contracting info** for overseas clients | About / Contact / footer | Owner: location, time-zone overlap, contracts, payment | ⬜ |
+| M-R10 | **MBMG partnership not mentioned**; scope overlap with MBMG's business division needs a written split | About / home | Owner: what can be said publicly about MBMG | ⬜ |
+| M-R11 | His top fix: **one product-journey page** carrying a single project through all six disciplines as one engagement | New page | Can build from existing copy; better with a real project as the example | ⬜ |
+
+**Lead:** Marlin also asked for a website for himself ("a website to match yours"; his old one lapsed) and says he has plenty of client proof. That's a sales lead for the owner to answer; not site work.
 
 ---
 
@@ -153,7 +173,7 @@ One block per project when details arrive (I-1, I-2).
 | P-2 | Supreme Prospects: Athletic Recruitment Platform (`/work/supreme-prospects-athletic-recruitment-platform`) | Supreme Prospects | ✅ 2026-11-10 | ✅ **real product screens** from the owner (2026-11-15): brand banner cover (2026-11-17) + 5 framed screens in `legacy/assets/work/supreme-prospects/` | ✅ published as Project 02 | Copy: [content/projects/supreme-prospects.md](content/projects/supreme-prospects.md). No duration or status shown (owner). The source's "eliminated compliance violations" was softened to "built to prevent" (not provable publicly) |
 | P-3 | Calliana: Virtual Receptionist Call Platform (`/work/calliana-virtual-receptionist-call-platform`) | Calliana | ✅ 2026-11-10 (from the internal scope PDF + owner's status) | ✅ **real product screens** from the owner (2026-11-10): logo banner cover + 6 framed screens in `legacy/assets/work/calliana/` | ✅ published as Project 03 | Copy: [content/projects/calliana.md](content/projects/calliana.md). Duration 3 months. **Not finished yet:** design + frontend done, backend mostly done, some third-party integrations not connected. The page says so under "Where it stands" and claims no results. Kept out of the public copy: client owner's name, Fiverr, pricing, phase plan, softphone product/version. Owner confirmed (2026-11-10): screens are dummy data exported from Figma, client is happy for them to be shown, "Zoiper Connected" is fine. **Update the page when it launches** |
 
-Real projects so far: Nexus Courier (01), Supreme Prospects (02), Calliana (03). When all real projects are live: delete the 6 template case studies (D-13) and remove the "Sample cases" note (D-6).
+Real projects so far: Nexus Courier (01), Supreme Prospects (02), Calliana (03). The 6 template case studies are archived as drafts (D-13, 2026-11-17), not deleted. The "Sample cases" note is replaced (D-6).
 
 ---
 
@@ -181,3 +201,6 @@ Real projects so far: Nexus Courier (01), Supreme Prospects (02), Calliana (03).
 | 2026-11-15 | P-1 Nexus Courier and P-2 Supreme Prospects: illustrations replaced by the real product screens the owner shared (dummy data). Sign-in page as cover (kept within the wide-banner crop), dashboards etc. framed, light/dark pair. Files/alt in `scripts/project-screens.data.ts`; `scripts/update-project-screens.ts` (`npm run project-screens` + Vercel deploy step) swaps them on existing databases; the add scripts use the same list for new ones. Deployed via push to main | Claude |
 | 2026-11-17 | P-1/P-2 thumbnails: the owner's brand banners replace the sign-in pages as covers (same treatment as Calliana: banner on a blurred copy, edges faded). `scripts/update-project-banners.ts` (`npm run project-banners` + Vercel deploy step). Deployed via push to main | Claude |
 | 2026-11-17 | Home "Selected work" cards: the "PROJECT 01 // CLIENT" line redesigned as a two-part pill (brand-navy project number chip + frosted client name led by a small navy diamond), matching the white client box and round arrow. Applies to every card, desktop/tablet/phone (`sections/home/05-selected-work`). Deployed via push to main | Claude |
+| 2026-11-17 | Logged Marlin's client review as M-R1 to M-R11 in section 5, split into copy fixes vs owner input | Claude |
+| 2026-11-17 | Marlin review step 1 (owner decisions): the 6 template projects **archived** as drafts (hidden from visitors, kept in the admin); home logo strip now shows 16 technology logos (`legacy/assets/tech`, Simple Icons) titled "The technology behind what we build", and square logos show their name beside them. The "Sample cases — client names pending approval" note is replaced with a line about the real work (D-6). Stats, Calliana and Amit Ghosh (real name and photo) are kept; testimonials will be replaced later. Script `scripts/archive-templates-tech-logos.ts` (`npm run step1-content` + Vercel deploy step); starter data (`seed.ts`) uses the tech logos. Local only, not pushed yet | Claude |
+| 2026-11-17 | Home tech-logo strip made shorter: padding 80 → 52px, gap under the title 80 → 44px, gap between the two rows 80 → 40px (scales down on smaller screens). Local only, not pushed yet | Claude |
