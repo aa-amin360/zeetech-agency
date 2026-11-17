@@ -31,6 +31,7 @@
     "project-screens": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/update-project-screens.ts",
     "project-banners": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/update-project-banners.ts",
     "step1-content": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/archive-templates-tech-logos.ts",
+    "founder-title": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/update-founder-title.ts",
     "vercel:update-content": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation payload run scripts/update-content.ts",
     "images": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/convert-images.ts",
     "vercel:images": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation payload run scripts/convert-images.ts",

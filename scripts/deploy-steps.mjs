@@ -32,6 +32,7 @@ const SCRIPTS = [
   'scripts/update-project-screens.ts', // Nexus Courier + Supreme Prospects: real screens
   'scripts/update-project-banners.ts', // their brand banners as covers
   'scripts/archive-templates-tech-logos.ts', // Marlin review step 1: template projects archived, tech logos
+  'scripts/update-founder-title.ts', // Amit Ghosh: Founder
 ]
 
 const step = process.argv[2]

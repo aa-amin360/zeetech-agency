@@ -61,7 +61,7 @@ export const ABOUT_SECTIONS = [
     background: 'warm',
     images: [
       ['team-collaboration.webp', 'Product team reviewing work together'],
-      ['founder-portrait.webp', 'Portrait of ZeeTech’s co-founder'],
+      ['founder-portrait.webp', 'Portrait of ZeeTech’s founder'],
     ],
   },
   {
@@ -88,15 +88,15 @@ export const ABOUT_SECTIONS = [
       'Direct human partnership',
       'A real conversation behind',
       'every product decision.',
-      'Amit Ghosh, COO & Co-founder, is part of the conversations where product direction takes shape. Clear questions and shared decisions help connect an idea to the work that follows.\nProduct context · Shared decisions · Clear next steps',
+      'Amit Ghosh, Founder, is part of the conversations where product direction takes shape. Clear questions and shared decisions help connect an idea to the work that follows.\nProduct context · Shared decisions · Clear next steps',
     ),
     layout: 'person',
     background: 'warm',
     images: [
       ['studio-team.webp', 'ZeeTech team planning a product at the whiteboard'],
-      ['founder-portrait.webp', 'Portrait of ZeeTech’s co-founder'],
+      ['founder-portrait.webp', 'Portrait of ZeeTech’s founder'],
     ],
-    person: { name: 'Amit Ghosh', role: 'COO & Co-founder' },
+    person: { name: 'Amit Ghosh', role: 'Founder' },
   },
   {
     blockType: 'cardGrid',

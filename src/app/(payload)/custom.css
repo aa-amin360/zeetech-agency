@@ -244,3 +244,27 @@ html[data-theme="dark"] .nav { background: var(--theme-elevation-50); }
 .nav__controls { padding: 0 12px 4px; }
 .nav__log-out { color: var(--theme-elevation-500); }
 .nav__log-out:hover { color: var(--zt-orange); }
+
+/* One-click Publish / Unpublish (case studies: list column and sidebar) */
+.zt-publish { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.zt-publish__btn {
+  padding: 4px 12px;
+  border: 1px solid var(--theme-elevation-250);
+  border-radius: 999px;
+  background: var(--theme-elevation-0);
+  color: var(--theme-elevation-800);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.zt-publish__btn:hover:not(:disabled) { border-color: var(--theme-elevation-500); background: var(--theme-elevation-50); }
+.zt-publish__btn--go { border-color: #fd5600; background: #fd5600; color: #fff; }
+.zt-publish__btn--go:hover:not(:disabled) { border-color: #e04c00; background: #e04c00; }
+.zt-publish__btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.zt-publish__error { flex-basis: 100%; font-size: 12px; color: var(--theme-error-500); }
+.zt-publish-field { margin-bottom: 24px; }
+.zt-publish-field .field-label { margin-bottom: 8px; }
+.zt-publish__note { margin: 6px 0 0; font-size: 12px; color: var(--theme-elevation-500); }

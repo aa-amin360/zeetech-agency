@@ -13,7 +13,7 @@ export const CaseStudies: CollectionConfig = {
   admin: {
     group: 'Content',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'client', '_status', 'updatedAt'],
+    defaultColumns: ['title', 'client', 'visibility', 'updatedAt'],
     preview: (doc) => `${serverUrl()}/next/preview?path=${encodeURIComponent(`/work/${doc.slug}`)}`,
     livePreview: { url: ({ data }) => `${serverUrl()}/next/preview?path=${encodeURIComponent(`/work/${data?.slug}`)}` },
   },
@@ -21,6 +21,19 @@ export const CaseStudies: CollectionConfig = {
   access: { read: publishedOrLoggedIn, create: loggedIn, update: loggedIn, delete: loggedIn },
   hooks: { afterChange: [revalidateCollection] },
   fields: [
+    {
+      // one-click Publish / Unpublish, in the list and in the sidebar (stores nothing itself)
+      name: 'visibility',
+      type: 'ui',
+      label: 'Visibility',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Cell: '/admin/PublishToggle#PublishToggleCell',
+          Field: '/admin/PublishToggle#PublishToggleField',
+        },
+      },
+    },
     {
       type: 'row',
       fields: [

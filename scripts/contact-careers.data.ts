@@ -39,7 +39,7 @@ export const CAREERS_PAGE = {
     images: [
       ['studio-team.webp', 'ZeeTech team planning a product at the whiteboard'],
       ['code-desk.webp', 'Code on a monitor at a developer’s desk'],
-      ['founder-portrait.webp', 'Portrait of ZeeTech’s co-founder'],
+      ['founder-portrait.webp', 'Portrait of ZeeTech’s founder'],
     ] as const,
     label: { kicker: 'How we work', title: 'A shared product journey', text: 'Product · design · engineering' },
   },

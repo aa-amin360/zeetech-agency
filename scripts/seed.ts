@@ -388,7 +388,7 @@ const layout = [
         { title: 'What is getting in the way?', text: 'User problems, technical debt, missing workflows, or delivery bottlenecks.' },
         { title: 'What should change?', text: 'The result you want for users, the team, or the business.' },
       ],
-      person: { photo: img.iqbal, name: 'Amit Ghosh', role: 'COO & Co-founder' },
+      person: { photo: img.iqbal, name: 'Amit Ghosh', role: 'Founder' },
     },
     budgets: ['Less than $5k', '$5k - $20k', '$10k - $20k', '$20k - $50k', 'More than $50k'],
     submitLabel: 'Send Inquiry',
