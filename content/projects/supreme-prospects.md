@@ -96,7 +96,7 @@ Framed in a browser window on a soft background; the cover is the sign-in page, 
 middle band so the wide case-study banner never crops it. Files and alt text:
 `scripts/project-screens.data.ts`; images in `legacy/assets/work/supreme-prospects/`.
 
-Cover: sign-in page · Gallery: dashboard, athlete profile, talent evaluation, scouting & recruitment, light/dark mode.
+Cover: brand banner (`supreme-banner.webp`, 2026-11-17) · Gallery: dashboard, athlete profile, talent evaluation, scouting & recruitment, light/dark mode.
 
 Note: the screens show university logos (Duke, UNC, Kentucky, Michigan) and the sign-in page shows product marketing figures (200+ colleges, 50K+ athletes, 99% placement); both are part of the client's design, not ZeeTech claims.
 

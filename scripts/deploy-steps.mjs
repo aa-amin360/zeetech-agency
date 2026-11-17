@@ -30,6 +30,7 @@ const SCRIPTS = [
   'scripts/add-home-cyber-service.ts', // home: 7th discipline + key-feature chips
   'scripts/add-supreme-calliana.ts', // real projects 02 and 03
   'scripts/update-project-screens.ts', // Nexus Courier + Supreme Prospects: real screens
+  'scripts/update-project-banners.ts', // their brand banners as covers
 ]
 
 const step = process.argv[2]

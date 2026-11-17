@@ -7,7 +7,7 @@ export type ProjectScreens = { slug: string; folder: string; cover: Shot; galler
 export const NEXUS_SCREENS: ProjectScreens = {
   slug: 'nexus-courier-logistics-platform',
   folder: 'nexus-courier',
-  cover: ['nexus-cover.webp', 'Nexus Courier sign-in page'],
+  cover: ['nexus-banner.webp', 'Nexus Courier brand banner'],
   gallery: [
     ['nexus-dashboard.webp', 'Nexus Courier admin dashboard: shipments, delivery performance and recent orders'],
     ['nexus-orders.webp', 'Nexus Courier order management'],
@@ -21,7 +21,7 @@ export const NEXUS_SCREENS: ProjectScreens = {
 export const SUPREME_SCREENS: ProjectScreens = {
   slug: 'supreme-prospects-athletic-recruitment-platform',
   folder: 'supreme-prospects',
-  cover: ['supreme-cover.webp', 'Supreme Prospects sign-in page'],
+  cover: ['supreme-banner.webp', 'Supreme Prospects brand banner'],
   gallery: [
     ['supreme-dashboard.webp', 'Supreme Prospects dashboard: recruitment activity, talent distribution and pipeline'],
     ['supreme-athlete-profile.webp', 'Supreme Prospects athlete profile with talent score and performance analytics'],

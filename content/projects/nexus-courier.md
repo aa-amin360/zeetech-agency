@@ -150,7 +150,7 @@ Framed in a browser window on a soft background; the cover is the sign-in page, 
 middle band so the wide case-study banner never crops it. Files and alt text:
 `scripts/project-screens.data.ts`; images in `legacy/assets/work/nexus-courier/`.
 
-Cover: sign-in page · Gallery: admin dashboard, order management, shipment tracking, proof of delivery, corporate client dashboard, light/dark mode.
+Cover: brand banner (`nexus-banner.webp`, 2026-11-17) · Gallery: admin dashboard, order management, shipment tracking, proof of delivery, corporate client dashboard, light/dark mode.
 
 The earlier illustrations ([nexus-courier-visuals.html](nexus-courier-visuals.html)) are no longer used.
 
