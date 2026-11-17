@@ -8,6 +8,23 @@ const Arrow = () => (
   </svg>
 )
 
+/** "Project 01" → a small "Project" with a bold "01"; any other label is shown as it is. */
+function ProjectNumber({ label }: { label: string }) {
+  const m = /^(.*?)\s*(\d+)$/.exec(label.trim())
+  return (
+    <span className="case__num">
+      {m ? (
+        <>
+          {m[1] ? <span className="case__num-word">{m[1]}</span> : null}
+          <span className="case__num-digits">{m[2]}</span>
+        </>
+      ) : (
+        label
+      )}
+    </span>
+  )
+}
+
 export function CaseCard({ study, headingLevel = 3 }: { study: CaseStudy; headingLevel?: 2 | 3 }) {
   const H = headingLevel === 2 ? 'h2' : 'h3'
   const href = `/work/${study.slug}`
@@ -16,8 +33,8 @@ export function CaseCard({ study, headingLevel = 3 }: { study: CaseStudy; headin
       <div className="case__body">
         {study.projectLabel || study.client ? (
           <p className="case__kicker">
-            {study.projectLabel ? <span>{study.projectLabel}</span> : null}{' '}
-            {study.client ? <span className="case__client">{`// ${study.client}`}</span> : null}
+            {study.projectLabel ? <ProjectNumber label={study.projectLabel} /> : null}
+            {study.client ? <span className="case__client">{study.client}</span> : null}
           </p>
         ) : null}
         <H className="case__title">{study.titleAccent ? `${study.title} ${study.titleAccent}` : study.title}</H>

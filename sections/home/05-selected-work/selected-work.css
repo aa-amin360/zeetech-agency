@@ -40,15 +40,64 @@
   gap: clamp(14px, calc(24 * var(--u)), 24px);
   letter-spacing: 1px;
 }
+/* project label: a two-part pill (dark number + frosted client name) that echoes the white
+   client box and round arrow at the bottom of the card, on any card colour */
 .case__kicker {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  max-width: 100%;
   margin: 0;
-  font-weight: 700;
-  font-size: clamp(15px, calc(24 * var(--u)), 24px);
-  line-height: 1.5;
-  text-transform: uppercase;
+  padding: 5px;
+  gap: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 6px 18px -10px rgba(14, 14, 13, 0.35);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-size: clamp(12px, calc(16 * var(--u)), 16px);
+  line-height: 1;
   color: var(--zt-ink-strong);
 }
-.case__client { color: #fff; }
+.case__num {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  flex: none;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--zt-ink);          /* brand navy, softer than black */
+  color: #fff;
+}
+.case__num-word {
+  font-weight: 500;
+  font-size: 0.8em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.case__num-digits { font-weight: 700; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
+.case__client {
+  min-width: 0;
+  padding: 7px 14px 7px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.case__client::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 10px;
+  background: var(--zt-ink);
+  transform: rotate(45deg);           /* diamond */
+  vertical-align: 0.15em;
+}
+[data-perf="low"] .case__kicker { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(255, 255, 255, 0.72); }
 .case__title {
   margin: 0;
   font-weight: 600;
@@ -174,7 +223,7 @@
     padding: clamp(16px, 3vw, 24px);
   }
   .case__body { display: contents; }             /* its parts join the card's grid */
-  .case__kicker { grid-area: kicker; }
+  .case__kicker { grid-area: kicker; justify-self: start; }
   .case__title { grid-area: title; align-self: center; font-size: clamp(20px, 4.2vw, 30px); line-height: 1.25; }
   .case__desc { grid-area: desc; }
   .case__meta { grid-area: meta; }
@@ -186,7 +235,9 @@
 /* phones: description hidden (it is on the project page) and duration + scope on one line */
 @media (max-width: 560px) {
   .case { gap: 10px 14px; }
-  .case__kicker { font-size: 13px; line-height: 1.4; }
+  .case__kicker { font-size: 11.5px; padding: 4px; }
+  .case__num { padding: 6px 10px; }
+  .case__client { padding: 6px 10px 6px 6px; }
   .case__desc { display: none; }
   .case__meta { display: flex; gap: 0; min-width: 0; font-size: 14px; }
   .case__meta > div { flex: 0 1 auto; min-width: 0; gap: 0; }
