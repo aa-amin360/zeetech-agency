@@ -91,14 +91,13 @@ College scouting is fragmented and heavily regulated:
 
 ## Visuals
 
-Illustrations drawn from the feature list (not screenshots), in `legacy/assets/work/supreme-prospects/`:
+**Real product screens** shared by the owner (2026-11-15): dummy data, exported from the design.
+Framed in a browser window on a soft background; the cover is the sign-in page, kept inside the
+middle band so the wide case-study banner never crops it. Files and alt text:
+`scripts/project-screens.data.ts`; images in `legacy/assets/work/supreme-prospects/`.
 
-| File | Used as | Shows |
-|---|---|---|
-| `cover.webp` | Cover | Prospect profile with talent score, scouting board, dead-period message lock, field-grading phone |
-| `search.webp` | Gallery 1 | Talent search: filters, tiered prospect list, comparison heat-map |
-| `compliance.webp` | Gallery 2 | Compliance calendar with dead period, three-way messaging with parent, audit log |
-| `grading.webp` | Gallery 3 | Mobile field grading: position rubric, weighted sliders, offline sync |
-| `portals.webp` | Gallery 4 | The six role portals on one design system |
+Cover: sign-in page · Gallery: dashboard, athlete profile, talent evaluation, scouting & recruitment, light/dark mode.
 
-Source: [project-visuals.html](project-visuals.html) (`#sp-cover|1200|750`, `#sp-search|1200|675`, …).
+Note: the screens show university logos (Duke, UNC, Kentucky, Michigan) and the sign-in page shows product marketing figures (200+ colleges, 50K+ athletes, 99% placement); both are part of the client's design, not ZeeTech claims.
+
+The earlier illustrations ([project-visuals.html](project-visuals.html) `#sp-…`) are no longer used.

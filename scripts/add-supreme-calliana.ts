@@ -15,6 +15,7 @@ import { getPayload } from 'payload'
 import { generateKeyBetween } from 'payload/shared'
 import config from '../src/payload.config'
 import { ctx, endSections, mediaFrom, renumberProjects, storyFromCopy } from './case-study-create'
+import { SUPREME_SCREENS } from './project-screens.data'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(dirname, '..')
@@ -49,13 +50,9 @@ const PROJECTS: Project[] = [
           'How ZeeTech built a multi-tenant recruitment platform with six role portals, a talent scoring engine and recruiting-compliance rules built into messaging.',
       },
     },
-    cover: ['cover.webp', 'Supreme Prospects: illustration of prospect search, talent score, dead-period message lock and field grading'],
-    gallery: [
-      ['search.webp', 'Supreme Prospects: illustration of talent search with tiers and a comparison heat-map'],
-      ['compliance.webp', 'Supreme Prospects: illustration of the recruiting calendar, three-way messaging and audit trail'],
-      ['grading.webp', 'Supreme Prospects: illustration of the rubric builder and mobile field grading'],
-      ['portals.webp', 'Supreme Prospects: illustration of the six role portals'],
-    ],
+    // real product screens (dummy data), shared with update-project-screens.ts
+    cover: SUPREME_SCREENS.cover,
+    gallery: SUPREME_SCREENS.gallery,
   },
   {
     slug: 'calliana-virtual-receptionist-call-platform',

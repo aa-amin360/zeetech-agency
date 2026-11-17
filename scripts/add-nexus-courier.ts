@@ -18,6 +18,7 @@ import { getPayload } from 'payload'
 import { generateKeyBetween } from 'payload/shared'
 import { convertMarkdownToLexical, editorConfigFactory } from '@payloadcms/richtext-lexical'
 import config from '../src/payload.config'
+import { NEXUS_SCREENS } from './project-screens.data'
 
 const SLUG = 'nexus-courier-logistics-platform'
 const dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -92,14 +93,10 @@ const strip = (v: unknown): unknown =>
 const fromHome = (type: string) =>
   (home.docs[0]?.layout ?? []).filter((b) => b.blockType === type).slice(0, 1).map(strip)
 
-log('Uploading the Nexus Courier illustrations…')
-const cover = await media('cover.webp', 'Nexus Courier: illustration of the admin dashboard, shipment timeline and QR label')
-const gallery = [
-  await media('admin.webp', 'Nexus Courier: illustration of the admin operations overview'),
-  await media('client.webp', 'Nexus Courier: illustration of the client delivery request, QR label and public tracking'),
-  await media('tracking.webp', 'Nexus Courier: illustration of the service-area map, chain-of-custody timeline and proof of delivery'),
-  await media('hubs.webp', 'Nexus Courier: illustration of hub-and-spoke sorting, delivery runs and driver transfers'),
-]
+log('Uploading the Nexus Courier screens…')
+const cover = await media(...NEXUS_SCREENS.cover)
+const gallery: number[] = []
+for (const shot of NEXUS_SCREENS.gallery) gallery.push(await media(...shot))
 
 // 2. an order key before the current first project
 const first = await payload.find({ collection: 'case-studies', sort: '_order', limit: 1, depth: 0, draft: true })

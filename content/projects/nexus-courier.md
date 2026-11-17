@@ -145,20 +145,14 @@ Logistics processes that used to be separate now run in one place:
 
 ## Visuals
 
-No screenshots exist, so these are **illustrations** drawn from the feature list (flat style,
-placeholder bars instead of real data). They are not screenshots of the real product.
+**Real product screens** shared by the owner (2026-11-15): dummy data, exported from the design.
+Framed in a browser window on a soft background; the cover is the sign-in page, kept inside the
+middle band so the wide case-study banner never crops it. Files and alt text:
+`scripts/project-screens.data.ts`; images in `legacy/assets/work/nexus-courier/`.
 
-| File (`legacy/assets/work/nexus-courier/`) | Used as | Shows |
-|---|---|---|
-| `cover.webp` (2400×1500) | Cover | Admin overview + tracking timeline + QR label. Key content kept in the centre so the wide hero, 16:10 card and 4:3 phone crops all work |
-| `admin.webp` (2400×1350) | Gallery 1 | Admin dashboard: KPIs, recent orders, deliveries chart, live map |
-| `client.webp` (2400×1350) | Gallery 2 | Client dashboard: new delivery request (Route / Rush / Round Trip), QR label, public tracking |
-| `tracking.webp` (2400×1350) | Gallery 3 | Service-area map with route + hub, chain-of-custody timeline, proof of delivery |
-| `hubs.webp` (2400×1350) | Gallery 4 | Hub-and-spoke sorting: destination buckets, delivery runs, manifest checks, driver transfers |
+Cover: sign-in page · Gallery: admin dashboard, order management, shipment tracking, proof of delivery, corporate client dashboard, light/dark mode.
 
-Source: [nexus-courier-visuals.html](nexus-courier-visuals.html). Open it as
-`nexus-courier-visuals.html#cover|1200|750` (or `admin|1200|675` …) and screenshot at 2× to re-render.
-If real screenshots turn up later, swap them in via the admin (Case studies → Nexus Courier).
+The earlier illustrations ([nexus-courier-visuals.html](nexus-courier-visuals.html)) are no longer used.
 
 ---
 
