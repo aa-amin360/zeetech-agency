@@ -230,10 +230,10 @@ const layout = [
       { label: 'Top design agency', image: img.upworkAward, round: true },
     ],
     stats: [
-      { value: 150, suffix: '+', label: 'Countries served', note: 'Metric pending verification' },
-      { value: 14, suffix: '+', label: 'Projects shipped', note: 'Metric pending verification' },
-      { value: 98, suffix: '%', label: 'Client retention', note: 'Metric pending verification' },
-      { value: 5, suffix: '+', label: 'Years building', note: 'Metric pending verification' },
+      { value: 150, suffix: '+', label: 'Countries served' },
+      { value: 14, suffix: '+', label: 'Projects shipped' },
+      { value: 98, suffix: '%', label: 'Client retention' },
+      { value: 5, suffix: '+', label: 'Years building' },
     ],
   },
   {

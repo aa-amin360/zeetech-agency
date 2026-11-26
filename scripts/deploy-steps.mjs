@@ -34,6 +34,7 @@ const SCRIPTS = [
   'scripts/archive-templates-tech-logos.ts', // Marlin review step 1: template projects archived, tech logos
   'scripts/update-founder-title.ts', // Amit Ghosh: Founder
   'scripts/update-ceo-founder-title.ts', // Amit Ghosh: CEO & Founder
+  'scripts/step2-copy-how-we-work.ts', // Marlin review step 2: no-handoff copy, security-first, positioning, How we work page
 ]
 
 const step = process.argv[2]

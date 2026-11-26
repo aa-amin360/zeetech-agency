@@ -74,7 +74,7 @@ export function ServiceDetail({ service, all }: { service: Service; all: Service
           <div className="sec__inner">
             <DisplayTitle
               id="svc-process-title"
-              heading={heading(service.processHeading, 'A clear process.', 'From first step to handoff.')}
+              heading={heading(service.processHeading, 'A clear process.', 'One team, start to finish.')}
             />
             <ol className="svc-steps">
               {service.process.map((s, i) => (

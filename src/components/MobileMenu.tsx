@@ -17,7 +17,7 @@ export function MobileMenu({ links, cta }: { links: MenuLink[]; cta: { label: st
         burger.current?.focus()
       }
     }
-    const mq = window.matchMedia('(min-width: 901px)')
+    const mq = window.matchMedia('(min-width: 1101px)')
     const onWide = (m: MediaQueryListEvent) => m.matches && setOpen(false)
     window.addEventListener('keydown', onKey)
     mq.addEventListener('change', onWide)
