@@ -137,3 +137,25 @@
 .testi__play-btn .testi__play { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .testi__play-btn:hover .testi__play { transform: translate(-50%, -50%) scale(1.12); }
 .testi__play-btn:focus-visible { outline: 3px solid var(--zt-orange); outline-offset: -3px; }
+
+/* "Verified on Fiverr" link under the name (slides with a photo; the review card has its own) */
+.testi__verify {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: none;
+  color: var(--zt-orange);
+}
+.testi__verify:hover { text-decoration: underline; }
+
+/* phones: a review card (no photo) only needs a short band, so the quote stays near the top */
+@media (max-width: 900px) {
+  .testi__media:has(.rcard) { aspect-ratio: auto; }
+  .testi__media .rcard { flex-direction: row; flex-wrap: wrap; gap: 10px 16px; padding: 18px; }
+  .testi__media .rcard__avatar { width: 64px; font-size: 28px; box-shadow: none; }
+  .testi__media .rcard__platform { flex-basis: 100%; order: 3; }
+  .testi__media .rcard__verify { order: 4; }
+}

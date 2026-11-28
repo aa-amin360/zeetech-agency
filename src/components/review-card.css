@@ -1,0 +1,67 @@
+/* ---------------------------------------------------------
+   Review card: stands in for a photo on testimonials without one
+   (public platform reviews). Used by Proof (home) and Client stories.
+   --------------------------------------------------------- */
+.rcard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  height: 100%;
+  padding: 24px 16px;
+  border-radius: inherit;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(253, 86, 0, 0.16), transparent 60%),
+    linear-gradient(160deg, #0b1733 0%, #13254f 100%);
+  color: #fff;
+  text-align: center;
+}
+.rcard__avatar {
+  display: grid;
+  place-items: center;
+  width: clamp(72px, 34%, 120px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #ff8648, #fd5600);
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.08), 0 12px 28px -10px rgba(253, 86, 0, 0.7);
+  font-weight: 700;
+  font-size: clamp(32px, 3.4vw, 54px);
+  line-height: 1;
+  color: #fff;
+}
+.rcard__rating { display: flex; align-items: center; gap: 10px; margin: 4px 0 0; }
+.rcard__rating .stars { display: flex; gap: 4px; }
+.rcard__rating .star { position: relative; width: 20px; height: 20px; flex-shrink: 0; }
+.rcard__rating .star img { position: absolute; left: 6.77%; top: 4.66%; width: 86.46%; height: 82.43%; }
+.rcard__rating strong { font-size: 18px; font-weight: 700; }
+.rcard__platform {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+.rcard__verify {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.rcard__verify:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.5); }
+.rcard__verify:focus-visible { outline: 2px solid #ff8648; outline-offset: 3px; }
+
+/* small (phone layout of the home proof section: a round avatar beside the name) */
+.rcard--compact { padding: 0; gap: 0; background: none; }
+.rcard--compact .rcard__rating,
+.rcard--compact .rcard__platform,
+.rcard--compact .rcard__verify { display: none; }
+.rcard--compact .rcard__avatar { width: 100%; box-shadow: none; font-size: 22px; }

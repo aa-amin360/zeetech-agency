@@ -1,30 +1,28 @@
 import { Fragment } from 'react'
-import type { ProofStatsBlock, Testimonial } from '@/payload-types'
+import type { Media, ProofStatsBlock, Testimonial } from '@/payload-types'
 import { Img } from '@/components/Img'
+import { ReviewCard, Stars } from '@/components/ReviewCard'
 import './proof-stats.css'
 
-const Stars = ({ value }: { value: number }) => {
-  const full = Math.floor(value)
-  const half = value - full >= 0.25
+function RatingInner({ icon, value }: { icon?: number | Media | null; value: number }) {
   return (
-    <span className="stars" role="img" aria-label={`Rated ${value} out of 5`}>
-      {Array.from({ length: full }).map((_, i) => (
-        <span className="star" key={i}>
-          <img src="/brand/star-full.svg" alt="" />
-        </span>
-      ))}
-      {half ? (
-        <span className="star">
-          <img src="/brand/star-half.svg" alt="" />
-        </span>
-      ) : null}
-    </span>
+    <>
+      {icon ? <Img media={icon} className="proof__badge-img is-round" alt="" sizes="80px" /> : null}
+      <div className="proof__rating">
+        <Stars value={value} />
+        <strong>{Number.isInteger(value) ? value : value.toFixed(1)}/5</strong>
+      </div>
+    </>
   )
 }
 
 export function ProofStats({ block }: { block: ProofStatsBlock }) {
   const t = typeof block.testimonial === 'object' ? (block.testimonial as Testimonial | null) : null
   const awards = block.awards ?? []
+  // the stars beside the quote are that review's own rating, so they always match what the client gave
+  const rating = t?.source?.rating ?? block.rating?.value ?? null
+  const ratingUrl = t?.source?.rating ? t.source.reviewUrl : null
+  const platform = t?.source?.platform ?? 'the platform'
   const stats = block.stats ?? []
 
   return (
@@ -32,7 +30,13 @@ export function ProofStats({ block }: { block: ProofStatsBlock }) {
       {t ? (
         <div className="sec__inner proof__inner">
           <figure className="proof__person" data-reveal>
-            <Img media={t.photo} className="proof__photo" alt={t.name} sizes="273px" />
+            {t.photo ? (
+              <Img media={t.photo} className="proof__photo" alt={t.name} sizes="273px" />
+            ) : (
+              <div className="proof__photo proof__photo--card">
+                <ReviewCard t={t} />
+              </div>
+            )}
             <figcaption>
               <strong className="proof__name">{t.name}</strong>
               <span className="proof__role">
@@ -67,20 +71,23 @@ export function ProofStats({ block }: { block: ProofStatsBlock }) {
               </p>
             </blockquote>
 
-            {block.rating?.value || awards.length ? (
+            {rating || awards.length ? (
               <ul className="proof__badges" data-reveal>
-                {block.rating?.value ? (
+                {rating ? (
                   <li className="proof__badge">
-                    <Img media={block.rating.icon} className="proof__badge-img is-round" alt="" sizes="80px" />
-                    <div className="proof__rating">
-                      <Stars value={block.rating.value} />
-                      <strong>{block.rating.value}/5</strong>
-                    </div>
+                    {ratingUrl ? (
+                      <a className="proof__rating-link" href={ratingUrl} target="_blank" rel="noopener noreferrer">
+                        <RatingInner icon={block.rating?.icon} value={rating} />
+                        <span className="visually-hidden"> (opens the review on {platform})</span>
+                      </a>
+                    ) : (
+                      <RatingInner icon={block.rating?.icon} value={rating} />
+                    )}
                   </li>
                 ) : null}
                 {awards.map((a, i) => (
                   <Fragment key={a.id ?? i}>
-                    {i > 0 || block.rating?.value ? (
+                    {i > 0 || rating ? (
                       <li className="proof__rule" aria-hidden="true">
                         <img src="/brand/rule-v-grey.svg" width={1} height={115} alt="" />
                       </li>

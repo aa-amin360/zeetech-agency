@@ -23,6 +23,7 @@
   object-fit: cover;
   border-radius: 16px;
 }
+.proof__photo--card { overflow: hidden; }   /* review card in place of a photo (public platform reviews) */
 .proof__person figcaption {
   display: flex;
   flex-direction: column;
@@ -207,6 +208,11 @@
   }
   .proof__person { flex-direction: row; align-items: center; gap: 14px; }
   .proof__photo { flex-shrink: 0; width: 56px; aspect-ratio: 1; border-radius: 50%; }
+  /* review card shrinks to just the letter avatar */
+  .proof__photo--card { overflow: visible; }
+  .proof__photo--card .rcard { padding: 0; background: none; }
+  .proof__photo--card .rcard > :not(.rcard__avatar) { display: none; }
+  .proof__photo--card .rcard__avatar { width: 100%; font-size: 22px; box-shadow: none; }
   .proof__person figcaption { gap: 2px; letter-spacing: 0.02em; }
   .proof__name { font-size: 17px; line-height: 1.3; }
   .proof__role { font-size: 13px; line-height: 1.4; }
@@ -277,3 +283,8 @@
 @media (min-width: 901px) and (max-width: 1280px) {
   .proof__person { width: clamp(200px, 22cqw, 273px); }
 }
+
+/* rating beside the quote links to the original review */
+.proof__rating-link { display: contents; color: inherit; text-decoration: none; }
+.proof__rating-link:hover .proof__rating strong { text-decoration: underline; }
+.proof__rating-link:focus-visible .proof__rating { outline: 2px solid var(--zt-orange); outline-offset: 4px; }

@@ -4,6 +4,7 @@ import { getPayloadClient, isPreview } from '@/lib/payload'
 import { resolveVideo } from '@/lib/video'
 import { serverUrl } from '@/lib/url'
 import { Img } from '@/components/Img'
+import { ReviewCard, VerifyLink } from '@/components/ReviewCard'
 import { DisplayTitle, Eyebrow } from '@/components/ui'
 import { VideoFrame } from '@/components/VideoFrame'
 import { JsonLd } from '@/components/JsonLd'
@@ -21,7 +22,9 @@ function Slide({ t }: { t: Testimonial }) {
           <Img media={posterMedia} alt={t.name} sizes="(max-width: 900px) 100vw, 30vw" />
         ) : video?.poster ? (
           <img src={video.poster} alt={t.name} loading="lazy" />
-        ) : null}
+        ) : (
+          <ReviewCard t={t} />
+        )}
         {video ? (
           <VideoFrame
             video={video}
@@ -37,7 +40,9 @@ function Slide({ t }: { t: Testimonial }) {
         <blockquote className="testi__quote">
           <p>
             “{t.quote}”{' '}
-            {t.source?.logo ? (
+            {/* the chip's crop is cut for the Upwork logo; Fiverr reviews get the "Verified on Fiverr" link
+                instead, and the review card (no photo) already names the platform */}
+            {t.source?.logo && (posterMedia || video) && t.source.platform !== 'fiverr' ? (
               <span className="testi__source">
                 <span className="testi__crop">
                   <Img media={t.source.logo} alt={`Review on ${platform}`} sizes="120px" />
@@ -50,6 +55,7 @@ function Slide({ t }: { t: Testimonial }) {
           <div>
             <p className="testi__name">{t.name}</p>
             <p className="testi__role">{[t.role, t.company].filter(Boolean).join(' — ')}</p>
+            {posterMedia || video ? <VerifyLink t={t} className="testi__verify" /> : null}
           </div>
           {t.source?.badge ? <Img media={t.source.badge} className="testi__crest" alt="" sizes="80px" /> : null}
         </div>
