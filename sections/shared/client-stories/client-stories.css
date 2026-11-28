@@ -159,3 +159,80 @@
   .testi__media .rcard__platform { flex-basis: 100%; order: 3; }
   .testi__media .rcard__verify { order: 4; }
 }
+
+/* ---------- auto-changing stories (StoriesSlider.tsx) ---------- */
+.testi__slider { display: contents; }          /* header, dots and track stay direct parts of the section layout */
+.arrows { align-items: center; }
+.testi__toggle {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(14, 14, 13, 0.18);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--zt-ink-strong);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.testi__toggle svg { width: 16px; height: 16px; }
+.testi__toggle:hover { border-color: var(--zt-orange); color: var(--zt-orange); }
+.testi__toggle:focus-visible { outline: 2px solid var(--zt-ink-strong); outline-offset: 3px; }
+
+/* one dot per story; the active one fills up while it waits for the next */
+.testi__dots { display: flex; gap: 8px; margin-top: calc(-1 * clamp(8px, calc(24 * var(--u)), 24px)); }
+.testi__dot {
+  position: relative;
+  width: 28px;
+  height: 4px;
+  padding: 8px 0;                 /* bigger hit area, same look */
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.testi__dot::before,
+.testi__dot > span {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 4px;
+  margin-top: -2px;
+  border-radius: 2px;
+}
+.testi__dot::before { right: 0; background: rgba(14, 14, 13, 0.15); }
+.testi__dot > span { width: 0; background: var(--zt-orange); }
+.testi__dot.is-active { width: 48px; }
+.testi__dot.is-active > span { width: 100%; }
+.testi__dot.is-running > span { animation: testi-fill var(--dur, 6000ms) linear both; }
+.testi__dot:focus-visible { outline: 2px solid var(--zt-ink-strong); outline-offset: 2px; }
+@keyframes testi-fill { from { width: 0; } to { width: 100%; } }
+.testi__slider:hover .testi__dot.is-running > span { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .testi__dot.is-running > span { animation: none; width: 100%; } }
+
+/* ---------- smaller, framed client photo (owner: the old frame felt too big) ---------- */
+.testi__media {
+  flex: 0 0 22%;
+  aspect-ratio: 4 / 5;
+  align-self: center;
+  border: 6px solid #fff;
+  border-radius: 24px;
+  background: #fff;
+  /* a soft orange card stacked behind the photo (offset only to the right and down, so the
+     slider's clipped left edge never cuts it) */
+  box-shadow: 14px 14px 0 0 rgba(253, 86, 0, 0.16), 4px 10px 18px -8px rgba(11, 23, 51, 0.25);
+}
+.testi__media > img:first-child { border-radius: 18px; }
+.testi__media .rcard { border-radius: 18px; }
+.testi__slide { gap: calc(88 * var(--u)); }
+.testi__slide:not(.is-active) .testi__media { box-shadow: 4px 10px 18px -8px rgba(11, 23, 51, 0.25); }
+
+@media (max-width: 900px) {
+  /* phones: a compact portrait beside nothing, left-aligned above the quote */
+  .testi__media { width: clamp(140px, 42vw, 200px); border-width: 4px; border-radius: 20px; box-shadow: 10px 10px 0 0 rgba(253, 86, 0, 0.16), 0 18px 36px -22px rgba(11, 23, 51, 0.45); }
+  .testi__media > img:first-child { border-radius: 16px; }
+  .testi__media:has(.rcard) { width: 100%; border-radius: 18px; }
+  .testi__media:has(.testi__play-btn),
+  .testi__media:has(video) { width: min(100%, 420px); }
+}

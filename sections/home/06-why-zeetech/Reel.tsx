@@ -7,8 +7,13 @@ import { onPerfChange, perfLevel } from '@/lib/perf'
 
 type Wave = Awaited<ReturnType<typeof import('./reel-wave').createWave>>
 
-/** Studio reel frame. Shows the Three.js wave until a video is added in the admin. */
-export function Reel({ video, title }: { video: ResolvedVideo | null; title: string }) {
+/**
+ * Studio reel frame. Shows the Three.js wave until a video is added in the admin. A video with a
+ * poster (e.g. a client's video testimonial) shows the poster and its caption instead, so visitors
+ * see who is speaking before they press play.
+ */
+export function Reel({ video, title, caption }: { video: ResolvedVideo | null; title: string; caption?: string | null }) {
+  const poster = video?.poster
   const reel = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const wave = useRef<Wave>(null)
@@ -16,7 +21,7 @@ export function Reel({ video, title }: { video: ResolvedVideo | null; title: str
   useEffect(() => {
     const el = reel.current
     const cv = canvas.current
-    if (!el || !cv) return
+    if (!el || !cv || poster) return
     let disposed = false
     // lowest performance level: a still glow instead of the 3D wave (three.js isn't loaded at all)
     const lite = () => {
@@ -51,16 +56,27 @@ export function Reel({ video, title }: { video: ResolvedVideo | null; title: str
       io.disconnect()
       wave.current?.dispose()
     }
-  }, [])
+  }, [poster])
 
   return (
-    <div className="reel" ref={reel} data-reveal>
-      <canvas className="reel__gl" ref={canvas} aria-hidden="true" />
+    <div className={`reel${poster ? ' reel--poster' : ''}`} ref={reel} data-reveal>
+      {poster ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="reel__poster" src={poster} alt="" loading="lazy" decoding="async" />
+      ) : (
+        <canvas className="reel__gl" ref={canvas} aria-hidden="true" />
+      )}
+      {poster && caption ? (
+        <p className="reel__caption">
+          <span className="reel__caption-tag">Client video</span>
+          {caption}
+        </p>
+      ) : null}
       <VideoFrame
         video={video}
         title={title}
         buttonClassName="reel__play"
-        buttonLabel={video ? 'Play studio reel' : 'Animate the wave'}
+        buttonLabel={video ? `Play video: ${caption || title}` : 'Animate the wave'}
         onPlay={() => wave.current?.pulse()}
       >
         <span className="reel__play-inner">

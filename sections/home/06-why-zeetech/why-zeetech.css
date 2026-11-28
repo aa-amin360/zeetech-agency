@@ -73,3 +73,54 @@
     radial-gradient(circle, rgba(255, 170, 90, 0.75) 0 1.2px, transparent 1.8px) 0 0 / 16px 16px,
     #000;
 }
+
+/* a video with a poster (client testimonial): the poster and who is speaking, until it plays */
+.reel__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 38%;
+}
+.reel--poster::after {             /* darkens the bottom so the caption reads on any picture */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent 42%);
+  pointer-events: none;
+}
+.reel__caption {
+  position: absolute;
+  left: clamp(16px, 3%, 40px);
+  bottom: clamp(14px, 4%, 36px);
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-weight: 600;
+  font-size: clamp(14px, calc(22 * var(--u)), 22px);
+  color: #fff;
+  pointer-events: none;
+}
+.reel__caption-tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--zt-orange);
+  font-size: 0.65em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.reel--poster:has(video) .reel__caption,
+.reel--poster:has(video)::after { display: none; }
+.reel--poster video { z-index: 2; object-fit: contain; background: #000; }   /* whole frame, nothing cropped */
+/* the play button moves off the speaker's face, to the bottom right beside the caption */
+.reel--poster .reel__play { top: auto; left: auto; right: clamp(16px, 3%, 40px); bottom: clamp(12px, 4%, 34px); transform: none; z-index: 2; }
+.reel--poster .reel__play:hover { transform: scale(1.06); }
+/* phones: no room for both on one line, so the caption goes to the top */
+@media (max-width: 600px) {
+  .reel--poster .reel__caption { top: 14px; bottom: auto; right: 14px; left: 14px; font-size: 13px; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7); }
+  .reel--poster::after { background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent 38%); }
+}
